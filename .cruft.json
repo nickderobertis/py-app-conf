@@ -1,0 +1,20 @@
+{
+    "template": "https://github.com/nickderobertis/cookiecutter-pypi-sphinx",
+    "commit": "1fdefcda9765e34fd70a4757a2eecc42ea249561",
+    "context": {
+        "cookiecutter": {
+            "package_name": "py-app-conf",
+            "package_directory": "pyappconf",
+            "full_name": "Python Application Configuration Management",
+            "repo_name": "py-app-conf",
+            "repo_username": "nickderobertis",
+            "short_description": "Strongly typed and validated configuration supporting multiple file types, dynamic instantiation, and environment variables",
+            "package_author": "Nick DeRobertis",
+            "author_email": "whoopnip@gmail.com",
+            "google_analytics_id": "",
+            "logo_url": "",
+            "_template": "https://github.com/nickderobertis/cookiecutter-pypi-sphinx"
+        }
+    },
+    "directory": null
+}
