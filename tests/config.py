@@ -8,6 +8,7 @@ DATA_NAME = 'data'
 JSON_PATH = INPUT_DATA_DIR / (DATA_NAME + '.json')
 YAML_PATH = INPUT_DATA_DIR / (DATA_NAME + '.yaml')
 TOML_PATH = INPUT_DATA_DIR / (DATA_NAME + '.toml')
+CUSTOM_CONFIG_OUT_PATH = GENERATED_DATA_DIR / 'config'
 
 if not INPUT_DATA_DIR.exists():
     INPUT_DATA_DIR.mkdir()

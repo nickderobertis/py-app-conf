@@ -6,7 +6,6 @@ from tests.fixtures.model import get_model_object
 
 if __name__ == "__main__":
     conf = get_model_object()
-    json_str = conf.json(indent=2)
-    JSON_PATH.write_text(json_str)
-    conf.yaml(out_path=YAML_PATH)
-    conf.toml(out_path=TOML_PATH)
+    conf.to_json(out_path=JSON_PATH, json_kwargs=dict(indent=2))
+    conf.to_yaml(out_path=YAML_PATH)
+    conf.to_toml(out_path=TOML_PATH)

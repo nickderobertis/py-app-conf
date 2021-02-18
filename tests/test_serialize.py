@@ -6,15 +6,15 @@ from tests.fixtures.model import model_object, model_classes
 
 
 def test_to_json(model_object: BaseConfig):
-    assert model_object.json(indent=2) == JSON_PATH.read_text()
+    assert model_object.to_json(json_kwargs=dict(indent=2)) == JSON_PATH.read_text()
 
 
 def test_to_yaml(model_object: BaseConfig):
-    assert model_object.yaml() == YAML_PATH.read_text()
+    assert model_object.to_yaml() == YAML_PATH.read_text()
 
 
 def test_to_toml(model_object: BaseConfig):
-    assert model_object.toml() == TOML_PATH.read_text()
+    assert model_object.to_toml() == TOML_PATH.read_text()
 
 
 def test_from_json(

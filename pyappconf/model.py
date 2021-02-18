@@ -1,5 +1,6 @@
+from enum import Enum
 from pathlib import Path
-from typing import Optional, Union, Dict, Any
+from typing import Optional, Union, Dict, Any, Callable
 
 from pydantic import BaseSettings, validator, BaseModel
 import yaml
@@ -24,22 +25,66 @@ def _get_data_kwargs(**kwargs):
     return kwargs
 
 
+class ConfigFormats(str, Enum):
+    YAML = 'yaml'
+    JSON = 'json'
+    TOML = 'toml'
+
+
 class AppConfig(BaseModel):
     app_name: str
     config_name: str = "config"
     custom_config_path: Optional[Path] = None
+    default_format: ConfigFormats = ConfigFormats.TOML
 
     @property
-    def config_location(self) -> Path:
+    def config_base_location(self) -> Path:
         if self.custom_config_path is not None:
             return self.custom_config_path
         return Path(appdirs.user_config_dir(self.app_name)) / self.config_name
 
+    @property
+    def config_location(self) -> Path:
+        return Path(str(self.config_base_location) + '.' + self.default_format.value)
+
 
 class BaseConfig(BaseSettings):
-    settings: AppConfig
+    _settings: AppConfig
+    settings: Optional[AppConfig] = None
 
-    def yaml(
+    @validator('settings')
+    def set_settings_from_class_if_none(cls, v):
+        if v is None:
+            return cls._settings
+        return v
+
+    def get_serializer(self) -> Callable[[Optional[Union[str, Path]], Optional[Dict[str, Any]]], str]:
+        if self.settings.default_format == ConfigFormats.TOML:
+            return self.to_toml
+        if self.settings.default_format == ConfigFormats.YAML:
+            return self.to_yaml
+        if self.settings.default_format == ConfigFormats.JSON:
+            return self.to_json
+
+    @classmethod
+    def get_deserializer(cls) -> Callable[[Union[str, Path]], 'BaseConfig']:
+        if cls._settings.default_format == ConfigFormats.TOML:
+            return cls.parse_toml
+        if cls._settings.default_format == ConfigFormats.YAML:
+            return cls.parse_yaml
+        if cls._settings.default_format == ConfigFormats.JSON:
+            return cls.parse_json
+
+    def save(self, serializer_kwargs: Optional[Dict[str, Any]] = None, **kwargs):
+        if not self.settings.config_location.parent.exists():
+            self.settings.config_location.parent.mkdir()
+        self.get_serializer()(self.settings.config_location, serializer_kwargs, **kwargs)
+
+    @classmethod
+    def load(cls) -> 'BaseConfig':
+        return cls.get_deserializer()(cls._settings.config_location)
+
+    def to_yaml(
         self,
         out_path: Optional[Union[str, Path]] = None,
         yaml_kwargs: Optional[Dict[str, Any]] = None,
@@ -58,7 +103,7 @@ class BaseConfig(BaseSettings):
         data = yaml.safe_load(Path(in_path).read_text())
         return cls.parse_obj(data)
 
-    def toml(
+    def to_toml(
         self,
         out_path: Optional[Union[str, Path]] = None,
         toml_kwargs: Optional[Dict[str, Any]] = None,
@@ -77,9 +122,19 @@ class BaseConfig(BaseSettings):
         data = toml.load(in_path)
         return cls.parse_obj(data)
 
-    def json(self, **kwargs) -> str:
+    def to_json(
+        self,
+        out_path: Optional[Union[str, Path]] = None,
+        json_kwargs: Optional[Dict[str, Any]] = None,
+        **kwargs
+    ) -> str:
+        if json_kwargs is None:
+            json_kwargs = {}
         kwargs = _get_data_kwargs(**kwargs)
-        return super().json(**kwargs)
+        data = self.dict(**kwargs)
+        json_str = json.dumps(data, **json_kwargs)
+        _output_if_necessary(json_str, out_path)
+        return json_str
 
     @classmethod
     def parse_json(cls, in_path: Union[str, Path]) -> "BaseConfig":

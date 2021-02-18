@@ -22,7 +22,7 @@ def get_model_classes() -> Tuple[Type[BaseConfig], Type[BaseModel]]:
         default_string: str = "woo"
         default_custom: SubConfig = SubConfig(a="yeah", b=5.6)
 
-        settings: AppConfig = AppConfig(app_name='MyApp')
+        _settings: AppConfig = AppConfig(app_name='MyApp')
 
     return MyConfig, SubConfig
 
