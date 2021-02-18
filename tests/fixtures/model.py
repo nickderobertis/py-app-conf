@@ -2,7 +2,7 @@ from typing import Type, Dict, List, Tuple
 
 import pytest
 
-from pyappconf.model import BaseConfig
+from pyappconf.model import BaseConfig, AppConfig
 
 
 def get_model_classes() -> Tuple[Type[BaseConfig], Type[BaseConfig]]:
@@ -20,6 +20,8 @@ def get_model_classes() -> Tuple[Type[BaseConfig], Type[BaseConfig]]:
 
         default_string: str = "woo"
         default_custom: SubConfig = SubConfig(a="yeah", b=5.6)
+
+        _settings = AppConfig(app_name='MyApp')
 
     return MyConfig, SubConfig
 

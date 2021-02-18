@@ -14,18 +14,21 @@ def _output_if_necessary(content: str, out_path: Optional[Union[str, Path]] = No
         out_path.write_text(content)
 
 
-class AppConfigSettings(BaseModel):
-    app_name: str = ""
-    app_author: str = ""
+class AppConfig(BaseModel):
+    app_name: str
+    config_name: str = 'config'
+    custom_config_path: Optional[Path] = None
 
-    @validator("app_name", "app_author")
-    def name_must_be_set(cls, v):
-        if not v:
-            raise ValueError("must be set")
-        return v
+    @property
+    def config_location(self) -> Path:
+        if self.custom_config_path is not None:
+            return self.custom_config_path
+        return Path(appdirs.user_config_dir(self.app_name)) / self.config_name
 
 
 class BaseConfig(BaseSettings):
+    _settings: AppConfig
+
     def yaml(
         self,
         out_path: Optional[Union[str, Path]] = None,
