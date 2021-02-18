@@ -1,0 +1,7 @@
+pyappconf
+=========
+
+.. toctree::
+   :maxdepth: 4
+
+   pyappconf
