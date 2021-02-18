@@ -1,4 +1,4 @@
-from typing import Type, Dict, List, Tuple
+from typing import Type, Dict, List, Tuple, Sequence, Optional
 
 import pytest
 from pydantic import BaseModel
@@ -24,13 +24,17 @@ def get_model_classes() -> Tuple[Type[BaseConfig], Type[BaseModel]]:
 
         _settings: AppConfig = AppConfig(app_name='MyApp')
 
+        class Config:
+            env_prefix = 'MYAPP_'
+
+
     return MyConfig, SubConfig
 
 
-def get_model_object(**kwargs) -> BaseConfig:
+def get_model_object(exclude_keys: Optional[Sequence[str]] = None, **kwargs) -> BaseConfig:
     MyConfig, SubConfig = get_model_classes()
 
-    default_kwargs = dict(
+    all_kwargs = dict(
         string="a",
         integer=5,
         custom=SubConfig(a="b", b=8.5),
@@ -38,9 +42,12 @@ def get_model_object(**kwargs) -> BaseConfig:
         str_list=["a", "b", "c"],
         int_tuple=(1, 2, 3),
     )
-    kwargs.update(default_kwargs)
+    if exclude_keys is not None:
+        all_kwargs = {key: value for key, value in all_kwargs.items() if key not in exclude_keys}
+    all_kwargs.update(kwargs)
 
-    conf = MyConfig(**kwargs)
+    # conf = MyConfig(**{'myapp_' + key: value for key, value in all_kwargs.items()})
+    conf = MyConfig(**all_kwargs)
     return conf
 
 

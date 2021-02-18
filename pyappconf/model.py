@@ -1,3 +1,4 @@
+from copy import deepcopy
 from enum import Enum
 from pathlib import Path
 from typing import Optional, Union, Dict, Any, Callable
@@ -84,6 +85,10 @@ class BaseConfig(BaseSettings):
     def load(cls) -> 'BaseConfig':
         return cls.get_deserializer()(cls._settings.config_location)
 
+    @classmethod
+    def _get_env_values(cls) -> Dict[str, Any]:
+        return cls._build_environ(cls)
+
     def to_yaml(
         self,
         out_path: Optional[Union[str, Path]] = None,
@@ -101,7 +106,8 @@ class BaseConfig(BaseSettings):
     @classmethod
     def parse_yaml(cls, in_path: Union[str, Path]) -> "BaseConfig":
         data = yaml.safe_load(Path(in_path).read_text())
-        return cls.parse_obj(data)
+        data.update(cls._get_env_values())
+        return cls(**data)
 
     def to_toml(
         self,
@@ -120,7 +126,8 @@ class BaseConfig(BaseSettings):
     @classmethod
     def parse_toml(cls, in_path: Union[str, Path]) -> "BaseConfig":
         data = toml.load(in_path)
-        return cls.parse_obj(data)
+        data.update(cls._get_env_values())
+        return cls(**data)
 
     def to_json(
         self,
@@ -139,4 +146,5 @@ class BaseConfig(BaseSettings):
     @classmethod
     def parse_json(cls, in_path: Union[str, Path]) -> "BaseConfig":
         data = json.loads(Path(in_path).read_text())
-        return cls.parse_obj(data)
+        data.update(cls._get_env_values())
+        return cls(**data)
