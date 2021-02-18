@@ -1,12 +1,13 @@
 from typing import Type, Dict, List, Tuple
 
 import pytest
+from pydantic import BaseModel
 
 from pyappconf.model import BaseConfig, AppConfig
 
 
-def get_model_classes() -> Tuple[Type[BaseConfig], Type[BaseConfig]]:
-    class SubConfig(BaseConfig):
+def get_model_classes() -> Tuple[Type[BaseConfig], Type[BaseModel]]:
+    class SubConfig(BaseModel):
         a: str
         b: float
 
@@ -21,14 +22,15 @@ def get_model_classes() -> Tuple[Type[BaseConfig], Type[BaseConfig]]:
         default_string: str = "woo"
         default_custom: SubConfig = SubConfig(a="yeah", b=5.6)
 
-        _settings = AppConfig(app_name='MyApp')
+        settings: AppConfig = AppConfig(app_name='MyApp')
 
     return MyConfig, SubConfig
 
 
 def get_model_object(**kwargs) -> BaseConfig:
     MyConfig, SubConfig = get_model_classes()
-    conf = MyConfig(
+
+    default_kwargs = dict(
         string="a",
         integer=5,
         custom=SubConfig(a="b", b=8.5),
@@ -36,11 +38,14 @@ def get_model_object(**kwargs) -> BaseConfig:
         str_list=["a", "b", "c"],
         int_tuple=(1, 2, 3),
     )
+    kwargs.update(default_kwargs)
+
+    conf = MyConfig(**kwargs)
     return conf
 
 
 @pytest.fixture(scope="session")
-def model_classes() -> Tuple[Type[BaseConfig], Type[BaseConfig]]:
+def model_classes() -> Tuple[Type[BaseConfig], Type[BaseModel]]:
     return get_model_classes()
 
 

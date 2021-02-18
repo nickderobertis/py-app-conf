@@ -14,9 +14,19 @@ def _output_if_necessary(content: str, out_path: Optional[Union[str, Path]] = No
         out_path.write_text(content)
 
 
+def _get_data_kwargs(**kwargs):
+    default_kwargs = dict(
+        exclude={"settings"},
+    )
+    if "exclude" in kwargs:
+        default_kwargs["exclude"].update(kwargs["exclude"])
+    kwargs.update(default_kwargs)
+    return kwargs
+
+
 class AppConfig(BaseModel):
     app_name: str
-    config_name: str = 'config'
+    config_name: str = "config"
     custom_config_path: Optional[Path] = None
 
     @property
@@ -27,7 +37,7 @@ class AppConfig(BaseModel):
 
 
 class BaseConfig(BaseSettings):
-    _settings: AppConfig
+    settings: AppConfig
 
     def yaml(
         self,
@@ -37,6 +47,7 @@ class BaseConfig(BaseSettings):
     ) -> str:
         if yaml_kwargs is None:
             yaml_kwargs = {}
+        kwargs = _get_data_kwargs(**kwargs)
         data = self.dict(**kwargs)
         yaml_str = yaml.safe_dump(data, **yaml_kwargs)
         _output_if_necessary(yaml_str, out_path)
@@ -55,6 +66,7 @@ class BaseConfig(BaseSettings):
     ) -> str:
         if toml_kwargs is None:
             toml_kwargs = {}
+        kwargs = _get_data_kwargs(**kwargs)
         data = self.dict(**kwargs)
         toml_str = toml.dumps(data, **toml_kwargs)
         _output_if_necessary(toml_str, out_path)
@@ -64,6 +76,10 @@ class BaseConfig(BaseSettings):
     def parse_toml(cls, in_path: Union[str, Path]) -> "BaseConfig":
         data = toml.load(in_path)
         return cls.parse_obj(data)
+
+    def json(self, **kwargs) -> str:
+        kwargs = _get_data_kwargs(**kwargs)
+        return super().json(**kwargs)
 
     @classmethod
     def parse_json(cls, in_path: Union[str, Path]) -> "BaseConfig":
