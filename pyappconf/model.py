@@ -51,7 +51,7 @@ class AppConfig(BaseModel):
 
 class BaseConfig(BaseSettings):
     _settings: AppConfig
-    settings: Optional[AppConfig] = None
+    settings: AppConfig = None  # type: ignore
 
     @validator('settings')
     def set_settings_from_class_if_none(cls, v):
@@ -66,6 +66,7 @@ class BaseConfig(BaseSettings):
             return self.to_yaml
         if self.settings.default_format == ConfigFormats.JSON:
             return self.to_json
+        raise NotImplementedError(f'unsupported format {self.settings.default_format}')
 
     @classmethod
     def get_deserializer(cls) -> Callable[[Union[str, Path]], 'BaseConfig']:
@@ -75,11 +76,12 @@ class BaseConfig(BaseSettings):
             return cls.parse_yaml
         if cls._settings.default_format == ConfigFormats.JSON:
             return cls.parse_json
+        raise NotImplementedError(f'unsupported format {cls._settings.default_format}')
 
     def save(self, serializer_kwargs: Optional[Dict[str, Any]] = None, **kwargs):
         if not self.settings.config_location.parent.exists():
             self.settings.config_location.parent.mkdir()
-        self.get_serializer()(self.settings.config_location, serializer_kwargs, **kwargs)
+        self.get_serializer()(self.settings.config_location, serializer_kwargs, **kwargs)  # type: ignore
 
     @classmethod
     def load(cls) -> 'BaseConfig':
@@ -87,7 +89,7 @@ class BaseConfig(BaseSettings):
 
     @classmethod
     def _get_env_values(cls) -> Dict[str, Any]:
-        return cls._build_environ(cls, _env_file=cls.Config.env_file)
+        return cls._build_environ(cls, _env_file=cls.Config.env_file)  # type: ignore
 
     def to_yaml(
         self,
@@ -119,7 +121,7 @@ class BaseConfig(BaseSettings):
             toml_kwargs = {}
         kwargs = _get_data_kwargs(**kwargs)
         data = self.dict(**kwargs)
-        toml_str = toml.dumps(data, **toml_kwargs)
+        toml_str = toml.dumps(data, **toml_kwargs)  # type: ignore
         _output_if_necessary(toml_str, out_path)
         return toml_str
 
