@@ -4,6 +4,7 @@ import pytest
 from pydantic import BaseModel
 
 from pyappconf.model import BaseConfig, AppConfig
+from tests.config import ENV_PATH
 
 
 def get_model_classes() -> Tuple[Type[BaseConfig], Type[BaseModel]]:
@@ -26,6 +27,7 @@ def get_model_classes() -> Tuple[Type[BaseConfig], Type[BaseModel]]:
 
         class Config:
             env_prefix = 'MYAPP_'
+            env_file = ENV_PATH
 
 
     return MyConfig, SubConfig
