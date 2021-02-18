@@ -89,7 +89,8 @@ class BaseConfig(BaseSettings):
 
     @classmethod
     def _get_env_values(cls) -> Dict[str, Any]:
-        return cls._build_environ(cls, _env_file=cls.Config.env_file)  # type: ignore
+        env_file = getattr(cls.Config, 'env_file', None)
+        return cls._build_environ(cls, _env_file=env_file)  # type: ignore
 
     def to_yaml(
         self,
