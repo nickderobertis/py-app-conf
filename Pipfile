@@ -21,6 +21,11 @@ pytest-cov = "*"
 mypy = "*"
 pypandoc = "*"
 cruft = "*"
+pydantic = "*"
+appdirs = "*"
+PyYAML = "*"
+toml = "*"
+
 
 [requires]
 python_version = "3.8"
