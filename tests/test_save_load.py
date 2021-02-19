@@ -6,12 +6,14 @@ from tests.fixtures.model import get_model_object, get_model_classes
 def _save_load_test(custom_settings: AppConfig):
     mod = get_model_object(settings=custom_settings)
     mod.save()
+    assert str(mod.settings.config_location).endswith(custom_settings.default_format.value)
 
     OrigConfig, SubConfig = get_model_classes()
 
     class MyConfig(OrigConfig):
         _settings = custom_settings
 
+    assert str(MyConfig._settings.config_location).endswith(custom_settings.default_format.value)
     obj = MyConfig.load()
     assert mod == obj
 
