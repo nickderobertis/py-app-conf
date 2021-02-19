@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyappconf.model &mdash; py-app-conf 0.1.0 documentation</title>
+  <title>pyappconf.model &mdash; py-app-conf 0.1.1 documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.1.1
               </div>
             
           
@@ -255,7 +255,8 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_get_env_values</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_build_environ</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">_env_file</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">env_file</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="n">env_file</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">Config</span><span class="p">,</span> <span class="s1">&#39;env_file&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_build_environ</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">_env_file</span><span class="o">=</span><span class="n">env_file</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
 <div class="viewcode-block" id="BaseConfig.to_yaml"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.BaseConfig.to_yaml">[docs]</a>    <span class="k">def</span> <span class="nf">to_yaml</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
