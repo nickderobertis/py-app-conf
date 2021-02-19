@@ -31,6 +31,18 @@ class ConfigFormats(str, Enum):
     JSON = 'json'
     TOML = 'toml'
 
+    @classmethod
+    def from_path(cls, path: Path) -> 'ConfigFormats':
+        ext = path.suffix.strip('.').casefold()
+        if ext in ('yml', 'yaml'):
+            return cls.YAML
+        if ext == 'json':
+            return cls.JSON
+        if ext == 'toml':
+            return cls.TOML
+        raise ValueError(f'suffix {ext} not a supported config format. Supplied path: {path}')
+
+
 
 class AppConfig(BaseModel):
     app_name: str
@@ -69,14 +81,25 @@ class BaseConfig(BaseSettings):
         raise NotImplementedError(f'unsupported format {self.settings.default_format}')
 
     @classmethod
-    def get_deserializer(cls) -> Callable[[Union[str, Path]], 'BaseConfig']:
-        if cls._settings.default_format == ConfigFormats.TOML:
+    def get_deserializer(cls, config_format: Optional[ConfigFormats] = None) -> Callable[[Union[str, Path]], 'BaseConfig']:
+        if config_format is None:
+            config_format = cls._settings.default_format
+
+        if config_format == ConfigFormats.TOML:
             return cls.parse_toml
-        if cls._settings.default_format == ConfigFormats.YAML:
+        if config_format == ConfigFormats.YAML:
             return cls.parse_yaml
-        if cls._settings.default_format == ConfigFormats.JSON:
+        if config_format == ConfigFormats.JSON:
             return cls.parse_json
-        raise NotImplementedError(f'unsupported format {cls._settings.default_format}')
+        raise NotImplementedError(f'unsupported format {config_format}')
+
+    @classmethod
+    def _settings_with_overrides(cls, **kwargs) -> AppConfig:
+        if not kwargs:
+            return deepcopy(cls._settings)
+        config_data = cls._settings.dict()
+        config_data.update(**kwargs)
+        return AppConfig(**config_data)
 
     def save(self, serializer_kwargs: Optional[Dict[str, Any]] = None, **kwargs):
         if not self.settings.config_location.parent.exists():
@@ -84,8 +107,25 @@ class BaseConfig(BaseSettings):
         self.get_serializer()(self.settings.config_location, serializer_kwargs, **kwargs)  # type: ignore
 
     @classmethod
-    def load(cls) -> 'BaseConfig':
-        return cls.get_deserializer()(cls._settings.config_location)
+    def load(cls, path: Optional[Union[str, Path]] = None) -> 'BaseConfig':
+        assign_settings = True
+
+        config_format: Optional[ConfigFormats]
+        if path is None:
+            assign_settings = False
+            path = cls._settings.config_location
+            config_format = None
+        else:
+            path = Path(path)
+            config_format = ConfigFormats.from_path(path)
+
+        obj = cls.get_deserializer(config_format)(path)
+        if assign_settings:
+            obj.settings = cls._settings_with_overrides(
+                custom_config_path=path.with_suffix(''),
+                default_format=config_format
+            )
+        return obj
 
     @classmethod
     def _get_env_values(cls) -> Dict[str, Any]:

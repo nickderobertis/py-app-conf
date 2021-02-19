@@ -1,5 +1,7 @@
 from typing import Type, Tuple
 
+from pydantic import BaseModel
+
 from pyappconf.model import BaseConfig
 from tests.config import JSON_PATH, YAML_PATH, TOML_PATH
 from tests.fixtures.model import model_object, model_classes
@@ -18,7 +20,7 @@ def test_to_toml(model_object: BaseConfig):
 
 
 def test_from_json(
-    model_object: BaseConfig, model_classes: Tuple[Type[BaseConfig], Type[BaseConfig]]
+    model_object: BaseConfig, model_classes: Tuple[Type[BaseConfig], Type[BaseModel]]
 ):
     MyConfig, SubConfig = model_classes
     loaded_object = MyConfig.parse_json(JSON_PATH)
@@ -26,7 +28,7 @@ def test_from_json(
 
 
 def test_from_yaml(
-    model_object: BaseConfig, model_classes: Tuple[Type[BaseConfig], Type[BaseConfig]]
+    model_object: BaseConfig, model_classes: Tuple[Type[BaseConfig], Type[BaseModel]]
 ):
     MyConfig, SubConfig = model_classes
     loaded_object = MyConfig.parse_yaml(YAML_PATH)
@@ -34,7 +36,7 @@ def test_from_yaml(
 
 
 def test_from_toml(
-    model_object: BaseConfig, model_classes: Tuple[Type[BaseConfig], Type[BaseConfig]]
+    model_object: BaseConfig, model_classes: Tuple[Type[BaseConfig], Type[BaseModel]]
 ):
     MyConfig, SubConfig = model_classes
     loaded_object = MyConfig.parse_toml(TOML_PATH)
