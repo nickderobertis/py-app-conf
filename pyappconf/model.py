@@ -123,7 +123,8 @@ class BaseConfig(BaseSettings):
         if assign_settings:
             obj.settings = cls._settings_with_overrides(
                 custom_config_path=path.with_suffix(''),
-                default_format=config_format
+                default_format=config_format,
+                config_name=path.stem,
             )
         return obj
 

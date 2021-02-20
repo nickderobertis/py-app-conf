@@ -4,7 +4,7 @@ from typing import Type, Tuple
 from pydantic import BaseModel
 
 from pyappconf.model import AppConfig, ConfigFormats, BaseConfig
-from tests.config import CUSTOM_CONFIG_OUT_PATH
+from tests.config import CUSTOM_CONFIG_OUT_PATH, JSON_PATH, CUSTOM_CONFIG_IN_PATH, YAML_PATH, TOML_PATH, DATA_NAME
 from tests.fixtures.model import (
     get_model_object,
     get_model_classes,
@@ -60,8 +60,9 @@ def test_save_load_json():
 def assert_model_loaded_with_extension(
     mod: BaseConfig, model_object: BaseConfig, format: ConfigFormats
 ):
-    assert mod.settings.custom_config_path == CUSTOM_CONFIG_OUT_PATH
+    assert mod.settings.custom_config_path == CUSTOM_CONFIG_IN_PATH
     assert mod.settings.default_format == format
+    assert mod.settings.config_name == DATA_NAME
 
     mod.settings = model_object.settings
     assert mod == model_object
@@ -71,7 +72,7 @@ def test_load_toml_with_custom_path(
     model_object: BaseConfig, model_classes: Tuple[Type[BaseConfig], Type[BaseModel]]
 ):
     MyConfig, _ = model_classes
-    mod = MyConfig.load(Path(str(CUSTOM_CONFIG_OUT_PATH) + ".toml"))
+    mod = MyConfig.load(TOML_PATH)
     assert_model_loaded_with_extension(mod, model_object, ConfigFormats.TOML)
 
 
@@ -79,7 +80,7 @@ def test_load_yaml_with_custom_path(
     model_object: BaseConfig, model_classes: Tuple[Type[BaseConfig], Type[BaseModel]]
 ):
     MyConfig, _ = model_classes
-    mod = MyConfig.load(Path(str(CUSTOM_CONFIG_OUT_PATH) + ".yaml"))
+    mod = MyConfig.load(YAML_PATH)
     assert_model_loaded_with_extension(mod, model_object, ConfigFormats.YAML)
 
 
@@ -87,5 +88,5 @@ def test_load_json_with_custom_path(
     model_object: BaseConfig, model_classes: Tuple[Type[BaseConfig], Type[BaseModel]]
 ):
     MyConfig, _ = model_classes
-    mod = MyConfig.load(Path(str(CUSTOM_CONFIG_OUT_PATH) + ".json"))
+    mod = MyConfig.load(JSON_PATH)
     assert_model_loaded_with_extension(mod, model_object, ConfigFormats.JSON)
