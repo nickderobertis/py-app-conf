@@ -9,6 +9,7 @@ dictionary:
   yeah:
     a: c
     b: 9.6
+file_path: /a/b.txt
 int_tuple:
 - 1
 - 2

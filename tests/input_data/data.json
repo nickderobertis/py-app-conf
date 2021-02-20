@@ -25,5 +25,6 @@
   "default_custom": {
     "a": "yeah",
     "b": 5.6
-  }
+  },
+  "file_path": "/a/b.txt"
 }

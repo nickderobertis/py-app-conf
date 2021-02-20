@@ -9,6 +9,10 @@ import toml
 import json
 import appdirs
 
+from pyappconf.encoding.ext_json import ExtendedJSONEncoder
+from pyappconf.encoding.ext_toml import CustomTomlEncoder
+from pyappconf.encoding.ext_yaml import CustomDumper
+
 
 def _output_if_necessary(content: str, out_path: Optional[Union[str, Path]] = None):
     if out_path is not None:
@@ -159,7 +163,7 @@ class BaseConfig(BaseSettings):
             yaml_kwargs = {}
         kwargs = _get_data_kwargs(**kwargs)
         data = self.dict(**kwargs)
-        yaml_str = yaml.safe_dump(data, **yaml_kwargs)
+        yaml_str = yaml.dump(data, **yaml_kwargs, Dumper=CustomDumper)
         _output_if_necessary(yaml_str, out_path)
         return yaml_str
 
@@ -179,7 +183,7 @@ class BaseConfig(BaseSettings):
             toml_kwargs = {}
         kwargs = _get_data_kwargs(**kwargs)
         data = self.dict(**kwargs)
-        toml_str = toml.dumps(data, **toml_kwargs)  # type: ignore
+        toml_str = toml.dumps(data, **toml_kwargs, encoder=CustomTomlEncoder())  # type: ignore
         _output_if_necessary(toml_str, out_path)
         return toml_str
 
@@ -199,7 +203,7 @@ class BaseConfig(BaseSettings):
             json_kwargs = {}
         kwargs = _get_data_kwargs(**kwargs)
         data = self.dict(**kwargs)
-        json_str = json.dumps(data, **json_kwargs)
+        json_str = json.dumps(data, **json_kwargs, cls=ExtendedJSONEncoder)
         _output_if_necessary(json_str, out_path)
         return json_str
 

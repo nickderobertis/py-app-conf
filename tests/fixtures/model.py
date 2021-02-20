@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Type, Dict, List, Tuple, Sequence, Optional
 
 import pytest
@@ -22,6 +23,7 @@ def get_model_classes() -> Tuple[Type[BaseConfig], Type[BaseModel]]:
 
         default_string: str = "woo"
         default_custom: SubConfig = SubConfig(a="yeah", b=5.6)
+        file_path: Path = Path('/a/b.txt')
 
         _settings: AppConfig = AppConfig(app_name="MyApp")
 
