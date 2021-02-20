@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyappconf.model &mdash; py-app-conf 0.2.0 documentation</title>
+  <title>pyappconf.model &mdash; py-app-conf 0.2.1 documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.2.0
+                0.2.1
               </div>
             
           
@@ -289,7 +289,8 @@
         <span class="k">if</span> <span class="n">assign_settings</span><span class="p">:</span>
             <span class="n">obj</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_settings_with_overrides</span><span class="p">(</span>
                 <span class="n">custom_config_path</span><span class="o">=</span><span class="n">path</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">),</span>
-                <span class="n">default_format</span><span class="o">=</span><span class="n">config_format</span>
+                <span class="n">default_format</span><span class="o">=</span><span class="n">config_format</span><span class="p">,</span>
+                <span class="n">config_name</span><span class="o">=</span><span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">obj</span></div>
 
