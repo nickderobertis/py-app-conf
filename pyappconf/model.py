@@ -1,13 +1,14 @@
 from copy import deepcopy
 from enum import Enum
 from pathlib import Path
-from typing import Optional, Union, Dict, Any, Callable
+from typing import Optional, Union, Dict, Any, Callable, Type
 
 from pydantic import BaseSettings, validator, BaseModel
 import yaml
 import toml
 import json
 import appdirs
+from toml.encoder import TomlEncoder
 
 from pyappconf.encoding.ext_json import ExtendedJSONEncoder
 from pyappconf.encoding.ext_toml import CustomTomlEncoder
@@ -53,6 +54,9 @@ class AppConfig(BaseModel):
     config_name: str = "config"
     custom_config_path: Optional[Path] = None
     default_format: ConfigFormats = ConfigFormats.TOML
+    toml_encoder: Type[TomlEncoder] = CustomTomlEncoder
+    yaml_encoder: Type = CustomDumper
+    json_encoder: Type[json.JSONEncoder] = ExtendedJSONEncoder
 
     @property
     def config_base_location(self) -> Path:
@@ -163,7 +167,7 @@ class BaseConfig(BaseSettings):
             yaml_kwargs = {}
         kwargs = _get_data_kwargs(**kwargs)
         data = self.dict(**kwargs)
-        yaml_str = yaml.dump(data, **yaml_kwargs, Dumper=CustomDumper)
+        yaml_str = yaml.dump(data, **yaml_kwargs, Dumper=self.settings.yaml_encoder)
         _output_if_necessary(yaml_str, out_path)
         return yaml_str
 
@@ -183,7 +187,7 @@ class BaseConfig(BaseSettings):
             toml_kwargs = {}
         kwargs = _get_data_kwargs(**kwargs)
         data = self.dict(**kwargs)
-        toml_str = toml.dumps(data, **toml_kwargs, encoder=CustomTomlEncoder())  # type: ignore
+        toml_str = toml.dumps(data, **toml_kwargs, encoder=self.settings.toml_encoder())  # type: ignore
         _output_if_necessary(toml_str, out_path)
         return toml_str
 
@@ -203,7 +207,7 @@ class BaseConfig(BaseSettings):
             json_kwargs = {}
         kwargs = _get_data_kwargs(**kwargs)
         data = self.dict(**kwargs)
-        json_str = json.dumps(data, **json_kwargs, cls=ExtendedJSONEncoder)
+        json_str = json.dumps(data, **json_kwargs, cls=self.settings.json_encoder)
         _output_if_necessary(json_str, out_path)
         return json_str
 
