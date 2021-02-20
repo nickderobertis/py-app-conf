@@ -1,0 +1,43 @@
+pyappconf.encoding package
+==========================
+
+.. automodule:: pyappconf.encoding
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyappconf.encoding.ext\_json module
+-----------------------------------
+
+.. automodule:: pyappconf.encoding.ext_json
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyappconf.encoding.ext\_toml module
+-----------------------------------
+
+.. automodule:: pyappconf.encoding.ext_toml
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyappconf.encoding.ext\_yaml module
+-----------------------------------
+
+.. automodule:: pyappconf.encoding.ext_yaml
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyappconf.encoding.general module
+---------------------------------
+
+.. automodule:: pyappconf.encoding.general
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

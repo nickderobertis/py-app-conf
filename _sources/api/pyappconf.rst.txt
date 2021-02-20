@@ -6,6 +6,13 @@ pyappconf package
    :undoc-members:
    :show-inheritance:
 
+Subpackages
+-----------
+
+.. toctree::
+
+   pyappconf.encoding
+
 Submodules
 ----------
 
