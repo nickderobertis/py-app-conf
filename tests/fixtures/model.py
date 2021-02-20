@@ -23,17 +23,32 @@ def get_model_classes() -> Tuple[Type[BaseConfig], Type[BaseModel]]:
         default_string: str = "woo"
         default_custom: SubConfig = SubConfig(a="yeah", b=5.6)
 
-        _settings: AppConfig = AppConfig(app_name='MyApp')
+        _settings: AppConfig = AppConfig(app_name="MyApp")
 
         class Config:
-            env_prefix = 'MYAPP_'
+            env_prefix = "MYAPP_"
             env_file = ENV_PATH
-
 
     return MyConfig, SubConfig
 
 
-def get_model_object(exclude_keys: Optional[Sequence[str]] = None, **kwargs) -> BaseConfig:
+def get_model_class_with_defaults() -> Type[BaseConfig]:
+    class MyDefaultConfig(BaseConfig):
+        a: str = "a"
+        b: int = 2
+
+        _settings: AppConfig = AppConfig(app_name="MyApp")
+
+        class Config:
+            env_prefix = "MYAPP_"
+            env_file = ENV_PATH
+
+    return MyDefaultConfig
+
+
+def get_model_object(
+    exclude_keys: Optional[Sequence[str]] = None, **kwargs
+) -> BaseConfig:
     MyConfig, SubConfig = get_model_classes()
 
     all_kwargs = dict(
@@ -45,12 +60,19 @@ def get_model_object(exclude_keys: Optional[Sequence[str]] = None, **kwargs) -> 
         int_tuple=(1, 2, 3),
     )
     if exclude_keys is not None:
-        all_kwargs = {key: value for key, value in all_kwargs.items() if key not in exclude_keys}
+        all_kwargs = {
+            key: value for key, value in all_kwargs.items() if key not in exclude_keys
+        }
     all_kwargs.update(kwargs)
 
     # conf = MyConfig(**{'myapp_' + key: value for key, value in all_kwargs.items()})
     conf = MyConfig(**all_kwargs)
     return conf
+
+
+def get_model_object_with_defaults() -> BaseConfig:
+    MyDefaultConfig = get_model_class_with_defaults()
+    return MyDefaultConfig()
 
 
 @pytest.fixture(scope="session")
@@ -59,5 +81,15 @@ def model_classes() -> Tuple[Type[BaseConfig], Type[BaseModel]]:
 
 
 @pytest.fixture(scope="session")
+def model_class_with_defaults() -> Type[BaseConfig]:
+    return get_model_class_with_defaults()
+
+
+@pytest.fixture(scope="session")
 def model_object() -> BaseConfig:
     return get_model_object()
+
+
+@pytest.fixture(scope="session")
+def model_object_with_defaults() -> BaseConfig:
+    return get_model_object_with_defaults()

@@ -129,6 +129,22 @@ class BaseConfig(BaseSettings):
         return obj
 
     @classmethod
+    def load_or_create(cls, path: Optional[Union[str, Path]] = None) -> 'BaseConfig':
+        if path is None:
+            path = cls._settings.config_location
+        else:
+            path = Path(path)
+        if path.exists():
+            return cls.load(path)
+        else:
+            config_format = ConfigFormats.from_path(path)
+            return cls(settings=cls._settings_with_overrides(
+                custom_config_path=path.with_suffix(''),
+                default_format=config_format,
+                config_name=path.stem,
+            ))
+
+    @classmethod
     def _get_env_values(cls) -> Dict[str, Any]:
         env_file = getattr(cls.Config, 'env_file', None)
         return cls._build_environ(cls, _env_file=env_file)  # type: ignore
