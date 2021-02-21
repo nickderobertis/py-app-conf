@@ -111,7 +111,7 @@ class BaseConfig(BaseSettings):
 
     def save(self, serializer_kwargs: Optional[Dict[str, Any]] = None, **kwargs):
         if not self.settings.config_location.parent.exists():
-            self.settings.config_location.parent.mkdir()
+            self.settings.config_location.parent.mkdir(parents=True)
         self.get_serializer()(self.settings.config_location, serializer_kwargs, **kwargs)  # type: ignore
 
     @classmethod
