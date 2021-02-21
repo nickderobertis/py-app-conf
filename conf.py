@@ -20,7 +20,7 @@ REPO_MAINTAINERS = [
 ]
 
 # Package version in the format (major, minor, release)
-PACKAGE_VERSION_TUPLE = (0, 3, 0)
+PACKAGE_VERSION_TUPLE = (0, 3, 1)
 
 # Short description of the package
 PACKAGE_SHORT_DESCRIPTION = "Strongly typed and validated configuration supporting multiple file types, dynamic instantiation, and environment variables"
@@ -67,6 +67,7 @@ PACKAGE_INSTALL_REQUIRES = [
     'PyYAML',
     'toml',
     'python-dotenv',
+    'typing_extensions',
 ]
 
 # Add any third party packages you use in requirements for optional features of your package here
