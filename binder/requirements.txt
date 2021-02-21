@@ -1,7 +1,7 @@
+appdirs
 PyYAML
 toml
 pydantic
 python-dotenv
-appdirs
-py-app-conf
 typing_extensions
+py-app-conf
