@@ -8,6 +8,7 @@ import yaml
 import toml
 import json
 import appdirs
+from pydantic.env_settings import EnvSettingsSource
 from toml.encoder import TomlEncoder
 
 from pyappconf.encoding.ext_json import ExtendedJSONEncoder
@@ -155,7 +156,8 @@ class BaseConfig(BaseSettings):
     @classmethod
     def _get_env_values(cls) -> Dict[str, Any]:
         env_file = getattr(cls.Config, 'env_file', None)
-        return cls._build_environ(cls, _env_file=env_file)  # type: ignore
+        source = EnvSettingsSource(env_file=env_file, env_file_encoding=None)
+        return source(cls)  # type: ignore
 
     def to_yaml(
         self,
