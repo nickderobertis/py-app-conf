@@ -26,4 +26,5 @@ appdirs = "*"
 PyYAML = "*"
 toml = "*"
 python-dotenv = "*"
-
+types-pyyaml = "*"
+types-toml = "*"
