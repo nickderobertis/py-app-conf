@@ -27,5 +27,3 @@ PyYAML = "*"
 toml = "*"
 python-dotenv = "*"
 
-[requires]
-python_version = "3.8"
