@@ -4,10 +4,11 @@
 <html lang="en" >
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyappconf package &mdash; py-app-conf 0.3.2 documentation</title>
+  <title>pyappconf package &mdash; py-app-conf 0.3.3 documentation</title>
   
 
   
@@ -22,6 +23,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
@@ -35,13 +37,15 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pyappconf.encoding package" href="pyappconf.encoding.html" />
@@ -69,7 +73,7 @@
             
             
               <div class="version">
-                0.3.2
+                0.3.3
               </div>
             
           
@@ -94,12 +98,12 @@
               
             
             
-              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Getting started with py-app-conf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">This is my gallery</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Documentation</span></p>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">pyappconf</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">pyappconf package</a><ul>
@@ -180,10 +184,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-pyappconf">
+  <section id="module-pyappconf">
 <span id="pyappconf-package"></span><h1>pyappconf package<a class="headerlink" href="#module-pyappconf" title="Permalink to this headline">¶</a></h1>
 <p>Strongly typed and validated configuration supporting multiple file types, dynamic instantiation, and environment variables</p>
-<div class="section" id="subpackages">
+<section id="subpackages">
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
@@ -197,113 +201,100 @@
 </li>
 </ul>
 </div>
-</div>
-<div class="section" id="submodules">
+</section>
+<section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-pyappconf.model">
+</section>
+<section id="module-pyappconf.model">
 <span id="pyappconf-model-module"></span><h2>pyappconf.model module<a class="headerlink" href="#module-pyappconf.model" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="pyappconf.model.AppConfig">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyappconf.model.</span></code><code class="sig-name descname"><span class="pre">AppConfig</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#AppConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.AppConfig" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.</span></code></p>
+<dt class="sig sig-object py" id="pyappconf.model.AppConfig">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyappconf.model.</span></span><span class="sig-name descname"><span class="pre">AppConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#AppConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.AppConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
 <dl class="py attribute">
-<dt id="pyappconf.model.AppConfig.app_name">
-<code class="sig-name descname"><span class="pre">app_name</span></code><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></em><a class="headerlink" href="#pyappconf.model.AppConfig.app_name" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyappconf.model.AppConfig.app_name">
+<span class="sig-name descname"><span class="pre">app_name</span></span><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><a class="headerlink" href="#pyappconf.model.AppConfig.app_name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
-<dt id="pyappconf.model.AppConfig.config_base_location">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">config_base_location</span></code><a class="headerlink" href="#pyappconf.model.AppConfig.config_base_location" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="pyappconf.model.AppConfig.config_base_location">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">config_base_location</span></span><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">pathlib.Path</span></a></em><a class="headerlink" href="#pyappconf.model.AppConfig.config_base_location" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="pyappconf.model.AppConfig.config_location">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">config_location</span></code><a class="headerlink" href="#pyappconf.model.AppConfig.config_location" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="pyappconf.model.AppConfig.config_location">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">config_location</span></span><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">pathlib.Path</span></a></em><a class="headerlink" href="#pyappconf.model.AppConfig.config_location" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="pyappconf.model.AppConfig.config_name">
-<code class="sig-name descname"><span class="pre">config_name</span></code><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">'config'</span></em><a class="headerlink" href="#pyappconf.model.AppConfig.config_name" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyappconf.model.AppConfig.config_name">
+<span class="sig-name descname"><span class="pre">config_name</span></span><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><a class="headerlink" href="#pyappconf.model.AppConfig.config_name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="pyappconf.model.AppConfig.custom_config_path">
-<code class="sig-name descname"><span class="pre">custom_config_path</span></code><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><span class="pre">pathlib.Path</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pyappconf.model.AppConfig.custom_config_path" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyappconf.model.AppConfig.custom_config_path">
+<span class="sig-name descname"><span class="pre">custom_config_path</span></span><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">pathlib.Path</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyappconf.model.AppConfig.custom_config_path" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="pyappconf.model.AppConfig.default_format">
-<code class="sig-name descname"><span class="pre">default_format</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="#pyappconf.model.ConfigFormats" title="pyappconf.model.ConfigFormats"><span class="pre">pyappconf.model.ConfigFormats</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">'toml'</span></em><a class="headerlink" href="#pyappconf.model.AppConfig.default_format" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyappconf.model.AppConfig.default_format">
+<span class="sig-name descname"><span class="pre">default_format</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="#pyappconf.model.ConfigFormats" title="pyappconf.model.ConfigFormats"><span class="pre">pyappconf.model.ConfigFormats</span></a></em><a class="headerlink" href="#pyappconf.model.AppConfig.default_format" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="pyappconf.model.AppConfig.json_encoder">
-<code class="sig-name descname"><span class="pre">json_encoder</span></code><a class="headerlink" href="#pyappconf.model.AppConfig.json_encoder" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="pyappconf.encoding.html#pyappconf.encoding.ext_json.ExtendedJSONEncoder" title="pyappconf.encoding.ext_json.ExtendedJSONEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyappconf.encoding.ext_json.ExtendedJSONEncoder</span></code></a></p>
-</dd></dl>
+<dt class="sig sig-object py" id="pyappconf.model.AppConfig.json_encoder">
+<span class="sig-name descname"><span class="pre">json_encoder</span></span><em class="property"><span class="pre">:</span> <span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">json.encoder.JSONEncoder</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyappconf.model.AppConfig.json_encoder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="pyappconf.model.AppConfig.toml_encoder">
-<code class="sig-name descname"><span class="pre">toml_encoder</span></code><a class="headerlink" href="#pyappconf.model.AppConfig.toml_encoder" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="pyappconf.encoding.html#pyappconf.encoding.ext_toml.CustomTomlEncoder" title="pyappconf.encoding.ext_toml.CustomTomlEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyappconf.encoding.ext_toml.CustomTomlEncoder</span></code></a></p>
-</dd></dl>
+<dt class="sig sig-object py" id="pyappconf.model.AppConfig.toml_encoder">
+<span class="sig-name descname"><span class="pre">toml_encoder</span></span><em class="property"><span class="pre">:</span> <span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">toml.encoder.TomlEncoder</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyappconf.model.AppConfig.toml_encoder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="pyappconf.model.AppConfig.yaml_encoder">
-<code class="sig-name descname"><span class="pre">yaml_encoder</span></code><a class="headerlink" href="#pyappconf.model.AppConfig.yaml_encoder" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="pyappconf.encoding.html#pyappconf.encoding.ext_yaml.CustomDumper" title="pyappconf.encoding.ext_yaml.CustomDumper"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyappconf.encoding.ext_yaml.CustomDumper</span></code></a></p>
-</dd></dl>
+<dt class="sig sig-object py" id="pyappconf.model.AppConfig.yaml_encoder">
+<span class="sig-name descname"><span class="pre">yaml_encoder</span></span><em class="property"><span class="pre">:</span> <span class="pre">Type</span></em><a class="headerlink" href="#pyappconf.model.AppConfig.yaml_encoder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="pyappconf.model.BaseConfig">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyappconf.model.</span></code><code class="sig-name descname"><span class="pre">BaseConfig</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.</span></code></p>
+<dt class="sig sig-object py" id="pyappconf.model.BaseConfig">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyappconf.model.</span></span><span class="sig-name descname"><span class="pre">BaseConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_env_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;object</span> <span class="pre">object&gt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_file_encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_secrets_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.env_settings.BaseSettings</span></code></p>
 <dl class="py method">
-<dt id="pyappconf.model.BaseConfig.get_deserializer">
-<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">get_deserializer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.get_deserializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.get_deserializer" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyappconf.model.BaseConfig.get_deserializer">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">get_deserializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.get_deserializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.get_deserializer" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>]], <a class="reference internal" href="#pyappconf.model.BaseConfig" title="pyappconf.model.BaseConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseConfig</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>]], <a class="reference internal" href="#pyappconf.model.BaseConfig" title="pyappconf.model.BaseConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseConfig</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pyappconf.model.BaseConfig.get_serializer">
-<code class="sig-name descname"><span class="pre">get_serializer</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.get_serializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.get_serializer" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyappconf.model.BaseConfig.get_serializer">
+<span class="sig-name descname"><span class="pre">get_serializer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.get_serializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.get_serializer" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]], <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]], <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pyappconf.model.BaseConfig.load">
-<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">load</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.load" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#pyappconf.model.BaseConfig" title="pyappconf.model.BaseConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseConfig</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyappconf.model.BaseConfig.load_or_create">
-<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">load_or_create</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.load_or_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.load_or_create" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyappconf.model.BaseConfig.load">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.load" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#pyappconf.model.BaseConfig" title="pyappconf.model.BaseConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseConfig</span></code></a></p>
@@ -312,8 +303,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="pyappconf.model.BaseConfig.parse_json">
-<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">parse_json</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.parse_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.parse_json" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyappconf.model.BaseConfig.load_or_create">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">load_or_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.load_or_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.load_or_create" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#pyappconf.model.BaseConfig" title="pyappconf.model.BaseConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseConfig</span></code></a></p>
@@ -322,8 +313,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="pyappconf.model.BaseConfig.parse_toml">
-<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">parse_toml</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.parse_toml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.parse_toml" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyappconf.model.BaseConfig.parse_json">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">parse_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.parse_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.parse_json" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#pyappconf.model.BaseConfig" title="pyappconf.model.BaseConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseConfig</span></code></a></p>
@@ -332,8 +323,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="pyappconf.model.BaseConfig.parse_yaml">
-<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">parse_yaml</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.parse_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.parse_yaml" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyappconf.model.BaseConfig.parse_toml">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">parse_toml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.parse_toml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.parse_toml" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#pyappconf.model.BaseConfig" title="pyappconf.model.BaseConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseConfig</span></code></a></p>
@@ -342,46 +333,56 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="pyappconf.model.BaseConfig.save">
-<code class="sig-name descname"><span class="pre">save</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">serializer_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.save" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyappconf.model.BaseConfig.parse_yaml">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">parse_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.parse_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.parse_yaml" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyappconf.model.BaseConfig" title="pyappconf.model.BaseConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseConfig</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyappconf.model.BaseConfig.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">serializer_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.save" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="pyappconf.model.BaseConfig.set_settings_from_class_if_none">
-<code class="sig-name descname"><span class="pre">set_settings_from_class_if_none</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyappconf.model.BaseConfig.set_settings_from_class_if_none" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyappconf.model.BaseConfig.set_settings_from_class_if_none">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">set_settings_from_class_if_none</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.set_settings_from_class_if_none"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.set_settings_from_class_if_none" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="pyappconf.model.BaseConfig.settings">
-<code class="sig-name descname"><span class="pre">settings</span></code><em class="property"><span class="pre">:</span> <a class="reference internal" href="#pyappconf.model.AppConfig" title="pyappconf.model.AppConfig"><span class="pre">pyappconf.model.AppConfig</span></a></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pyappconf.model.BaseConfig.settings" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyappconf.model.BaseConfig.settings">
+<span class="sig-name descname"><span class="pre">settings</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="#pyappconf.model.AppConfig" title="pyappconf.model.AppConfig"><span class="pre">pyappconf.model.AppConfig</span></a></em><a class="headerlink" href="#pyappconf.model.BaseConfig.settings" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="pyappconf.model.BaseConfig.to_json">
-<code class="sig-name descname"><span class="pre">to_json</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.to_json" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyappconf.model.BaseConfig.to_json">
+<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.to_json" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pyappconf.model.BaseConfig.to_toml">
-<code class="sig-name descname"><span class="pre">to_toml</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toml_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.to_toml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.to_toml" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyappconf.model.BaseConfig.to_toml">
+<span class="sig-name descname"><span class="pre">to_toml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toml_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.to_toml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.to_toml" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pyappconf.model.BaseConfig.to_yaml">
-<code class="sig-name descname"><span class="pre">to_yaml</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaml_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.to_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.to_yaml" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyappconf.model.BaseConfig.to_yaml">
+<span class="sig-name descname"><span class="pre">to_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaml_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.to_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.to_yaml" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -389,28 +390,28 @@
 </dd></dl>
 
 <dl class="py class">
-<dt id="pyappconf.model.ConfigFormats">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyappconf.model.</span></code><code class="sig-name descname"><span class="pre">ConfigFormats</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#ConfigFormats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.ConfigFormats" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<dt class="sig sig-object py" id="pyappconf.model.ConfigFormats">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyappconf.model.</span></span><span class="sig-name descname"><span class="pre">ConfigFormats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#ConfigFormats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.ConfigFormats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>An enumeration.</p>
 <dl class="py attribute">
-<dt id="pyappconf.model.ConfigFormats.JSON">
-<code class="sig-name descname"><span class="pre">JSON</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'json'</span></em><a class="headerlink" href="#pyappconf.model.ConfigFormats.JSON" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyappconf.model.ConfigFormats.JSON">
+<span class="sig-name descname"><span class="pre">JSON</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'json'</span></em><a class="headerlink" href="#pyappconf.model.ConfigFormats.JSON" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="pyappconf.model.ConfigFormats.TOML">
-<code class="sig-name descname"><span class="pre">TOML</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'toml'</span></em><a class="headerlink" href="#pyappconf.model.ConfigFormats.TOML" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyappconf.model.ConfigFormats.TOML">
+<span class="sig-name descname"><span class="pre">TOML</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'toml'</span></em><a class="headerlink" href="#pyappconf.model.ConfigFormats.TOML" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="pyappconf.model.ConfigFormats.YAML">
-<code class="sig-name descname"><span class="pre">YAML</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'yaml'</span></em><a class="headerlink" href="#pyappconf.model.ConfigFormats.YAML" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyappconf.model.ConfigFormats.YAML">
+<span class="sig-name descname"><span class="pre">YAML</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'yaml'</span></em><a class="headerlink" href="#pyappconf.model.ConfigFormats.YAML" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="pyappconf.model.ConfigFormats.from_path">
-<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">from_path</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#ConfigFormats.from_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.ConfigFormats.from_path" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyappconf.model.ConfigFormats.from_path">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#ConfigFormats.from_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.ConfigFormats.from_path" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#pyappconf.model.ConfigFormats" title="pyappconf.model.ConfigFormats"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigFormats</span></code></a></p>
@@ -420,8 +421,8 @@
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

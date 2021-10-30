@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyappconf.model &mdash; py-app-conf 0.3.2 documentation</title>
+  <title>pyappconf.model &mdash; py-app-conf 0.3.3 documentation</title>
   
 
   
@@ -22,6 +22,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
@@ -35,13 +36,15 @@
   
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sphinx_paramlinks.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
 </head>
@@ -67,7 +70,7 @@
             
             
               <div class="version">
-                0.3.2
+                0.3.3
               </div>
             
           
@@ -92,12 +95,12 @@
               
             
             
-              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Getting started with py-app-conf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">This is my gallery</a></li>
 </ul>
-<p class="caption"><span class="caption-text">API Documentation</span></p>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">pyappconf</a></li>
 </ul>
@@ -174,6 +177,7 @@
 <span class="kn">import</span> <span class="nn">toml</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">appdirs</span>
+<span class="kn">from</span> <span class="nn">pydantic.env_settings</span> <span class="kn">import</span> <span class="n">EnvSettingsSource</span>
 <span class="kn">from</span> <span class="nn">toml.encoder</span> <span class="kn">import</span> <span class="n">TomlEncoder</span>
 
 <span class="kn">from</span> <span class="nn">pyappconf.encoding.ext_json</span> <span class="kn">import</span> <span class="n">ExtendedJSONEncoder</span>
@@ -239,11 +243,11 @@
     <span class="n">_settings</span><span class="p">:</span> <span class="n">AppConfig</span>
     <span class="n">settings</span><span class="p">:</span> <span class="n">AppConfig</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: ignore</span>
 
-    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;settings&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="BaseConfig.set_settings_from_class_if_none"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.BaseConfig.set_settings_from_class_if_none">[docs]</a>    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;settings&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">set_settings_from_class_if_none</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_settings</span>
-        <span class="k">return</span> <span class="n">v</span>
+        <span class="k">return</span> <span class="n">v</span></div>
 
 <div class="viewcode-block" id="BaseConfig.get_serializer"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.BaseConfig.get_serializer">[docs]</a>    <span class="k">def</span> <span class="nf">get_serializer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]],</span> <span class="nb">str</span><span class="p">]:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">default_format</span> <span class="o">==</span> <span class="n">ConfigFormats</span><span class="o">.</span><span class="n">TOML</span><span class="p">:</span>
@@ -321,7 +325,8 @@
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_get_env_values</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="n">env_file</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">Config</span><span class="p">,</span> <span class="s1">&#39;env_file&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_build_environ</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">_env_file</span><span class="o">=</span><span class="n">env_file</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="n">EnvSettingsSource</span><span class="p">(</span><span class="n">env_file</span><span class="o">=</span><span class="n">env_file</span><span class="p">,</span> <span class="n">env_file_encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">source</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
 <div class="viewcode-block" id="BaseConfig.to_yaml"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.BaseConfig.to_yaml">[docs]</a>    <span class="k">def</span> <span class="nf">to_yaml</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
