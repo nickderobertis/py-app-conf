@@ -1,24 +1,29 @@
+import shutil
 from pathlib import Path
-from typing import Type, Tuple
+from typing import Type, Tuple, Optional
 
+import pytest
 from pydantic import BaseModel
 
 from pyappconf.model import AppConfig, ConfigFormats, BaseConfig
 from tests.config import (
-    CUSTOM_CONFIG_OUT_PATH,
+    GENERATED_DATA_DIR,
     JSON_PATH,
-    CUSTOM_CONFIG_IN_PATH,
     YAML_PATH,
     TOML_PATH,
-    DATA_NAME, NON_EXISTENT_INPUT_JSON_PATH, NON_EXISTENT_NAME, NON_EXISTENT_IN_PATH,
+    DATA_NAME,
+    NON_EXISTENT_INPUT_JSON_PATH,
+    NON_EXISTENT_NAME,
+    RECURSIVE_INPUT_FOLDER,
+    INPUT_DATA_DIR,
 )
 from tests.fixtures.model import (
     get_model_object,
     get_model_classes,
     model_classes,
     model_object,
-model_class_with_defaults,
-model_object_with_defaults,
+    model_class_with_defaults,
+    model_object_with_defaults,
 )
 
 
@@ -43,7 +48,7 @@ def _save_load_test(custom_settings: AppConfig):
 
 def test_save_load_toml():
     custom_settings = AppConfig(
-        app_name="MyApp", custom_config_path=CUSTOM_CONFIG_OUT_PATH
+        app_name="MyApp", custom_config_folder=GENERATED_DATA_DIR
     )
     _save_load_test(custom_settings)
 
@@ -51,7 +56,7 @@ def test_save_load_toml():
 def test_save_load_yaml():
     custom_settings = AppConfig(
         app_name="MyApp",
-        custom_config_path=CUSTOM_CONFIG_OUT_PATH,
+        custom_config_folder=GENERATED_DATA_DIR,
         default_format=ConfigFormats.YAML,
     )
     _save_load_test(custom_settings)
@@ -60,7 +65,7 @@ def test_save_load_yaml():
 def test_save_load_json():
     custom_settings = AppConfig(
         app_name="MyApp",
-        custom_config_path=CUSTOM_CONFIG_OUT_PATH,
+        custom_config_folder=GENERATED_DATA_DIR,
         default_format=ConfigFormats.JSON,
     )
     _save_load_test(custom_settings)
@@ -69,7 +74,7 @@ def test_save_load_json():
 def assert_model_loaded_with_extension(
     mod: BaseConfig, model_object: BaseConfig, config_format: ConfigFormats
 ):
-    assert mod.settings.custom_config_path == CUSTOM_CONFIG_IN_PATH
+    assert mod.settings.custom_config_folder == INPUT_DATA_DIR
     assert mod.settings.default_format == config_format
     assert mod.settings.config_name == DATA_NAME
 
@@ -115,9 +120,40 @@ def test_load_or_create_with_path_does_not_exist(
     MyConfig = model_class_with_defaults
     model_object = model_object_with_defaults
     mod = MyConfig.load_or_create(NON_EXISTENT_INPUT_JSON_PATH)
-    assert mod.settings.custom_config_path == NON_EXISTENT_IN_PATH
+    assert mod.settings.custom_config_folder == INPUT_DATA_DIR
     assert mod.settings.default_format == ConfigFormats.JSON
     assert mod.settings.config_name == NON_EXISTENT_NAME
 
     mod.settings = model_object.settings
     assert mod == model_object
+
+
+@pytest.mark.parametrize(
+    "path, expect_string",
+    [
+        (RECURSIVE_INPUT_FOLDER / "1", "loaded from 1"),
+        (RECURSIVE_INPUT_FOLDER / "2", "loaded from recursive"),
+        # Third and fourth cases - didn't find recursive, go to default location
+        (INPUT_DATA_DIR, "a"),
+        (None, "a"),
+    ],
+)
+def test_load_recursive(path: Optional[Path], expect_string: str):
+    OrigConfig, SubConfig = get_model_classes()
+
+    shutil.copy(
+        INPUT_DATA_DIR / "data.toml", GENERATED_DATA_DIR / "recursive-config.toml"
+    )
+
+    custom_settings = AppConfig(
+        app_name="MyApp",
+        custom_config_folder=GENERATED_DATA_DIR,
+        config_name="recursive-config",
+    )
+
+    class MyConfig(OrigConfig):
+        _settings = custom_settings
+
+    mod = MyConfig.load_recursive(path)
+
+    assert mod.string == expect_string

@@ -21,9 +21,17 @@ def test_config_location_linux(model_object: BaseConfig):
     )
 
 
-def test_custom_config_location():
-    expect_path = Path("/woo")
+def test_custom_config_folder():
+    folder = Path("/woo")
     obj = get_model_object(
-        settings=AppConfig(app_name="MyApp", custom_config_path=expect_path)
+        settings=AppConfig(app_name="MyApp", custom_config_folder=folder)
     )
-    assert obj.settings.config_base_location == expect_path
+    assert obj.settings.config_base_location == (folder / "config")
+
+
+def test_custom_config_name():
+    folder = Path("/woo")
+    obj = get_model_object(
+        settings=AppConfig(app_name="MyApp", custom_config_folder=folder, config_name="yeah")
+    )
+    assert obj.settings.config_base_location == (folder / "yeah")

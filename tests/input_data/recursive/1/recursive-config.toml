@@ -1,0 +1,18 @@
+string = "loaded from 1"
+integer = 5
+str_list = [ "a", "b", "c",]
+int_tuple = [ 1, 2, 3,]
+default_string = "woo"
+file_path = "/a/b.txt"
+
+[custom]
+a = "b"
+b = 8.5
+
+[default_custom]
+a = "yeah"
+b = 5.6
+
+[dictionary.yeah]
+a = "c"
+b = 9.6
