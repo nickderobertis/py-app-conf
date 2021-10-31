@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyappconf.model &mdash; py-app-conf 0.3.3 documentation</title>
+  <title>pyappconf.model &mdash; py-app-conf 0.4.0 documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                0.3.3
+                0.4.0
               </div>
             
           
@@ -167,7 +167,8 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyappconf.model</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Type</span>
@@ -202,27 +203,28 @@
 
 
 <div class="viewcode-block" id="ConfigFormats"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.ConfigFormats">[docs]</a><span class="k">class</span> <span class="nc">ConfigFormats</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
-    <span class="n">YAML</span> <span class="o">=</span> <span class="s1">&#39;yaml&#39;</span>
-    <span class="n">JSON</span> <span class="o">=</span> <span class="s1">&#39;json&#39;</span>
-    <span class="n">TOML</span> <span class="o">=</span> <span class="s1">&#39;toml&#39;</span>
+    <span class="n">YAML</span> <span class="o">=</span> <span class="s2">&quot;yaml&quot;</span>
+    <span class="n">JSON</span> <span class="o">=</span> <span class="s2">&quot;json&quot;</span>
+    <span class="n">TOML</span> <span class="o">=</span> <span class="s2">&quot;toml&quot;</span>
 
 <div class="viewcode-block" id="ConfigFormats.from_path"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.ConfigFormats.from_path">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;ConfigFormats&#39;</span><span class="p">:</span>
-        <span class="n">ext</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">casefold</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;yml&#39;</span><span class="p">,</span> <span class="s1">&#39;yaml&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">from_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ConfigFormats&quot;</span><span class="p">:</span>
+        <span class="n">ext</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">casefold</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;yml&quot;</span><span class="p">,</span> <span class="s2">&quot;yaml&quot;</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">YAML</span>
-        <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s1">&#39;json&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s2">&quot;json&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">JSON</span>
-        <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s1">&#39;toml&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s2">&quot;toml&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">TOML</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;suffix </span><span class="si">{</span><span class="n">ext</span><span class="si">}</span><span class="s1"> not a supported config format. Supplied path: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div></div>
-
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;suffix </span><span class="si">{</span><span class="n">ext</span><span class="si">}</span><span class="s2"> not a supported config format. Supplied path: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="AppConfig"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.AppConfig">[docs]</a><span class="k">class</span> <span class="nc">AppConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">app_name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">config_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;config&quot;</span>
-    <span class="n">custom_config_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">custom_config_folder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">default_format</span><span class="p">:</span> <span class="n">ConfigFormats</span> <span class="o">=</span> <span class="n">ConfigFormats</span><span class="o">.</span><span class="n">TOML</span>
     <span class="n">toml_encoder</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">TomlEncoder</span><span class="p">]</span> <span class="o">=</span> <span class="n">CustomTomlEncoder</span>
     <span class="n">yaml_encoder</span><span class="p">:</span> <span class="n">Type</span> <span class="o">=</span> <span class="n">CustomDumper</span>
@@ -230,36 +232,44 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">config_base_location</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_config_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_config_path</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_config_folder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_config_folder</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_name</span>
         <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">appdirs</span><span class="o">.</span><span class="n">user_config_dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">app_name</span><span class="p">))</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_name</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">config_location</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_base_location</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_format</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_base_location</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_format</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">config_file_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_location</span><span class="o">.</span><span class="n">name</span></div>
 
 
 <div class="viewcode-block" id="BaseConfig"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.BaseConfig">[docs]</a><span class="k">class</span> <span class="nc">BaseConfig</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
     <span class="n">_settings</span><span class="p">:</span> <span class="n">AppConfig</span>
     <span class="n">settings</span><span class="p">:</span> <span class="n">AppConfig</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: ignore</span>
 
-<div class="viewcode-block" id="BaseConfig.set_settings_from_class_if_none"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.BaseConfig.set_settings_from_class_if_none">[docs]</a>    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;settings&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="BaseConfig.set_settings_from_class_if_none"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.BaseConfig.set_settings_from_class_if_none">[docs]</a>    <span class="nd">@validator</span><span class="p">(</span><span class="s2">&quot;settings&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">set_settings_from_class_if_none</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_settings</span>
         <span class="k">return</span> <span class="n">v</span></div>
 
-<div class="viewcode-block" id="BaseConfig.get_serializer"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.BaseConfig.get_serializer">[docs]</a>    <span class="k">def</span> <span class="nf">get_serializer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]],</span> <span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="BaseConfig.get_serializer"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.BaseConfig.get_serializer">[docs]</a>    <span class="k">def</span> <span class="nf">get_serializer</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]],</span> <span class="nb">str</span><span class="p">]:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">default_format</span> <span class="o">==</span> <span class="n">ConfigFormats</span><span class="o">.</span><span class="n">TOML</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_toml</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">default_format</span> <span class="o">==</span> <span class="n">ConfigFormats</span><span class="o">.</span><span class="n">YAML</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_yaml</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">default_format</span> <span class="o">==</span> <span class="n">ConfigFormats</span><span class="o">.</span><span class="n">JSON</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_json</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;unsupported format </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">default_format</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unsupported format </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">default_format</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BaseConfig.get_deserializer"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.BaseConfig.get_deserializer">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_deserializer</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config_format</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ConfigFormats</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]],</span> <span class="s1">&#39;BaseConfig&#39;</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">get_deserializer</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">config_format</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ConfigFormats</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]],</span> <span class="s2">&quot;BaseConfig&quot;</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">config_format</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">config_format</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">default_format</span>
 
@@ -269,7 +279,7 @@
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">parse_yaml</span>
         <span class="k">if</span> <span class="n">config_format</span> <span class="o">==</span> <span class="n">ConfigFormats</span><span class="o">.</span><span class="n">JSON</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">parse_json</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;unsupported format </span><span class="si">{</span><span class="n">config_format</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unsupported format </span><span class="si">{</span><span class="n">config_format</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_settings_with_overrides</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AppConfig</span><span class="p">:</span>
@@ -285,7 +295,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">get_serializer</span><span class="p">()(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">config_location</span><span class="p">,</span> <span class="n">serializer_kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
 
 <div class="viewcode-block" id="BaseConfig.load"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.BaseConfig.load">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;BaseConfig&#39;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BaseConfig&quot;</span><span class="p">:</span>
         <span class="n">assign_settings</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="n">config_format</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ConfigFormats</span><span class="p">]</span>
@@ -300,14 +310,14 @@
         <span class="n">obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_deserializer</span><span class="p">(</span><span class="n">config_format</span><span class="p">)(</span><span class="n">path</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">assign_settings</span><span class="p">:</span>
             <span class="n">obj</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_settings_with_overrides</span><span class="p">(</span>
-                <span class="n">custom_config_path</span><span class="o">=</span><span class="n">path</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">),</span>
+                <span class="n">custom_config_folder</span><span class="o">=</span><span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span>
                 <span class="n">default_format</span><span class="o">=</span><span class="n">config_format</span><span class="p">,</span>
                 <span class="n">config_name</span><span class="o">=</span><span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">obj</span></div>
 
 <div class="viewcode-block" id="BaseConfig.load_or_create"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.BaseConfig.load_or_create">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">load_or_create</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;BaseConfig&#39;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">load_or_create</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BaseConfig&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">config_location</span>
         <span class="k">else</span><span class="p">:</span>
@@ -316,15 +326,47 @@
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">config_format</span> <span class="o">=</span> <span class="n">ConfigFormats</span><span class="o">.</span><span class="n">from_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">settings</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">_settings_with_overrides</span><span class="p">(</span>
-                <span class="n">custom_config_path</span><span class="o">=</span><span class="n">path</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">),</span>
-                <span class="n">default_format</span><span class="o">=</span><span class="n">config_format</span><span class="p">,</span>
-                <span class="n">config_name</span><span class="o">=</span><span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="p">,</span>
-            <span class="p">))</span></div>
+            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+                <span class="n">settings</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">_settings_with_overrides</span><span class="p">(</span>
+                    <span class="n">custom_config_folder</span><span class="o">=</span><span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span>
+                    <span class="n">default_format</span><span class="o">=</span><span class="n">config_format</span><span class="p">,</span>
+                    <span class="n">config_name</span><span class="o">=</span><span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseConfig.load_recursive"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.BaseConfig.load_recursive">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">load_recursive</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BaseConfig&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Searches the passed path or current directory for a config with the correct name,</span>
+<span class="sd">        and if not found goes the parent directory and repeats the search.</span>
+<span class="sd">        If the config is not found after reaching the root directory,</span>
+<span class="sd">        it will look at the location in the config.</span>
+
+<span class="sd">        :param path: The path to start searching from, defaults to the current directory</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
+        <span class="n">current_path</span> <span class="o">=</span> <span class="n">path</span>
+
+        <span class="k">def</span> <span class="nf">has_hit_root_directory</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">current_path</span><span class="o">.</span><span class="n">parent</span> <span class="o">==</span> <span class="n">current_path</span>
+
+        <span class="n">file_name</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">config_file_name</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">check_path</span> <span class="o">=</span> <span class="n">current_path</span> <span class="o">/</span> <span class="n">file_name</span>
+            <span class="k">if</span> <span class="n">check_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">check_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">has_hit_root_directory</span><span class="p">():</span>
+                <span class="k">break</span>
+            <span class="n">current_path</span> <span class="o">=</span> <span class="n">current_path</span><span class="o">.</span><span class="n">parent</span>
+
+        <span class="c1"># Could not find config after reaching root directory. Try</span>
+        <span class="c1"># loading from default location</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">load</span><span class="p">()</span></div>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_get_env_values</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="n">env_file</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">Config</span><span class="p">,</span> <span class="s1">&#39;env_file&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">env_file</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">Config</span><span class="p">,</span> <span class="s2">&quot;env_file&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">source</span> <span class="o">=</span> <span class="n">EnvSettingsSource</span><span class="p">(</span><span class="n">env_file</span><span class="o">=</span><span class="n">env_file</span><span class="p">,</span> <span class="n">env_file_encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">source</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
@@ -332,7 +374,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">out_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">yaml_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">yaml_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">yaml_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
@@ -352,7 +394,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">out_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">toml_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">toml_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">toml_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
@@ -372,7 +414,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">out_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">json_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">json_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">json_kwargs</span> <span class="o">=</span> <span class="p">{}</span>

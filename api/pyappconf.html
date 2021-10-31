@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyappconf package &mdash; py-app-conf 0.3.3 documentation</title>
+  <title>pyappconf package &mdash; py-app-conf 0.4.0 documentation</title>
   
 
   
@@ -73,7 +73,7 @@
             
             
               <div class="version">
-                0.3.3
+                0.4.0
               </div>
             
           
@@ -227,6 +227,16 @@
 </dd></dl>
 
 <dl class="py property">
+<dt class="sig sig-object py" id="pyappconf.model.AppConfig.config_file_name">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">config_file_name</span></span><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><a class="headerlink" href="#pyappconf.model.AppConfig.config_file_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="pyappconf.model.AppConfig.config_location">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">config_location</span></span><em class="property"><span class="pre">:</span> <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">pathlib.Path</span></a></em><a class="headerlink" href="#pyappconf.model.AppConfig.config_location" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -242,8 +252,8 @@
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="pyappconf.model.AppConfig.custom_config_path">
-<span class="sig-name descname"><span class="pre">custom_config_path</span></span><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">pathlib.Path</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyappconf.model.AppConfig.custom_config_path" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyappconf.model.AppConfig.custom_config_folder">
+<span class="sig-name descname"><span class="pre">custom_config_folder</span></span><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">pathlib.Path</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyappconf.model.AppConfig.custom_config_folder" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -308,6 +318,26 @@
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#pyappconf.model.BaseConfig" title="pyappconf.model.BaseConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseConfig</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyappconf.model.BaseConfig.load_recursive">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">load_recursive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.load_recursive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.load_recursive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Searches the passed path or current directory for a config with the correct name,
+and if not found goes the parent directory and repeats the search.
+If the config is not found after reaching the root directory,
+it will look at the location in the config.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><span class="target" id="pyappconf.model.BaseConfig.load_recursive.params.path"></span><strong>path</strong><a class="paramlink headerlink reference internal" href="#pyappconf.model.BaseConfig.load_recursive.params.path">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]) – The path to start searching from, defaults to the current directory</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#pyappconf.model.BaseConfig" title="pyappconf.model.BaseConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseConfig</span></code></a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
 </dd>
 </dl>
 </dd></dl>
