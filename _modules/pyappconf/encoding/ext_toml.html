@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyappconf.encoding.ext_toml &mdash; py-app-conf 0.4.0 documentation</title>
+  <title>pyappconf.encoding.ext_toml &mdash; py-app-conf 0.4.1 documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                0.4.0
+                0.4.1
               </div>
             
           
@@ -167,7 +167,9 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyappconf.encoding.ext_toml</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span><span class="p">,</span> <span class="n">PosixPath</span>
+<span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span><span class="p">,</span> <span class="n">PosixPath</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Any</span>
 
 <span class="kn">from</span> <span class="nn">toml.encoder</span> <span class="kn">import</span> <span class="n">_dump_str</span><span class="p">,</span> <span class="n">TomlEncoder</span>
 
@@ -178,12 +180,35 @@
     <span class="k">return</span> <span class="n">_dump_str</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span>
 
 
+<span class="k">def</span> <span class="nf">_dump_enum</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Enum</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">_dump_str</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+
 <div class="viewcode-block" id="CustomTomlEncoder"><a class="viewcode-back" href="../../../api/pyappconf.encoding.html#pyappconf.encoding.ext_toml.CustomTomlEncoder">[docs]</a><span class="k">class</span> <span class="nc">CustomTomlEncoder</span><span class="p">(</span><span class="n">TomlEncoder</span><span class="p">):</span>
+    <span class="n">multi_dump_funcs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Type</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span>
 
 <div class="viewcode-block" id="CustomTomlEncoder.__init__"><a class="viewcode-back" href="../../../api/pyappconf.encoding.html#pyappconf.encoding.ext_toml.CustomTomlEncoder.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_dict</span><span class="o">=</span><span class="nb">dict</span><span class="p">,</span> <span class="n">preserve</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">_dict</span><span class="o">=</span><span class="n">_dict</span><span class="p">,</span> <span class="n">preserve</span><span class="o">=</span><span class="n">preserve</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multi_dump_funcs</span> <span class="o">=</span> <span class="p">{</span><span class="n">Enum</span><span class="p">:</span> <span class="n">_dump_enum</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dump_funcs</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="n">_dump_hasstr</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dump_funcs</span><span class="p">[</span><span class="n">PosixPath</span><span class="p">]</span> <span class="o">=</span> <span class="n">_dump_hasstr</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dump_funcs</span><span class="p">[</span><span class="n">PosixPath</span><span class="p">]</span> <span class="o">=</span> <span class="n">_dump_hasstr</span></div>
+
+<div class="viewcode-block" id="CustomTomlEncoder.dump_value"><a class="viewcode-back" href="../../../api/pyappconf.encoding.html#pyappconf.encoding.ext_toml.CustomTomlEncoder.dump_value">[docs]</a>    <span class="k">def</span> <span class="nf">dump_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Overrides TomlEncoder.dump_value to adds support for putting</span>
+<span class="sd">        a base class in multi_dump_funcs and have it be used for any</span>
+<span class="sd">        subclass of that type</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Lookup function corresponding to v&#39;s type</span>
+        <span class="n">dump_fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dump_funcs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">dump_fn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">base_cls</span><span class="p">,</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">multi_dump_funcs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">base_cls</span><span class="p">):</span>
+                    <span class="n">dump_fn</span> <span class="o">=</span> <span class="n">fn</span>
+            <span class="k">if</span> <span class="n">dump_fn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Got a multi dump function</span>
+                <span class="k">return</span> <span class="n">dump_fn</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">dump_value</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

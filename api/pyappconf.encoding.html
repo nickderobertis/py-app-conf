@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyappconf.encoding package &mdash; py-app-conf 0.4.0 documentation</title>
+  <title>pyappconf.encoding package &mdash; py-app-conf 0.4.1 documentation</title>
   
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.4.0
+                0.4.1
               </div>
             
           
@@ -236,6 +236,19 @@ implement default like this:</p>
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">_dict=&lt;class</span> <span class="pre">'dict'&gt;</span></em>, <em class="sig-param"><span class="pre">preserve=False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/encoding/ext_toml.html#CustomTomlEncoder.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.encoding.ext_toml.CustomTomlEncoder.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="pyappconf.encoding.ext_toml.CustomTomlEncoder.dump_value">
+<span class="sig-name descname"><span class="pre">dump_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/encoding/ext_toml.html#CustomTomlEncoder.dump_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.encoding.ext_toml.CustomTomlEncoder.dump_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overrides TomlEncoder.dump_value to adds support for putting
+a base class in multi_dump_funcs and have it be used for any
+subclass of that type</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyappconf.encoding.ext_toml.CustomTomlEncoder.multi_dump_funcs">
+<span class="sig-name descname"><span class="pre">multi_dump_funcs</span></span><em class="property"><span class="pre">:</span> <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyappconf.encoding.ext_toml.CustomTomlEncoder.multi_dump_funcs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </section>
@@ -256,6 +269,11 @@ implement default like this:</p>
 <dt class="sig sig-object py" id="pyappconf.encoding.ext_yaml.CustomRepresenter">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyappconf.encoding.ext_yaml.</span></span><span class="sig-name descname"><span class="pre">CustomRepresenter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_flow_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/encoding/ext_yaml.html#CustomRepresenter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.encoding.ext_yaml.CustomRepresenter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">yaml.representer.SafeRepresenter</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyappconf.encoding.ext_yaml.CustomRepresenter.yaml_multi_representers">
+<span class="sig-name descname"><span class="pre">yaml_multi_representers</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{&lt;enum</span> <span class="pre">'Enum'&gt;:</span> <span class="pre">&lt;function</span> <span class="pre">_represent_enum&gt;}</span></em><a class="headerlink" href="#pyappconf.encoding.ext_yaml.CustomRepresenter.yaml_multi_representers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyappconf.encoding.ext_yaml.CustomRepresenter.yaml_representers">
 <span class="sig-name descname"><span class="pre">yaml_representers</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{&lt;class</span> <span class="pre">'NoneType'&gt;:</span> <span class="pre">&lt;function</span> <span class="pre">SafeRepresenter.represent_none&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'str'&gt;:</span> <span class="pre">&lt;function</span> <span class="pre">SafeRepresenter.represent_str&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'bytes'&gt;:</span> <span class="pre">&lt;function</span> <span class="pre">SafeRepresenter.represent_binary&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;:</span> <span class="pre">&lt;function</span> <span class="pre">SafeRepresenter.represent_bool&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;:</span> <span class="pre">&lt;function</span> <span class="pre">SafeRepresenter.represent_int&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;:</span> <span class="pre">&lt;function</span> <span class="pre">SafeRepresenter.represent_float&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'list'&gt;:</span> <span class="pre">&lt;function</span> <span class="pre">SafeRepresenter.represent_list&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'tuple'&gt;:</span> <span class="pre">&lt;function</span> <span class="pre">SafeRepresenter.represent_list&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'dict'&gt;:</span> <span class="pre">&lt;function</span> <span class="pre">SafeRepresenter.represent_dict&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'set'&gt;:</span> <span class="pre">&lt;function</span> <span class="pre">SafeRepresenter.represent_set&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'datetime.date'&gt;:</span> <span class="pre">&lt;function</span> <span class="pre">SafeRepresenter.represent_date&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'datetime.datetime'&gt;:</span> <span class="pre">&lt;function</span> <span class="pre">SafeRepresenter.represent_datetime&gt;,</span> <span class="pre">None:</span> <span class="pre">&lt;function</span> <span class="pre">SafeRepresenter.represent_undefined&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'pathlib.Path'&gt;:</span> <span class="pre">&lt;function</span> <span class="pre">_represent_hasstr&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'pathlib.PosixPath'&gt;:</span> <span class="pre">&lt;function</span> <span class="pre">_represent_hasstr&gt;}</span></em><a class="headerlink" href="#pyappconf.encoding.ext_yaml.CustomRepresenter.yaml_representers" title="Permalink to this definition">¶</a></dt>

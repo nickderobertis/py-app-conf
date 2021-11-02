@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyappconf.encoding.ext_yaml &mdash; py-app-conf 0.4.0 documentation</title>
+  <title>pyappconf.encoding.ext_yaml &mdash; py-app-conf 0.4.1 documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                0.4.0
+                0.4.1
               </div>
             
           
@@ -167,7 +167,8 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyappconf.encoding.ext_yaml</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span><span class="p">,</span> <span class="n">PosixPath</span>
+<span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span><span class="p">,</span> <span class="n">PosixPath</span>
 
 <span class="kn">from</span> <span class="nn">yaml.emitter</span> <span class="kn">import</span> <span class="n">Emitter</span>
 <span class="kn">from</span> <span class="nn">yaml.representer</span> <span class="kn">import</span> <span class="n">SafeRepresenter</span>
@@ -183,12 +184,19 @@
     <span class="k">return</span> <span class="n">SafeRepresenter</span><span class="o">.</span><span class="n">represent_str</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
 
 
+<span class="k">def</span> <span class="nf">_represent_enum</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">yaml.representer</span> <span class="kn">import</span> <span class="n">SafeRepresenter</span>
+
+    <span class="k">return</span> <span class="n">SafeRepresenter</span><span class="o">.</span><span class="n">represent_str</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+
 <div class="viewcode-block" id="CustomRepresenter"><a class="viewcode-back" href="../../../api/pyappconf.encoding.html#pyappconf.encoding.ext_yaml.CustomRepresenter">[docs]</a><span class="k">class</span> <span class="nc">CustomRepresenter</span><span class="p">(</span><span class="n">SafeRepresenter</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
 <span class="n">CustomRepresenter</span><span class="o">.</span><span class="n">add_representer</span><span class="p">(</span><span class="n">Path</span><span class="p">,</span> <span class="n">_represent_hasstr</span><span class="p">)</span>
 <span class="n">CustomRepresenter</span><span class="o">.</span><span class="n">add_representer</span><span class="p">(</span><span class="n">PosixPath</span><span class="p">,</span> <span class="n">_represent_hasstr</span><span class="p">)</span>
+<span class="n">CustomRepresenter</span><span class="o">.</span><span class="n">add_multi_representer</span><span class="p">(</span><span class="n">Enum</span><span class="p">,</span> <span class="n">_represent_enum</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="CustomDumper"><a class="viewcode-back" href="../../../api/pyappconf.encoding.html#pyappconf.encoding.ext_yaml.CustomDumper">[docs]</a><span class="k">class</span> <span class="nc">CustomDumper</span><span class="p">(</span><span class="n">Emitter</span><span class="p">,</span> <span class="n">Serializer</span><span class="p">,</span> <span class="n">CustomRepresenter</span><span class="p">,</span> <span class="n">Resolver</span><span class="p">):</span>
