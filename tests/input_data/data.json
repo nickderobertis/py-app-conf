@@ -26,5 +26,10 @@
     "a": "yeah",
     "b": 5.6
   },
+  "default_enum": "one",
+  "default_enum_list": [
+    "one",
+    "two"
+  ],
   "file_path": "/a/b.txt"
 }
