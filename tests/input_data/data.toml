@@ -3,6 +3,8 @@ integer = 5
 str_list = [ "a", "b", "c",]
 int_tuple = [ 1, 2, 3,]
 default_string = "woo"
+default_enum = "one"
+default_enum_list = [ "one", "two",]
 file_path = "/a/b.txt"
 
 [custom]

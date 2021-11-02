@@ -1,3 +1,4 @@
+from enum import Enum
 from pathlib import Path, PosixPath
 
 from yaml.emitter import Emitter
@@ -14,12 +15,19 @@ def _represent_hasstr(obj, value: HasStr):
     return SafeRepresenter.represent_str(obj, str(value))
 
 
+def _represent_enum(obj, value: Enum):
+    from yaml.representer import SafeRepresenter
+
+    return SafeRepresenter.represent_str(obj, value.value)
+
+
 class CustomRepresenter(SafeRepresenter):
     pass
 
 
 CustomRepresenter.add_representer(Path, _represent_hasstr)
 CustomRepresenter.add_representer(PosixPath, _represent_hasstr)
+CustomRepresenter.add_multi_representer(Enum, _represent_enum)
 
 
 class CustomDumper(Emitter, Serializer, CustomRepresenter, Resolver):

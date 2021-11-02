@@ -4,6 +4,10 @@ custom:
 default_custom:
   a: yeah
   b: 5.6
+default_enum: one
+default_enum_list:
+- one
+- two
 default_string: woo
 dictionary:
   yeah:
