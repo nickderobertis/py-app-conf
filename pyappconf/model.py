@@ -249,6 +249,8 @@ class BaseConfig(BaseSettings):
     ) -> str:
         if json_kwargs is None:
             json_kwargs = {}
+        if "indent" not in json_kwargs:
+            json_kwargs["indent"] = 2
         kwargs = _get_data_kwargs(**kwargs)
         data = self.dict(**kwargs)
         json_str = json.dumps(data, **json_kwargs, cls=self.settings.json_encoder)
