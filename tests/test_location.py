@@ -32,6 +32,8 @@ def test_custom_config_folder():
 def test_custom_config_name():
     folder = Path("/woo")
     obj = get_model_object(
-        settings=AppConfig(app_name="MyApp", custom_config_folder=folder, config_name="yeah")
+        settings=AppConfig(
+            app_name="MyApp", custom_config_folder=folder, config_name="yeah"
+        )
     )
     assert obj.settings.config_base_location == (folder / "yeah")
