@@ -10,6 +10,7 @@ import toml
 import json
 import appdirs
 from pydantic.env_settings import EnvSettingsSource
+from pydantic.schema import default_ref_template
 from toml.encoder import TomlEncoder
 
 from pyappconf.encoding.ext_json import ExtendedJSONEncoder
@@ -262,3 +263,9 @@ class BaseConfig(BaseSettings):
         data = json.loads(Path(in_path).read_text())
         data.update(cls._get_env_values())
         return cls(**data)
+
+    @classmethod
+    def schema(cls, by_alias: bool = True, ref_template: str = default_ref_template) -> 'DictStrAny':
+        temp_cls = deepcopy(super())
+        temp_cls.settings = None
+        return super(temp_cls).schema(by_alias=by_alias, ref_template=ref_template)

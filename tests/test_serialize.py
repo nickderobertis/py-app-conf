@@ -41,3 +41,8 @@ def test_from_toml(
     MyConfig, SubConfig = model_classes
     loaded_object = MyConfig.parse_toml(TOML_PATH)
     assert model_object == loaded_object
+
+
+def test_json_schema(model_classes: Tuple[Type[BaseConfig], Type[BaseModel]]):
+    MyConfig, SubConfig = model_classes
+    assert MyConfig.schema_json() == ""
