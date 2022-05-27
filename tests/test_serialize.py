@@ -1,10 +1,10 @@
-from typing import Type, Tuple
+from typing import Tuple, Type
 
 from pydantic import BaseModel
 
 from pyappconf.model import BaseConfig
-from tests.config import JSON_PATH, YAML_PATH, TOML_PATH
-from tests.fixtures.model import model_object, model_classes
+from tests.config import JSON_PATH, TOML_PATH, YAML_PATH
+from tests.fixtures.model import model_classes, model_object
 
 
 def test_to_json(model_object: BaseConfig):

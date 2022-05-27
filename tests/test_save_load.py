@@ -1,28 +1,28 @@
 import shutil
 from pathlib import Path
-from typing import Type, Tuple, Optional
+from typing import Optional, Tuple, Type
 
 import pytest
 from pydantic import BaseModel
 
-from pyappconf.model import AppConfig, ConfigFormats, BaseConfig
+from pyappconf.model import AppConfig, BaseConfig, ConfigFormats
 from tests.config import (
-    GENERATED_DATA_DIR,
-    JSON_PATH,
-    YAML_PATH,
-    TOML_PATH,
     DATA_NAME,
+    GENERATED_DATA_DIR,
+    INPUT_DATA_DIR,
+    JSON_PATH,
     NON_EXISTENT_INPUT_JSON_PATH,
     NON_EXISTENT_NAME,
     RECURSIVE_INPUT_FOLDER,
-    INPUT_DATA_DIR,
+    TOML_PATH,
+    YAML_PATH,
 )
 from tests.fixtures.model import (
-    get_model_object,
     get_model_classes,
+    get_model_object,
+    model_class_with_defaults,
     model_classes,
     model_object,
-    model_class_with_defaults,
     model_object_with_defaults,
 )
 
