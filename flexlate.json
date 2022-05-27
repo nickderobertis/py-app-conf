@@ -4,12 +4,39 @@
       "name": "copier-pypi-sphinx-flexlate",
       "path": "https://github.com/nickderobertis/copier-pypi-sphinx-flexlate",
       "type": "cookiecutter",
-      "version": "091fcff1b2a425adc13a75fc587fbbb190b7ca3a",
+      "version": "683a558845c22a76bfb4f5365560bd420750d1fb",
       "git_url": "https://github.com/nickderobertis/copier-pypi-sphinx-flexlate",
       "target_version": null,
       "render_relative_root_in_output": "{{cookiecutter.repo_name}}",
       "render_relative_root_in_template": "{{cookiecutter.repo_name}}"
     }
   ],
-  "applied_templates": []
+  "applied_templates": [
+    {
+      "name": "copier-pypi-sphinx-flexlate",
+      "data": {
+        "package_name": "py-app-conf",
+        "package_directory": "pyappconf",
+        "full_name": "Python Application Configuration Management",
+        "repo_name": "py-app-conf",
+        "repo_username": "nickderobertis",
+        "short_description": "Strongly typed and validated configuration supporting multiple file types, dynamic instantiation, and environment variables",
+        "main_branch_name": "main",
+        "package_author": "Nick DeRobertis",
+        "author_email": "whoopnip@gmail.com",
+        "google_analytics_id": "",
+        "os_support": [
+          "ubuntu",
+          "macos",
+          "windows"
+        ],
+        "minimum_python_version": "3.8",
+        "logo_url": "",
+        "install_packages": ""
+      },
+      "version": "683a558845c22a76bfb4f5365560bd420750d1fb",
+      "add_mode": "local",
+      "root": ".."
+    }
+  ]
 }
