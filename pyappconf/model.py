@@ -4,7 +4,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Optional, Union, Dict, Any, Callable, Type
 
-from pydantic import BaseSettings, validator, BaseModel
+from pydantic import validator, BaseModel
 import yaml
 import toml
 import json
@@ -12,6 +12,7 @@ import appdirs
 from pydantic.env_settings import EnvSettingsSource
 from toml.encoder import TomlEncoder
 
+from pyappconf.base_settings import BaseSettings
 from pyappconf.encoding.ext_json import ExtendedJSONEncoder
 from pyappconf.encoding.ext_toml import CustomTomlEncoder
 from pyappconf.encoding.ext_yaml import CustomDumper
