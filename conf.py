@@ -57,12 +57,12 @@ PACKAGE_INSTALL_REQUIRES = [
     # e.g.
     # 'package',
     # 'otherpackage>=1,<2'
-    'pydantic>=1.8',
-    'appdirs',
-    'PyYAML',
-    'toml',
-    'python-dotenv',
-    'typing_extensions',
+    "pydantic>=1.8",
+    "appdirs",
+    "PyYAML",
+    "toml",
+    "python-dotenv",
+    "typing_extensions",
 ]
 
 # Add any third party packages you use in requirements for optional features of your package here
