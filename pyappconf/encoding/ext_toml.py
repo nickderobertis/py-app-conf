@@ -2,7 +2,7 @@ from enum import Enum
 from pathlib import Path, PosixPath
 from typing import Any, Callable, Dict, Type
 
-from toml.encoder import TomlEncoder, _dump_str
+from toml.encoder import TomlEncoder, _dump_str  # type: ignore
 
 from pyappconf.encoding.general import HasStr
 
