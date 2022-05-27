@@ -1,0 +1,24 @@
+{
+  "template_sources": [],
+  "applied_templates": [
+    {
+      "name": "copier-pypi-sphinx-flexlate",
+      "data": {
+        "package_name": "py-app-conf",
+        "package_directory": "pyappconf",
+        "full_name": "Python Application Configuration Management",
+        "repo_name": "py-app-conf",
+        "repo_username": "nickderobertis",
+        "short_description": "Strongly typed and validated configuration supporting multiple file types, dynamic instantiation, and environment variables",
+        "package_author": "Nick DeRobertis",
+        "author_email": "whoopnip@gmail.com",
+        "google_analytics_id": "",
+        "logo_url": "",
+        "install_packages": ""
+      },
+      "version": "091fcff1b2a425adc13a75fc587fbbb190b7ca3a",
+      "add_mode": "local",
+      "root": ".."
+    }
+  ]
+}
