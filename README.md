@@ -1,4 +1,4 @@
-[![](https://codecov.io/gh/nickderobertis/py-app-conf/branch/main/graph/badge.svg)](https://codecov.io/gh/nickderobertis/py-app-conf)
+[![](https://codecov.io/gh/nickderobertis/py-app-conf/branch/master/graph/badge.svg)](https://codecov.io/gh/nickderobertis/py-app-conf)
 [![PyPI](https://img.shields.io/pypi/v/py-app-conf)](https://pypi.org/project/py-app-conf/)
 ![PyPI - License](https://img.shields.io/pypi/l/py-app-conf)
 [![Documentation](https://img.shields.io/badge/documentation-pass-green)](https://nickderobertis.github.io/py-app-conf/)
