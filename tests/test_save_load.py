@@ -86,7 +86,9 @@ def test_load_toml_with_custom_path(
     model_object: BaseConfig, model_classes: Tuple[Type[BaseConfig], Type[BaseModel]]
 ):
     MyConfig, _ = model_classes
+    orig_config_location = MyConfig._settings.config_location
     mod = MyConfig.load(TOML_PATH)
+    assert mod._settings.config_location == orig_config_location
     assert_model_loaded_with_extension(mod, model_object, ConfigFormats.TOML)
 
 
@@ -94,7 +96,9 @@ def test_load_yaml_with_custom_path(
     model_object: BaseConfig, model_classes: Tuple[Type[BaseConfig], Type[BaseModel]]
 ):
     MyConfig, _ = model_classes
+    orig_config_location = MyConfig._settings.config_location
     mod = MyConfig.load(YAML_PATH)
+    assert mod._settings.config_location == orig_config_location
     assert_model_loaded_with_extension(mod, model_object, ConfigFormats.YAML)
 
 
@@ -102,7 +106,9 @@ def test_load_json_with_custom_path(
     model_object: BaseConfig, model_classes: Tuple[Type[BaseConfig], Type[BaseModel]]
 ):
     MyConfig, _ = model_classes
+    orig_config_location = MyConfig._settings.config_location
     mod = MyConfig.load(JSON_PATH)
+    assert mod._settings.config_location == orig_config_location
     assert_model_loaded_with_extension(mod, model_object, ConfigFormats.JSON)
 
 
@@ -110,7 +116,9 @@ def test_load_or_create_with_path_exists(
     model_object: BaseConfig, model_classes: Tuple[Type[BaseConfig], Type[BaseModel]]
 ):
     MyConfig, _ = model_classes
+    orig_config_location = MyConfig._settings.config_location
     mod = MyConfig.load_or_create(JSON_PATH)
+    assert mod._settings.config_location == orig_config_location
     assert_model_loaded_with_extension(mod, model_object, ConfigFormats.JSON)
 
 
@@ -119,7 +127,9 @@ def test_load_or_create_with_path_does_not_exist(
 ):
     MyConfig = model_class_with_defaults
     model_object = model_object_with_defaults
+    orig_config_location = MyConfig._settings.config_location
     mod = MyConfig.load_or_create(NON_EXISTENT_INPUT_JSON_PATH)
+    assert mod._settings.config_location == orig_config_location
     assert mod.settings.custom_config_folder == INPUT_DATA_DIR
     assert mod.settings.default_format == ConfigFormats.JSON
     assert mod.settings.config_name == NON_EXISTENT_NAME
@@ -154,6 +164,8 @@ def test_load_recursive(path: Optional[Path], expect_string: str):
     class MyConfig(OrigConfig):
         _settings = custom_settings
 
+    orig_config_location = MyConfig._settings.config_location
     mod = MyConfig.load_recursive(path)
+    assert mod._settings.config_location == orig_config_location
 
     assert mod.string == expect_string
