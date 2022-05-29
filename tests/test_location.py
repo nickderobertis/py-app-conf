@@ -1,24 +1,30 @@
 from pathlib import Path
 from unittest.mock import patch
 
-from pyappconf.model import BaseConfig, AppConfig
-from tests.fixtures.model import model_object, get_model_object
+from pyappconf.model import AppConfig, BaseConfig
+from tests import os_specific
+from tests.fixtures.model import get_model_object, model_object
 
 
-@patch("sys.platform", "linux")
+@os_specific.run_in(os_specific.OSType.LINUX)
 def test_config_base_location_linux(model_object: BaseConfig):
-    assert (
-        model_object.settings.config_base_location
-        == Path("~").expanduser() / ".config" / "MyApp" / "config"
-    )
+    with patch("sys.platform", "linux"):
+        assert (
+            model_object.settings.config_base_location
+            == Path("~").expanduser() / ".config" / "MyApp" / "config"
+        )
 
 
-@patch("sys.platform", "linux")
+@os_specific.run_in(os_specific.OSType.LINUX)
 def test_config_location_linux(model_object: BaseConfig):
-    assert (
-        model_object.settings.config_location
-        == Path("~").expanduser() / ".config" / "MyApp" / "config.toml"
-    )
+    with patch("sys.platform", "linux"):
+        assert (
+            model_object.settings.config_location
+            == Path("~").expanduser() / ".config" / "MyApp" / "config.toml"
+        )
+
+
+# TODO: Add config location tests for Windows and MacOS
 
 
 def test_custom_config_folder():
@@ -32,6 +38,8 @@ def test_custom_config_folder():
 def test_custom_config_name():
     folder = Path("/woo")
     obj = get_model_object(
-        settings=AppConfig(app_name="MyApp", custom_config_folder=folder, config_name="yeah")
+        settings=AppConfig(
+            app_name="MyApp", custom_config_folder=folder, config_name="yeah"
+        )
     )
     assert obj.settings.config_base_location == (folder / "yeah")

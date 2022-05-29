@@ -1,11 +1,11 @@
 from enum import Enum
 from pathlib import Path
-from typing import Type, Dict, List, Tuple, Sequence, Optional
+from typing import Dict, List, Optional, Sequence, Tuple, Type
 
 import pytest
 from pydantic import BaseModel, Field
 
-from pyappconf.model import BaseConfig, AppConfig
+from pyappconf.model import AppConfig, BaseConfig
 from tests.config import ENV_PATH
 
 
@@ -29,8 +29,10 @@ def get_model_classes() -> Tuple[Type[BaseConfig], Type[BaseModel]]:
         default_string: str = "woo"
         default_custom: SubConfig = SubConfig(a="yeah", b=5.6)
         default_enum: MyEnum = MyEnum.ONE
-        default_enum_list: List[MyEnum] = Field(default_factory=lambda: [MyEnum.ONE, MyEnum.TWO])
-        file_path: Path = Path('/a/b.txt')
+        default_enum_list: List[MyEnum] = Field(
+            default_factory=lambda: [MyEnum.ONE, MyEnum.TWO]
+        )
+        file_path: Path = Path("/a/b.txt")
 
         _settings: AppConfig = AppConfig(app_name="MyApp")
 

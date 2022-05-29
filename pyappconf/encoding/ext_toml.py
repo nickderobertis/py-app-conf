@@ -1,8 +1,8 @@
 from enum import Enum
 from pathlib import Path, PosixPath
-from typing import Dict, Callable, Type, Any
+from typing import Any, Callable, Dict, Type
 
-from toml.encoder import _dump_str, TomlEncoder
+from toml.encoder import TomlEncoder, _dump_str  # type: ignore
 
 from pyappconf.encoding.general import HasStr
 

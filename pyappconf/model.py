@@ -1,15 +1,18 @@
+import json
 import os
 from copy import deepcopy
+from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Optional, Union, Dict, Any, Callable, Type
+from typing import Any, Callable, Dict, Optional, Type, Union
 
-from pydantic import BaseSettings, validator, BaseModel
-import yaml
-import toml
-import json
 import appdirs
+import toml
+import yaml
+from pydantic import BaseModel, BaseSettings, validator
 from pydantic.env_settings import EnvSettingsSource
+from pydantic.fields import ModelField
+from pydantic.schema import default_ref_template
 from toml.encoder import TomlEncoder
 
 from pyappconf.encoding.ext_json import ExtendedJSONEncoder
@@ -52,14 +55,42 @@ class ConfigFormats(str, Enum):
         )
 
 
-class AppConfig(BaseModel):
-    app_name: str
-    config_name: str = "config"
-    custom_config_folder: Optional[Path] = None
-    default_format: ConfigFormats = ConfigFormats.TOML
-    toml_encoder: Type[TomlEncoder] = CustomTomlEncoder
-    yaml_encoder: Type = CustomDumper
-    json_encoder: Type[json.JSONEncoder] = ExtendedJSONEncoder
+class AppConfig:
+    def __init__(
+        self,
+        app_name: str,
+        config_name: str = "config",
+        custom_config_folder: Optional[Path] = None,
+        default_format: ConfigFormats = ConfigFormats.TOML,
+        toml_encoder: Type[TomlEncoder] = CustomTomlEncoder,
+        yaml_encoder: Type = CustomDumper,
+        json_encoder: Type[json.JSONEncoder] = ExtendedJSONEncoder,
+    ):
+        self.app_name = app_name
+        self.config_name = config_name
+        self.custom_config_folder = custom_config_folder
+        self.default_format = default_format
+        self.toml_encoder = toml_encoder
+        self.yaml_encoder = yaml_encoder
+        self.json_encoder = json_encoder
+
+    @classmethod
+    def __modify_schema__(cls, field_schema: Dict[str, Any]) -> None:
+        field_schema[
+            "description"
+        ] = "Please ignore this field. It is used for internal purposes."
+
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+
+    def dict(self) -> Dict[str, Any]:
+        return self.__dict__
+
+    def copy(self, **kwargs) -> "AppConfig":
+        if not kwargs:
+            return deepcopy(self)
+        config_data = self.dict()
+        return self.__class__(**{**config_data, **kwargs})
 
     @property
     def config_base_location(self) -> Path:
@@ -83,7 +114,7 @@ class BaseConfig(BaseSettings):
     @validator("settings")
     def set_settings_from_class_if_none(cls, v):
         if v is None:
-            return cls._settings
+            return cls._settings.copy()
         return v
 
     def get_serializer(
@@ -114,11 +145,7 @@ class BaseConfig(BaseSettings):
 
     @classmethod
     def _settings_with_overrides(cls, **kwargs) -> AppConfig:
-        if not kwargs:
-            return deepcopy(cls._settings)
-        config_data = cls._settings.dict()
-        config_data.update(**kwargs)
-        return AppConfig(**config_data)
+        return cls._settings.copy(**kwargs)
 
     def save(self, serializer_kwargs: Optional[Dict[str, Any]] = None, **kwargs):
         if not self.settings.config_location.parent.exists():
@@ -262,3 +289,12 @@ class BaseConfig(BaseSettings):
         data = json.loads(Path(in_path).read_text())
         data.update(cls._get_env_values())
         return cls(**data)
+
+    @classmethod
+    def schema(
+        cls, by_alias: bool = True, ref_template: str = default_ref_template
+    ) -> Dict[str, Any]:
+        schema = super().schema(by_alias=by_alias, ref_template=ref_template)
+        if "properties" in schema and "settings" in schema["properties"]:
+            del schema["properties"]["settings"]
+        return schema
