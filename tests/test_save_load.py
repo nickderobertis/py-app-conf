@@ -27,7 +27,7 @@ from tests.fixtures.model import (
 )
 
 
-def _save_load_test(custom_settings: AppConfig):
+def _save_load_test(custom_settings: AppConfig) -> Tuple[BaseConfig, Type[BaseConfig]]:
     mod = get_model_object(settings=custom_settings)
     mod.save()
     assert str(mod.settings.config_location).endswith(
@@ -44,6 +44,7 @@ def _save_load_test(custom_settings: AppConfig):
     )
     obj = MyConfig.load()
     assert mod == obj
+    return obj, MyConfig
 
 
 def test_save_load_toml():
@@ -69,6 +70,38 @@ def test_save_load_json():
         default_format=ConfigFormats.JSON,
     )
     _save_load_test(custom_settings)
+
+
+def test_save_load_yaml_with_schema():
+    expect_schema_url = "https://example.com/schema.json"
+    custom_settings = AppConfig(
+        app_name="MyApp",
+        custom_config_folder=GENERATED_DATA_DIR,
+        default_format=ConfigFormats.YAML,
+        schema_url=expect_schema_url,
+    )
+    obj, MyConfig = _save_load_test(custom_settings)
+    assert MyConfig._settings.schema_url == expect_schema_url
+    yaml_str = obj.to_yaml()
+    assert expect_schema_url in yaml_str
+    yaml_str_no_schema = obj.to_yaml(include_schema_url=False)
+    assert expect_schema_url not in yaml_str_no_schema
+
+
+def test_save_load_json_with_schema():
+    expect_schema_url = "https://example.com/schema.json"
+    custom_settings = AppConfig(
+        app_name="MyApp",
+        custom_config_folder=GENERATED_DATA_DIR,
+        default_format=ConfigFormats.JSON,
+        schema_url=expect_schema_url,
+    )
+    obj, MyConfig = _save_load_test(custom_settings)
+    assert MyConfig._settings.schema_url == expect_schema_url
+    json_str = obj.to_json()
+    assert expect_schema_url in json_str
+    json_str_no_schema = obj.to_json(include_schema_url=False)
+    assert expect_schema_url not in json_str_no_schema
 
 
 def assert_model_loaded_with_extension(

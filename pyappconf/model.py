@@ -62,6 +62,7 @@ class AppConfig:
         config_name: str = "config",
         custom_config_folder: Optional[Path] = None,
         default_format: ConfigFormats = ConfigFormats.TOML,
+        schema_url: Optional[str] = None,
         toml_encoder: Type[TomlEncoder] = CustomTomlEncoder,
         yaml_encoder: Type = CustomDumper,
         json_encoder: Type[json.JSONEncoder] = ExtendedJSONEncoder,
@@ -70,6 +71,7 @@ class AppConfig:
         self.config_name = config_name
         self.custom_config_folder = custom_config_folder
         self.default_format = default_format
+        self.schema_url = schema_url
         self.toml_encoder = toml_encoder
         self.yaml_encoder = yaml_encoder
         self.json_encoder = json_encoder
@@ -232,6 +234,7 @@ class BaseConfig(BaseSettings):
         self,
         out_path: Optional[Union[str, Path]] = None,
         yaml_kwargs: Optional[Dict[str, Any]] = None,
+        include_schema_url: bool = True,
         **kwargs,
     ) -> str:
         if yaml_kwargs is None:
@@ -239,6 +242,8 @@ class BaseConfig(BaseSettings):
         kwargs = _get_data_kwargs(**kwargs)
         data = self.dict(**kwargs)
         yaml_str = yaml.dump(data, **yaml_kwargs, Dumper=self.settings.yaml_encoder)
+        if include_schema_url and self.settings.schema_url is not None:
+            yaml_str = f"# yaml-language-server: $schema={self.settings.schema_url}\n{yaml_str}"
         _output_if_necessary(yaml_str, out_path)
         return yaml_str
 
@@ -259,6 +264,7 @@ class BaseConfig(BaseSettings):
         kwargs = _get_data_kwargs(**kwargs)
         data = self.dict(**kwargs)
         toml_str = toml.dumps(data, **toml_kwargs, encoder=self.settings.toml_encoder())  # type: ignore
+        # TODO: Add schema URL to TOML once there is a specification for it
         _output_if_necessary(toml_str, out_path)
         return toml_str
 
@@ -272,6 +278,7 @@ class BaseConfig(BaseSettings):
         self,
         out_path: Optional[Union[str, Path]] = None,
         json_kwargs: Optional[Dict[str, Any]] = None,
+        include_schema_url: bool = True,
         **kwargs,
     ) -> str:
         if json_kwargs is None:
@@ -280,6 +287,8 @@ class BaseConfig(BaseSettings):
             json_kwargs["indent"] = 2
         kwargs = _get_data_kwargs(**kwargs)
         data = self.dict(**kwargs)
+        if include_schema_url and self.settings.schema_url is not None:
+            data["$schema"] = self.settings.schema_url
         json_str = json.dumps(data, **json_kwargs, cls=self.settings.json_encoder)
         _output_if_necessary(json_str, out_path)
         return json_str
@@ -288,6 +297,9 @@ class BaseConfig(BaseSettings):
     def parse_json(cls, in_path: Union[str, Path]) -> "BaseConfig":
         data = json.loads(Path(in_path).read_text())
         data.update(cls._get_env_values())
+        if "$schema" in data:
+            # Schema is not kept in instance data, it is in cls._settings.schema_url
+            del data["$schema"]
         return cls(**data)
 
     @classmethod
