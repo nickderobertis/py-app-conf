@@ -86,6 +86,12 @@ class AppConfig:
     def dict(self) -> Dict[str, Any]:
         return self.__dict__
 
+    def copy(self, **kwargs) -> "AppConfig":
+        if not kwargs:
+            return deepcopy(self)
+        config_data = self.dict()
+        return self.__class__(**{**config_data, **kwargs})
+
     @property
     def config_base_location(self) -> Path:
         if self.custom_config_folder is not None:
@@ -108,7 +114,7 @@ class BaseConfig(BaseSettings):
     @validator("settings")
     def set_settings_from_class_if_none(cls, v):
         if v is None:
-            return cls._settings
+            return cls._settings.copy()
         return v
 
     def get_serializer(
@@ -139,11 +145,7 @@ class BaseConfig(BaseSettings):
 
     @classmethod
     def _settings_with_overrides(cls, **kwargs) -> AppConfig:
-        if not kwargs:
-            return deepcopy(cls._settings)
-        config_data = cls._settings.dict()
-        config_data.update(**kwargs)
-        return AppConfig(**config_data)
+        return cls._settings.copy(**kwargs)
 
     def save(self, serializer_kwargs: Optional[Dict[str, Any]] = None, **kwargs):
         if not self.settings.config_location.parent.exists():
