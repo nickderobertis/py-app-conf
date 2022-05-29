@@ -1,7 +1,7 @@
+PyYAML
+pydantic>=1.8
+typing_extensions
 python-dotenv
 py-app-conf
-toml
-pydantic>=1.8
-PyYAML
-typing_extensions
 appdirs
+toml

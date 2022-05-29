@@ -47,7 +47,7 @@
   
   
   
-    <title>pyappconf package &#8212; py-app-conf 1.0.0 documentation</title>
+    <title>pyappconf package &#8212; py-app-conf 1.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
@@ -90,7 +90,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="py-app-conf 1.0.0 documentation"
+        <a href="../index.html" title="py-app-conf 1.1.0 documentation"
            class="md-header-nav__button md-logo">
           
             <i class="md-icon">&#xe869</i>
@@ -176,7 +176,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">py-app-conf 1.0.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">py-app-conf 1.1.0 documentation</a></li>
           <li class="md-tabs__item"><a href="modules.html" class="md-tabs__link">pyappconf</a></li>
       </ul>
     </div>
@@ -189,13 +189,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="py-app-conf 1.0.0 documentation" class="md-nav__button md-logo">
+    <a href="../index.html" title="py-app-conf 1.1.0 documentation" class="md-nav__button md-logo">
       
         <i class="md-icon">&#xe869</i>
       
     </a>
     <a href="../index.html"
-       title="py-app-conf 1.0.0 documentation">py-app-conf</a>
+       title="py-app-conf 1.1.0 documentation">py-app-conf</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/nickderobertis/py-app-conf" title="Go to repository" class="md-source" data-md-source="github">
@@ -361,11 +361,11 @@
 <span id="pyappconf-model-module"></span><h2 id="module-pyappconf.model">pyappconf.model module<a class="headerlink" href="#module-pyappconf.model" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyappconf.model.AppConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyappconf.model.</span></span><span class="sig-name descname"><span class="pre">AppConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_name='config'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_config_folder=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_format=ConfigFormats.TOML</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toml_encoder=&lt;class</span> <span class="pre">'pyappconf.encoding.ext_toml.CustomTomlEncoder'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaml_encoder=&lt;class</span> <span class="pre">'pyappconf.encoding.ext_yaml.CustomDumper'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_encoder=&lt;class</span> <span class="pre">'pyappconf.encoding.ext_json.ExtendedJSONEncoder'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#AppConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.AppConfig" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyappconf.model.</span></span><span class="sig-name descname"><span class="pre">AppConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_name='config'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_config_folder=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_format=ConfigFormats.TOML</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_url=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toml_encoder=&lt;class</span> <span class="pre">'pyappconf.encoding.ext_toml.CustomTomlEncoder'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaml_encoder=&lt;class</span> <span class="pre">'pyappconf.encoding.ext_yaml.CustomDumper'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_encoder=&lt;class</span> <span class="pre">'pyappconf.encoding.ext_json.ExtendedJSONEncoder'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#AppConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.AppConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyappconf.model.AppConfig.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_name='config'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_config_folder=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_format=ConfigFormats.TOML</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toml_encoder=&lt;class</span> <span class="pre">'pyappconf.encoding.ext_toml.CustomTomlEncoder'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaml_encoder=&lt;class</span> <span class="pre">'pyappconf.encoding.ext_yaml.CustomDumper'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_encoder=&lt;class</span> <span class="pre">'pyappconf.encoding.ext_json.ExtendedJSONEncoder'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#AppConfig.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.AppConfig.__init__" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_name='config'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_config_folder=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_format=ConfigFormats.TOML</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_url=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toml_encoder=&lt;class</span> <span class="pre">'pyappconf.encoding.ext_toml.CustomTomlEncoder'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaml_encoder=&lt;class</span> <span class="pre">'pyappconf.encoding.ext_yaml.CustomDumper'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_encoder=&lt;class</span> <span class="pre">'pyappconf.encoding.ext_json.ExtendedJSONEncoder'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#AppConfig.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.AppConfig.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py property">
 <dt class="sig sig-object py" id="pyappconf.model.AppConfig.config_base_location">
@@ -522,7 +522,7 @@ it will look at the location in the config.</p>
 <dd></dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyappconf.model.BaseConfig.to_json">
-<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.to_json" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_schema_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.to_json" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
@@ -540,7 +540,7 @@ it will look at the location in the config.</p>
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyappconf.model.BaseConfig.to_yaml">
-<span class="sig-name descname"><span class="pre">to_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaml_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.to_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.to_yaml" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">to_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaml_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_schema_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyappconf/model.html#BaseConfig.to_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyappconf.model.BaseConfig.to_yaml" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
