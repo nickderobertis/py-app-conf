@@ -64,6 +64,7 @@ PACKAGE_INSTALL_REQUIRES = [
     "python-dotenv",
     "typing_extensions",
     "black",
+    "isort",
 ]
 
 # Add any third party packages you use in requirements for optional features of your package here

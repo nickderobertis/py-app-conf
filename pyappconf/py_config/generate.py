@@ -5,6 +5,7 @@ from typing import Any, Sequence, Set
 from uuid import UUID
 
 import black
+import isort
 from pydantic import BaseModel
 from pydantic.fields import ModelField
 
@@ -33,7 +34,10 @@ def _format_python_config_file(unformatted: str) -> str:
     :param unformatted: The python config file.
     :return: The formatted python config file.
     """
-    return black.format_str(unformatted, mode=black.FileMode(line_length=80))
+    black_formatted = black.format_str(unformatted, mode=black.FileMode(line_length=80))
+    # Now format with isort
+    isort_formatted = isort.code(black_formatted)
+    return isort_formatted
 
 
 def _pydantic_model_to_python_config_file(
