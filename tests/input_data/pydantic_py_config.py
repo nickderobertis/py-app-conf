@@ -2,9 +2,9 @@ import datetime
 from pathlib import Path
 from uuid import UUID
 
-from tests.fixtures.model import MyConfig, MyEnum, SubModel
+from tests.fixtures.pydantic_model import MyEnum, MyModel, SubModel
 
-config = MyConfig(
+config = MyModel(
     string="a",
     integer=5,
     custom=SubModel(a="b", b=8.5),

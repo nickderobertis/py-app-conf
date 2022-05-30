@@ -2,7 +2,16 @@ string = "loaded from 1"
 integer = 5
 str_list = [ "a", "b", "c",]
 int_tuple = [ 1, 2, 3,]
+uuid = "826032aa-465a-4692-b9b4-c81819197ed0"
+date = 2020-01-01
+time = 2020-01-01T12:00:00
 default_string = "woo"
+default_enum = "one"
+default_enum_list = [ "one", "two",]
+default_uuid_list = [ "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa", "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",]
+default_time_with_tz = 2022-01-01T00:00:00Z
+default_time_list = [ 2022-01-01T00:00:00-23:59, 2022-01-02T00:00:00+23:59,]
+default_date_list = [ 2022-01-01, 2022-01-02,]
 file_path = "/a/b.txt"
 
 [custom]

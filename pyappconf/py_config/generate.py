@@ -1,8 +1,11 @@
+import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any, Sequence, Set
+from uuid import UUID
 
 import black
+import isort
 from pydantic import BaseModel
 from pydantic.fields import ModelField
 
@@ -31,7 +34,10 @@ def _format_python_config_file(unformatted: str) -> str:
     :param unformatted: The python config file.
     :return: The formatted python config file.
     """
-    return black.format_str(unformatted, mode=black.FileMode(line_length=80))
+    black_formatted = black.format_str(unformatted, mode=black.FileMode(line_length=80))
+    # Now format with isort
+    isort_formatted = isort.code(black_formatted)
+    return isort_formatted
 
 
 def _pydantic_model_to_python_config_file(
@@ -90,10 +96,22 @@ def _build_attribute_value(value: Any, stdlib_imports: Set[str]) -> str:
     elif isinstance(value, Path):
         stdlib_imports.add("from pathlib import Path")
         return f'Path("{value}")'
+    elif isinstance(value, UUID):
+        stdlib_imports.add("from uuid import UUID")
+        return f'UUID("{value}")'
     elif isinstance(value, str):
         return f'"{value}"'
     elif isinstance(value, BaseModel):
         return repr(value)
+    elif isinstance(value, (datetime.datetime, datetime.date, datetime.time)):
+        stdlib_imports.add("import datetime")
+        return repr(value)
+    # elif isinstance(value, datetime.datetime):
+    #     stdlib_imports.add("from datetime import datetime")
+    #     return f"datetime({value.hour}, {value.minute}, {value.second}, {value.microsecond}, tzinfo={value.tzinfo})"
+    # elif isinstance(value, datetime.date):
+    #     stdlib_imports.add("from datetime import date")
+    #     return f"date({value.year}, {value.month}, {value.day})"
     elif isinstance(value, list):
         return (
             f"[{', '.join(_build_attribute_value(v, stdlib_imports) for v in value)}]"

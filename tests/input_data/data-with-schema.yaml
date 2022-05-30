@@ -2,14 +2,25 @@
 custom:
   a: b
   b: 8.5
+date: 2020-01-01
 default_custom:
   a: yeah
   b: 5.6
+default_date_list:
+- 2022-01-01
+- 2022-01-02
 default_enum: one
 default_enum_list:
 - one
 - two
 default_string: woo
+default_time_list:
+- 2022-01-01 00:00:00-23:59
+- 2022-01-02 00:00:00+23:59
+default_time_with_tz: 2022-01-01 00:00:00+00:00
+default_uuid_list:
+- aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
+- bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb
 dictionary:
   yeah:
     a: c
@@ -25,3 +36,5 @@ str_list:
 - b
 - c
 string: a
+time: 2020-01-01 12:00:00
+uuid: 826032aa-465a-4692-b9b4-c81819197ed0
