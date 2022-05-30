@@ -1,10 +1,12 @@
+import importlib.util
 import json
 import os
+import sys
 from copy import deepcopy
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Dict, Optional, Type, Union
+from typing import Any, Callable, Dict, Optional, Sequence, Set, Type, Union
 
 import appdirs
 import toml
@@ -18,6 +20,10 @@ from toml.encoder import TomlEncoder
 from pyappconf.encoding.ext_json import ExtendedJSONEncoder
 from pyappconf.encoding.ext_toml import CustomTomlEncoder
 from pyappconf.encoding.ext_yaml import CustomDumper
+from pyappconf.py_config.generate import (
+    base_config_to_python_config_file,
+    pydantic_model_to_python_config_file,
+)
 
 
 def _output_if_necessary(content: str, out_path: Optional[Union[str, Path]] = None):
@@ -40,6 +46,7 @@ class ConfigFormats(str, Enum):
     YAML = "yaml"
     JSON = "json"
     TOML = "toml"
+    PY = "py"
 
     @classmethod
     def from_path(cls, path: Path) -> "ConfigFormats":
@@ -50,6 +57,8 @@ class ConfigFormats(str, Enum):
             return cls.JSON
         if ext == "toml":
             return cls.TOML
+        if ext == "py":
+            return cls.PY
         raise ValueError(
             f"suffix {ext} not a supported config format. Supplied path: {path}"
         )
@@ -66,6 +75,10 @@ class AppConfig:
         toml_encoder: Type[TomlEncoder] = CustomTomlEncoder,
         yaml_encoder: Type = CustomDumper,
         json_encoder: Type[json.JSONEncoder] = ExtendedJSONEncoder,
+        py_config_encoder: Callable[
+            ["BaseConfig", Sequence[str], Sequence[str]], str
+        ] = base_config_to_python_config_file,
+        py_config_imports: Optional[Sequence[str]] = None,
     ):
         self.app_name = app_name
         self.config_name = config_name
@@ -75,6 +88,8 @@ class AppConfig:
         self.toml_encoder = toml_encoder
         self.yaml_encoder = yaml_encoder
         self.json_encoder = json_encoder
+        self.py_config_encoder = py_config_encoder
+        self.py_config_imports = py_config_imports
 
     @classmethod
     def __modify_schema__(cls, field_schema: Dict[str, Any]) -> None:
@@ -83,9 +98,16 @@ class AppConfig:
         ] = "Please ignore this field. It is used for internal purposes."
 
     def __eq__(self, other):
-        return self.__dict__ == other.__dict__
+        # Exclude functions as they will never compare to be equal after being serialized
+        exclude = {"toml_encoder", "yaml_encoder", "json_encoder", "py_config_encoder"}
+        if isinstance(other, AppConfig):
+            return self.dict(exclude=exclude) == other.dict(exclude=exclude)
+        else:
+            return self.dict(exclude=exclude) == other.__dict__
 
-    def dict(self) -> Dict[str, Any]:
+    def dict(self, exclude: Optional[Set[str]] = None) -> Dict[str, Any]:
+        if exclude:
+            return {k: v for k, v in self.__dict__.items() if k not in exclude}
         return self.__dict__
 
     def copy(self, **kwargs) -> "AppConfig":
@@ -128,6 +150,8 @@ class BaseConfig(BaseSettings):
             return self.to_yaml
         if self.settings.default_format == ConfigFormats.JSON:
             return self.to_json
+        if self.settings.default_format == ConfigFormats.PY:
+            return self.to_py_config
         raise NotImplementedError(f"unsupported format {self.settings.default_format}")
 
     @classmethod
@@ -143,6 +167,8 @@ class BaseConfig(BaseSettings):
             return cls.parse_yaml
         if config_format == ConfigFormats.JSON:
             return cls.parse_json
+        if config_format == ConfigFormats.PY:
+            return cls.parse_py_config
         raise NotImplementedError(f"unsupported format {config_format}")
 
     @classmethod
@@ -301,6 +327,28 @@ class BaseConfig(BaseSettings):
             # Schema is not kept in instance data, it is in cls._settings.schema_url
             del data["$schema"]
         return cls(**data)
+
+    def to_py_config(
+        self,
+        out_path: Optional[Union[str, Path]] = None,
+        py_config_kwargs: Dict[str, Any] = None,
+    ) -> str:
+        py_config_kwargs = py_config_kwargs or {}
+        if self.settings.py_config_imports is None:
+            raise ValueError(
+                "No imports specified for Python config, must set py_config_imports in settings"
+            )
+        py_str = self.settings.py_config_encoder(self, self.settings.py_config_imports, **py_config_kwargs)  # type: ignore
+        _output_if_necessary(py_str, out_path)
+        return py_str
+
+    @classmethod
+    def parse_py_config(cls, in_path: Union[str, Path]) -> "BaseConfig":
+        # Import the file given by the in_path. The config is in the config attribute of the module
+        spec = importlib.util.spec_from_file_location("py_config", in_path)
+        config_module = importlib.util.module_from_spec(spec)  # type: ignore
+        spec.loader.exec_module(config_module)  # type: ignore
+        return config_module.config
 
     @classmethod
     def schema(

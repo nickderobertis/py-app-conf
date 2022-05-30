@@ -5,41 +5,60 @@ from typing import Dict, List, Optional, Sequence, Tuple, Type
 import pytest
 from pydantic import BaseModel, Field
 
-from pyappconf.model import AppConfig, BaseConfig
-from tests.config import ENV_PATH
+from pyappconf.model import AppConfig, BaseConfig, ConfigFormats
+from tests.config import ENV_PATH, GENERATED_DATA_DIR
+
+
+class MyEnum(str, Enum):
+    ONE = "one"
+    TWO = "two"
+
+
+class SubConfig(BaseModel):
+    a: str
+    b: float
+
+
+class MyConfig(BaseConfig):
+    string: str
+    integer: int
+    custom: SubConfig
+    dictionary: Dict[str, SubConfig]
+    str_list: List[str]
+    int_tuple: Tuple[int, ...]
+
+    default_string: str = "woo"
+    default_custom: SubConfig = SubConfig(a="yeah", b=5.6)
+    default_enum: MyEnum = MyEnum.ONE
+    default_enum_list: List[MyEnum] = Field(
+        default_factory=lambda: [MyEnum.ONE, MyEnum.TWO]
+    )
+    file_path: Path = Path("/a/b.txt")
+
+    _settings: AppConfig = AppConfig(
+        app_name="MyApp",
+        py_config_imports=[
+            "from tests.fixtures.model import MyConfig, SubConfig, MyEnum"
+        ],
+    )
+
+    class Config:
+        env_prefix = "MYAPP_"
+        env_file = ENV_PATH
+
+
+class MyConfigPyFormat(MyConfig):
+    _settings = AppConfig(
+        app_name="MyApp",
+        custom_config_folder=GENERATED_DATA_DIR,
+        default_format=ConfigFormats.PY,
+        py_config_imports=[
+            "from tests.fixtures.model import MyConfigPyFormat, SubConfig, MyEnum"
+        ],
+    )
 
 
 def get_model_classes() -> Tuple[Type[BaseConfig], Type[BaseModel]]:
-    class MyEnum(str, Enum):
-        ONE = "one"
-        TWO = "two"
-
-    class SubConfig(BaseModel):
-        a: str
-        b: float
-
-    class MyConfig(BaseConfig):
-        string: str
-        integer: int
-        custom: SubConfig
-        dictionary: Dict[str, SubConfig]
-        str_list: List[str]
-        int_tuple: Tuple[int, ...]
-
-        default_string: str = "woo"
-        default_custom: SubConfig = SubConfig(a="yeah", b=5.6)
-        default_enum: MyEnum = MyEnum.ONE
-        default_enum_list: List[MyEnum] = Field(
-            default_factory=lambda: [MyEnum.ONE, MyEnum.TWO]
-        )
-        file_path: Path = Path("/a/b.txt")
-
-        _settings: AppConfig = AppConfig(app_name="MyApp")
-
-        class Config:
-            env_prefix = "MYAPP_"
-            env_file = ENV_PATH
-
     return MyConfig, SubConfig
 
 

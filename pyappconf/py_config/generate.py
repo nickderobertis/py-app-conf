@@ -1,14 +1,35 @@
 from enum import Enum
 from pathlib import Path
-from typing import Any, Sequence
+from typing import TYPE_CHECKING, Any, Sequence, Set
 
 import black
 from pydantic import BaseModel
 from pydantic.fields import ModelField
 
+if TYPE_CHECKING:
+    from pyappconf.model import BaseConfig
+
+
+def base_config_to_python_config_file(
+    model: "BaseConfig",
+    imports: Sequence[str],
+    exclude_fields: Sequence[str] = tuple(),
+) -> str:
+    """
+    Generate a python config file from a pyappconf model.
+
+    :param model: The pyappconf model.
+    :return: The python config file.
+    """
+    always_exclude_fields = ("settings", "_settings")
+    all_exclude_fields = [*always_exclude_fields, *exclude_fields]
+    return pydantic_model_to_python_config_file(model, imports, all_exclude_fields)
+
 
 def pydantic_model_to_python_config_file(
-    model: BaseModel, imports: Sequence[str]
+    model: BaseModel,
+    imports: Sequence[str],
+    exclude_fields: Sequence[str] = tuple(),
 ) -> str:
     """
     Generate a python config file from a pydantic model.
@@ -16,7 +37,7 @@ def pydantic_model_to_python_config_file(
     :param model: The pydantic model.
     :return: The python config file.
     """
-    unformatted = _pydantic_model_to_python_config_file(model, imports)
+    unformatted = _pydantic_model_to_python_config_file(model, imports, exclude_fields)
     # Format the python config file with black.
     formatted = _format_python_config_file(unformatted)
     return formatted
@@ -33,7 +54,9 @@ def _format_python_config_file(unformatted: str) -> str:
 
 
 def _pydantic_model_to_python_config_file(
-    model: BaseModel, imports: Sequence[str]
+    model: BaseModel,
+    imports: Sequence[str],
+    exclude_fields: Sequence[str] = tuple(),
 ) -> str:
     """
     Generate a python config file from a pydantic model.
@@ -41,19 +64,21 @@ def _pydantic_model_to_python_config_file(
     :param model: The pydantic model.
     :return: The python config file.
     """
-    imports_str = "\n".join(imports)
+    detected_stdlib_imports: Set[str] = set()
+    # _build_attribute_value() will add imports to detected_stdlib_imports.
+    attributes_str = _build_attributes(model, detected_stdlib_imports, exclude_fields)
+    imports_str = "\n".join([*imports, *detected_stdlib_imports])
     name = model.__class__.__name__
-    return (
-        f"""
+    return f"""
 {imports_str}
 
-config = {name}({_build_attributes(model)})
+config = {name}({attributes_str})
 """.strip()
-        + "\n"
-    )
 
 
-def _build_attributes(model: BaseModel) -> str:
+def _build_attributes(
+    model: BaseModel, stdlib_imports: Set[str], exclude_fields: Sequence[str] = tuple()
+) -> str:
     """
     Build the attribute definition of a pydantic model.
 
@@ -61,31 +86,42 @@ def _build_attributes(model: BaseModel) -> str:
     :return: The attributes of the model.
     """
     attributes = ""
+    field: ModelField
     for field_name, field in model.__fields__.items():
-        field: ModelField
+        if field_name in exclude_fields:
+            continue
         value = getattr(model, field_name)
-        attributes += f"    {field_name} = {_build_attribute_value(value)},\n"
+        attributes += (
+            f"    {field_name} = {_build_attribute_value(value, stdlib_imports)},\n"
+        )
     return attributes
 
 
-def _build_attribute_value(value: Any) -> str:
+def _build_attribute_value(value: Any, stdlib_imports: Set[str]) -> str:
     """
     Build the attribute value of a pydantic model.
 
     :param value: The value of the attribute.
     :return: The value of the attribute.
     """
-    if isinstance(value, (str, Path)):
+    if isinstance(value, Enum):
+        return f"{value.__class__.__name__}.{value.name}"
+    elif isinstance(value, Path):
+        stdlib_imports.add("from pathlib import Path")
+        return f'Path("{value}")'
+    elif isinstance(value, str):
         return f'"{value}"'
-    elif isinstance(value, Enum):
-        return f'"{value.value}"'
     elif isinstance(value, BaseModel):
         return repr(value)
     elif isinstance(value, list):
-        return f"[{', '.join(_build_attribute_value(v) for v in value)}]"
+        return (
+            f"[{', '.join(_build_attribute_value(v, stdlib_imports) for v in value)}]"
+        )
     elif isinstance(value, tuple):
-        return f"({', '.join(_build_attribute_value(v) for v in value)})"
+        return (
+            f"({', '.join(_build_attribute_value(v, stdlib_imports) for v in value)})"
+        )
     elif isinstance(value, dict):
-        return f"{{{', '.join(f'{_build_attribute_value(k)}: {_build_attribute_value(v)}' for k, v in value.items())}}}"
+        return f"{{{', '.join(f'{_build_attribute_value(k, stdlib_imports)}: {_build_attribute_value(v, stdlib_imports)}' for k, v in value.items())}}}"
     else:
         return str(value)

@@ -7,6 +7,7 @@ from tests.config import (
     INPUT_DATA_DIR,
     JSON_PATH,
     JSON_WITH_SCHEMA_PATH,
+    PY_CONFIG_PATH,
     TOML_PATH,
     YAML_PATH,
     YAML_WITH_SCHEMA_PATH,
@@ -18,6 +19,7 @@ if __name__ == "__main__":
     conf.to_json(out_path=JSON_PATH, json_kwargs=dict(indent=2))
     conf.to_yaml(out_path=YAML_PATH)
     conf.to_toml(out_path=TOML_PATH)
+    conf.to_py_config(out_path=PY_CONFIG_PATH)
 
     settings_with_schema = AppConfig(
         app_name="MyApp", schema_url="https://example.com/schema.json"

@@ -18,6 +18,8 @@ from tests.config import (
     YAML_PATH,
 )
 from tests.fixtures.model import (
+    MyConfigPyFormat,
+    SubConfig,
     get_model_classes,
     get_model_object,
     model_class_with_defaults,
@@ -43,6 +45,7 @@ def _save_load_test(custom_settings: AppConfig) -> Tuple[BaseConfig, Type[BaseCo
         custom_settings.default_format.value
     )
     obj = MyConfig.load()
+    # Check that loaded config is the same as the one used for saving
     assert mod == obj
     return obj, MyConfig
 
@@ -70,6 +73,32 @@ def test_save_load_json():
         default_format=ConfigFormats.JSON,
     )
     _save_load_test(custom_settings)
+
+
+def test_save_load_py_config():
+    """
+    This is structured differently than other save/load tests because py config functionality
+    will not work correctly when dynamically modifying the class settings just before load.
+    py config uses the imported class to create the config object, and that imported class
+    does not have the dynamic modifications applied.
+    :return:
+    """
+    all_kwargs = dict(
+        string="a",
+        integer=5,
+        custom=SubConfig(a="b", b=8.5),
+        dictionary={"yeah": SubConfig(a="c", b=9.6)},
+        str_list=["a", "b", "c"],
+        int_tuple=(1, 2, 3),
+    )
+    mod = MyConfigPyFormat(**all_kwargs)
+    mod.save()
+    settings = MyConfigPyFormat._settings
+    assert str(mod.settings.config_location).endswith(settings.default_format.value)
+
+    obj = MyConfigPyFormat.load()
+    # Check that loaded config is the same as the one used for saving
+    assert mod == obj
 
 
 def test_save_load_yaml_with_schema():
