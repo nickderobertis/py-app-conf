@@ -46,7 +46,7 @@
   
   
   
-    <title>pyappconf.model &#8212; py-app-conf 1.1.0 documentation</title>
+    <title>pyappconf.model &#8212; py-app-conf 1.2.0a1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
@@ -87,7 +87,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="py-app-conf 1.1.0 documentation"
+        <a href="../../index.html" title="py-app-conf 1.2.0a1 documentation"
            class="md-header-nav__button md-logo">
           
             <i class="md-icon">&#xe869</i>
@@ -173,7 +173,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">py-app-conf 1.1.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">py-app-conf 1.2.0a1 documentation</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -186,13 +186,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="py-app-conf 1.1.0 documentation" class="md-nav__button md-logo">
+    <a href="../../index.html" title="py-app-conf 1.2.0a1 documentation" class="md-nav__button md-logo">
       
         <i class="md-icon">&#xe869</i>
       
     </a>
     <a href="../../index.html"
-       title="py-app-conf 1.1.0 documentation">py-app-conf</a>
+       title="py-app-conf 1.2.0a1 documentation">py-app-conf</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/nickderobertis/py-app-conf" title="Go to repository" class="md-source" data-md-source="github">
@@ -271,26 +271,26 @@
           <article class="md-content__inner md-typeset" role="main">
             
   <h1 id="modules-pyappconf-model--page-root">Source code for pyappconf.model</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span></span><span class="kn">import</span> <span class="nn">importlib.util</span>
+<span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">appdirs</span>
 <span class="kn">import</span> <span class="nn">toml</span>
 <span class="kn">import</span> <span class="nn">yaml</span>
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">BaseSettings</span><span class="p">,</span> <span class="n">validator</span>
 <span class="kn">from</span> <span class="nn">pydantic.env_settings</span> <span class="kn">import</span> <span class="n">EnvSettingsSource</span>
-<span class="kn">from</span> <span class="nn">pydantic.fields</span> <span class="kn">import</span> <span class="n">ModelField</span>
 <span class="kn">from</span> <span class="nn">pydantic.schema</span> <span class="kn">import</span> <span class="n">default_ref_template</span>
 <span class="kn">from</span> <span class="nn">toml.encoder</span> <span class="kn">import</span> <span class="n">TomlEncoder</span>
 
 <span class="kn">from</span> <span class="nn">pyappconf.encoding.ext_json</span> <span class="kn">import</span> <span class="n">ExtendedJSONEncoder</span>
 <span class="kn">from</span> <span class="nn">pyappconf.encoding.ext_toml</span> <span class="kn">import</span> <span class="n">CustomTomlEncoder</span>
 <span class="kn">from</span> <span class="nn">pyappconf.encoding.ext_yaml</span> <span class="kn">import</span> <span class="n">CustomDumper</span>
+<span class="kn">from</span> <span class="nn">pyappconf.py_config.generate</span> <span class="kn">import</span> <span class="n">pydantic_model_to_python_config_file</span>
 
 
 <span class="k">def</span> <span class="nf">_output_if_necessary</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">out_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
@@ -313,6 +313,7 @@
     <span class="n">YAML</span> <span class="o">=</span> <span class="s2">"yaml"</span>
     <span class="n">JSON</span> <span class="o">=</span> <span class="s2">"json"</span>
     <span class="n">TOML</span> <span class="o">=</span> <span class="s2">"toml"</span>
+    <span class="n">PY</span> <span class="o">=</span> <span class="s2">"py"</span>
 
 <div class="viewcode-block" id="ConfigFormats.from_path"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.ConfigFormats.from_path">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"ConfigFormats"</span><span class="p">:</span>
@@ -323,6 +324,8 @@
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">JSON</span>
         <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s2">"toml"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">TOML</span>
+        <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s2">"py"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">PY</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">"suffix </span><span class="si">{</span><span class="n">ext</span><span class="si">}</span><span class="s2"> not a supported config format. Supplied path: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span></div></div>
@@ -339,6 +342,10 @@
         <span class="n">toml_encoder</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">TomlEncoder</span><span class="p">]</span> <span class="o">=</span> <span class="n">CustomTomlEncoder</span><span class="p">,</span>
         <span class="n">yaml_encoder</span><span class="p">:</span> <span class="n">Type</span> <span class="o">=</span> <span class="n">CustomDumper</span><span class="p">,</span>
         <span class="n">json_encoder</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">]</span> <span class="o">=</span> <span class="n">ExtendedJSONEncoder</span><span class="p">,</span>
+        <span class="n">py_config_encoder</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span>
+            <span class="p">[</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="nb">str</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="n">pydantic_model_to_python_config_file</span><span class="p">,</span>
+        <span class="n">py_config_imports</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">app_name</span> <span class="o">=</span> <span class="n">app_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config_name</span> <span class="o">=</span> <span class="n">config_name</span>
@@ -347,7 +354,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">schema_url</span> <span class="o">=</span> <span class="n">schema_url</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toml_encoder</span> <span class="o">=</span> <span class="n">toml_encoder</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">yaml_encoder</span> <span class="o">=</span> <span class="n">yaml_encoder</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">json_encoder</span> <span class="o">=</span> <span class="n">json_encoder</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">json_encoder</span> <span class="o">=</span> <span class="n">json_encoder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">py_config_encoder</span> <span class="o">=</span> <span class="n">py_config_encoder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">py_config_imports</span> <span class="o">=</span> <span class="n">py_config_imports</span></div>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__modify_schema__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">field_schema</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -356,9 +365,16 @@
         <span class="p">]</span> <span class="o">=</span> <span class="s2">"Please ignore this field. It is used for internal purposes."</span>
 
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="vm">__dict__</span>
+        <span class="c1"># Exclude functions as they will never compare to be equal after being serialized</span>
+        <span class="n">exclude</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"toml_encoder"</span><span class="p">,</span> <span class="s2">"yaml_encoder"</span><span class="p">,</span> <span class="s2">"json_encoder"</span><span class="p">,</span> <span class="s2">"py_config_encoder"</span><span class="p">}</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">AppConfig</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">)</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">dict</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">)</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="vm">__dict__</span>
 
-<div class="viewcode-block" id="AppConfig.dict"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.AppConfig.dict">[docs]</a>    <span class="k">def</span> <span class="nf">dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<div class="viewcode-block" id="AppConfig.dict"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.AppConfig.dict">[docs]</a>    <span class="k">def</span> <span class="nf">dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exclude</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">exclude</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude</span><span class="p">}</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span></div>
 
 <div class="viewcode-block" id="AppConfig.copy"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.AppConfig.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"AppConfig"</span><span class="p">:</span>
@@ -401,6 +417,8 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_yaml</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">default_format</span> <span class="o">==</span> <span class="n">ConfigFormats</span><span class="o">.</span><span class="n">JSON</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_json</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">default_format</span> <span class="o">==</span> <span class="n">ConfigFormats</span><span class="o">.</span><span class="n">PY</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_py_config</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unsupported format </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">default_format</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BaseConfig.get_deserializer"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.BaseConfig.get_deserializer">[docs]</a>    <span class="nd">@classmethod</span>
@@ -416,6 +434,8 @@
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">parse_yaml</span>
         <span class="k">if</span> <span class="n">config_format</span> <span class="o">==</span> <span class="n">ConfigFormats</span><span class="o">.</span><span class="n">JSON</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">parse_json</span>
+        <span class="k">if</span> <span class="n">config_format</span> <span class="o">==</span> <span class="n">ConfigFormats</span><span class="o">.</span><span class="n">PY</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">parse_py_config</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unsupported format </span><span class="si">{</span><span class="n">config_format</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
 
     <span class="nd">@classmethod</span>
@@ -574,6 +594,33 @@
             <span class="c1"># Schema is not kept in instance data, it is in cls._settings.schema_url</span>
             <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s2">"$schema"</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseConfig.to_py_config"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.BaseConfig.to_py_config">[docs]</a>    <span class="k">def</span> <span class="nf">to_py_config</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">out_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">py_config_kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">py_config_kwargs</span> <span class="o">=</span> <span class="n">py_config_kwargs</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">py_config_imports</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">"No imports specified for Python config, must set py_config_imports in settings"</span>
+            <span class="p">)</span>
+        <span class="n">always_exclude_fields</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"settings"</span><span class="p">,</span> <span class="s2">"_settings"</span><span class="p">)</span>
+        <span class="n">all_exclude_fields</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="o">*</span><span class="n">always_exclude_fields</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">py_config_kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"exclude_fields"</span><span class="p">,</span> <span class="p">[]),</span>
+        <span class="p">]</span>
+        <span class="n">py_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">py_config_encoder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">py_config_imports</span><span class="p">,</span> <span class="n">all_exclude_fields</span><span class="p">,</span> <span class="o">**</span><span class="n">py_config_kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="n">_output_if_necessary</span><span class="p">(</span><span class="n">py_str</span><span class="p">,</span> <span class="n">out_path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">py_str</span></div>
+
+<div class="viewcode-block" id="BaseConfig.parse_py_config"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.BaseConfig.parse_py_config">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">parse_py_config</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">in_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">"BaseConfig"</span><span class="p">:</span>
+        <span class="c1"># Import the file given by the in_path. The config is in the config attribute of the module</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">spec_from_file_location</span><span class="p">(</span><span class="s2">"py_config"</span><span class="p">,</span> <span class="n">in_path</span><span class="p">)</span>
+        <span class="n">config_module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">module_from_spec</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="n">spec</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">exec_module</span><span class="p">(</span><span class="n">config_module</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="k">return</span> <span class="n">config_module</span><span class="o">.</span><span class="n">config</span></div>
 
 <div class="viewcode-block" id="BaseConfig.schema"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.BaseConfig.schema">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">schema</span><span class="p">(</span>

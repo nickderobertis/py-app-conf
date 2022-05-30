@@ -12,6 +12,7 @@ Subpackages
 .. toctree::
 
    pyappconf.encoding
+   pyappconf.py_config
 
 Submodules
 ----------

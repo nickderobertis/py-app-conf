@@ -1,0 +1,19 @@
+pyappconf.py\_config package
+============================
+
+.. automodule:: pyappconf.py_config
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyappconf.py\_config.generate module
+------------------------------------
+
+.. automodule:: pyappconf.py_config.generate
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
