@@ -23,6 +23,8 @@ RECURSIVE_CONFIG_ROOT_PATH = RECURSIVE_INPUT_FOLDER / "recursive-config.toml"
 
 SCHEMA_JSON_PATH = INPUT_DATA_DIR / "schema.json"
 
+PYDANTIC_PY_CONFIG_PATH = INPUT_DATA_DIR / "pydantic_py_config.py"
+
 if not INPUT_DATA_DIR.exists():
     INPUT_DATA_DIR.mkdir()
 if not GENERATED_DATA_DIR.exists():

@@ -2,12 +2,14 @@
 Generate test data for file output
 """
 from pyappconf import AppConfig
+from pyappconf.py_config.generate import pydantic_model_to_python_config_file
 from tests.config import (
     DATA_NAME,
     INPUT_DATA_DIR,
     JSON_PATH,
     JSON_WITH_SCHEMA_PATH,
     PY_CONFIG_PATH,
+    PYDANTIC_PY_CONFIG_PATH,
     RECURSIVE_CONFIG_1_PATH,
     RECURSIVE_CONFIG_ROOT_PATH,
     SCHEMA_JSON_PATH,
@@ -16,6 +18,7 @@ from tests.config import (
     YAML_WITH_SCHEMA_PATH,
 )
 from tests.fixtures.model import MyConfig, get_model_object
+from tests.fixtures.pydantic_model import get_pydantic_model_object
 
 
 def generate_basic_configs():
@@ -47,8 +50,18 @@ def generate_json_schema():
     SCHEMA_JSON_PATH.write_text(schema)
 
 
+def generate_pydantic_py_config_file():
+    model = get_pydantic_model_object()
+    conf_str = pydantic_model_to_python_config_file(
+        model,
+        ["from tests.fixtures.pydantic_model import MyModel, SubModel, MyEnum"],
+    )
+    PYDANTIC_PY_CONFIG_PATH.write_text(conf_str)
+
+
 if __name__ == "__main__":
     generate_basic_configs()
     generate_configs_with_schema()
     generate_recursive_configs()
     generate_json_schema()
+    generate_pydantic_py_config_file()
