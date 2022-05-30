@@ -5,6 +5,8 @@ from typing import Dict, List, Tuple
 import pytest
 from pydantic import BaseModel, Field
 
+from tests.fixtures.data import get_default_data
+
 
 class MyEnum(str, Enum):
     ONE = "one"
@@ -34,14 +36,7 @@ class MyModel(BaseModel):
 
 
 def get_pydantic_model_object() -> MyModel:
-    all_kwargs = dict(
-        string="a",
-        integer=5,
-        custom=SubModel(a="b", b=8.5),
-        dictionary={"yeah": SubModel(a="c", b=9.6)},
-        str_list=["a", "b", "c"],
-        int_tuple=(1, 2, 3),
-    )
+    all_kwargs = get_default_data()
     return MyModel(**all_kwargs)
 
 

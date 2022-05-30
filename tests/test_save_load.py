@@ -17,6 +17,7 @@ from tests.config import (
     TOML_PATH,
     YAML_PATH,
 )
+from tests.fixtures.data import get_default_data
 from tests.fixtures.model import (
     MyConfigPyFormat,
     SubModel,
@@ -83,14 +84,7 @@ def test_save_load_py_config():
     does not have the dynamic modifications applied.
     :return:
     """
-    all_kwargs = dict(
-        string="a",
-        integer=5,
-        custom=SubModel(a="b", b=8.5),
-        dictionary={"yeah": SubModel(a="c", b=9.6)},
-        str_list=["a", "b", "c"],
-        int_tuple=(1, 2, 3),
-    )
+    all_kwargs = get_default_data()
     mod = MyConfigPyFormat(**all_kwargs)
     mod.save()
     settings = MyConfigPyFormat._settings

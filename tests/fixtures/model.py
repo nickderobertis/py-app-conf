@@ -1,12 +1,12 @@
 from enum import Enum
-from pathlib import Path
-from typing import Dict, List, Optional, Sequence, Tuple, Type
+from typing import Optional, Sequence, Tuple, Type
 
 import pytest
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from pyappconf.model import AppConfig, BaseConfig, ConfigFormats
 from tests.config import ENV_PATH, GENERATED_DATA_DIR
+from tests.fixtures.data import get_default_data
 from tests.fixtures.pydantic_model import MyModel, SubModel
 
 
@@ -61,22 +61,7 @@ def get_model_object(
     exclude_keys: Optional[Sequence[str]] = None, **kwargs
 ) -> BaseConfig:
     MyConfig, SubModel = get_model_classes()
-
-    all_kwargs = dict(
-        string="a",
-        integer=5,
-        custom=SubModel(a="b", b=8.5),
-        dictionary={"yeah": SubModel(a="c", b=9.6)},
-        str_list=["a", "b", "c"],
-        int_tuple=(1, 2, 3),
-    )
-    if exclude_keys is not None:
-        all_kwargs = {
-            key: value for key, value in all_kwargs.items() if key not in exclude_keys
-        }
-    all_kwargs.update(kwargs)
-
-    # conf = MyConfig(**{'myapp_' + key: value for key, value in all_kwargs.items()})
+    all_kwargs = get_default_data(exclude_keys=exclude_keys, **kwargs)
     conf = MyConfig(**all_kwargs)
     return conf
 
