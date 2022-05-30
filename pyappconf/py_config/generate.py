@@ -1,6 +1,7 @@
 from enum import Enum
 from pathlib import Path
 from typing import Any, Sequence, Set
+from uuid import UUID
 
 import black
 from pydantic import BaseModel
@@ -90,6 +91,9 @@ def _build_attribute_value(value: Any, stdlib_imports: Set[str]) -> str:
     elif isinstance(value, Path):
         stdlib_imports.add("from pathlib import Path")
         return f'Path("{value}")'
+    elif isinstance(value, UUID):
+        stdlib_imports.add("from uuid import UUID")
+        return f'UUID("{value}")'
     elif isinstance(value, str):
         return f'"{value}"'
     elif isinstance(value, BaseModel):

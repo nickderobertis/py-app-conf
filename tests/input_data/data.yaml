@@ -9,6 +9,9 @@ default_enum_list:
 - one
 - two
 default_string: woo
+default_uuid_list:
+- aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
+- bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb
 dictionary:
   yeah:
     a: c
@@ -24,3 +27,4 @@ str_list:
 - b
 - c
 string: a
+uuid: 826032aa-465a-4692-b9b4-c81819197ed0
