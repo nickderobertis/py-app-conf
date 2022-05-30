@@ -2,11 +2,11 @@ string = "a"
 integer = 5
 str_list = [ "a", "b", "c",]
 int_tuple = [ 1, 2, 3,]
-uuid = "UUID('826032aa-465a-4692-b9b4-c81819197ed0')"
+uuid = "826032aa-465a-4692-b9b4-c81819197ed0"
 default_string = "woo"
 default_enum = "one"
 default_enum_list = [ "one", "two",]
-default_uuid_list = [ "UUID('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa')", "UUID('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb')",]
+default_uuid_list = [ "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa", "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",]
 file_path = "/a/b.txt"
 
 [custom]
