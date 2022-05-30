@@ -1,6 +1,7 @@
 from enum import Enum
 from pathlib import Path, PosixPath
 from typing import Any, Callable, Dict, Type
+from uuid import UUID
 
 from toml.encoder import TomlEncoder, _dump_str  # type: ignore
 
@@ -15,12 +16,16 @@ def _dump_enum(obj: Enum) -> str:
     return _dump_str(obj.value)
 
 
+def _dump_uuid(obj: UUID) -> str:
+    return _dump_str(str(obj))
+
+
 class CustomTomlEncoder(TomlEncoder):
     multi_dump_funcs: Dict[Type, Callable[[Any], str]]
 
     def __init__(self, _dict=dict, preserve=False):
         super().__init__(_dict=_dict, preserve=preserve)
-        self.multi_dump_funcs = {Enum: _dump_enum}
+        self.multi_dump_funcs = {Enum: _dump_enum, UUID: _dump_uuid}
         self.dump_funcs[Path] = _dump_hasstr
         self.dump_funcs[PosixPath] = _dump_hasstr
 
