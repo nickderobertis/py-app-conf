@@ -19,7 +19,7 @@ from tests.config import (
 )
 from tests.fixtures.model import (
     MyConfigPyFormat,
-    SubConfig,
+    SubModel,
     get_model_classes,
     get_model_object,
     model_class_with_defaults,
@@ -36,7 +36,7 @@ def _save_load_test(custom_settings: AppConfig) -> Tuple[BaseConfig, Type[BaseCo
         custom_settings.default_format.value
     )
 
-    OrigConfig, SubConfig = get_model_classes()
+    OrigConfig, SubModel = get_model_classes()
 
     class MyConfig(OrigConfig):
         _settings = custom_settings
@@ -86,8 +86,8 @@ def test_save_load_py_config():
     all_kwargs = dict(
         string="a",
         integer=5,
-        custom=SubConfig(a="b", b=8.5),
-        dictionary={"yeah": SubConfig(a="c", b=9.6)},
+        custom=SubModel(a="b", b=8.5),
+        dictionary={"yeah": SubModel(a="c", b=9.6)},
         str_list=["a", "b", "c"],
         int_tuple=(1, 2, 3),
     )
@@ -211,7 +211,7 @@ def test_load_or_create_with_path_does_not_exist(
     ],
 )
 def test_load_recursive(path: Optional[Path], expect_string: str):
-    OrigConfig, SubConfig = get_model_classes()
+    OrigConfig, SubModel = get_model_classes()
 
     shutil.copy(
         INPUT_DATA_DIR / "data.toml", GENERATED_DATA_DIR / "recursive-config.toml"

@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 
 from pyappconf.model import AppConfig, BaseConfig, ConfigFormats
 from tests.config import ENV_PATH, GENERATED_DATA_DIR
+from tests.fixtures.pydantic_model import MyModel, SubModel
 
 
 class MyEnum(str, Enum):
@@ -14,31 +15,11 @@ class MyEnum(str, Enum):
     TWO = "two"
 
 
-class SubConfig(BaseModel):
-    a: str
-    b: float
-
-
-class MyConfig(BaseConfig):
-    string: str
-    integer: int
-    custom: SubConfig
-    dictionary: Dict[str, SubConfig]
-    str_list: List[str]
-    int_tuple: Tuple[int, ...]
-
-    default_string: str = "woo"
-    default_custom: SubConfig = SubConfig(a="yeah", b=5.6)
-    default_enum: MyEnum = MyEnum.ONE
-    default_enum_list: List[MyEnum] = Field(
-        default_factory=lambda: [MyEnum.ONE, MyEnum.TWO]
-    )
-    file_path: Path = Path("/a/b.txt")
-
+class MyConfig(MyModel, BaseConfig):
     _settings: AppConfig = AppConfig(
         app_name="MyApp",
         py_config_imports=[
-            "from tests.fixtures.model import MyConfig, SubConfig, MyEnum"
+            "from tests.fixtures.model import MyConfig, SubModel, MyEnum"
         ],
     )
 
@@ -53,13 +34,13 @@ class MyConfigPyFormat(MyConfig):
         custom_config_folder=GENERATED_DATA_DIR,
         default_format=ConfigFormats.PY,
         py_config_imports=[
-            "from tests.fixtures.model import MyConfigPyFormat, SubConfig, MyEnum"
+            "from tests.fixtures.model import MyConfigPyFormat, SubModel, MyEnum"
         ],
     )
 
 
 def get_model_classes() -> Tuple[Type[BaseConfig], Type[BaseModel]]:
-    return MyConfig, SubConfig
+    return MyConfig, SubModel
 
 
 def get_model_class_with_defaults() -> Type[BaseConfig]:
@@ -79,13 +60,13 @@ def get_model_class_with_defaults() -> Type[BaseConfig]:
 def get_model_object(
     exclude_keys: Optional[Sequence[str]] = None, **kwargs
 ) -> BaseConfig:
-    MyConfig, SubConfig = get_model_classes()
+    MyConfig, SubModel = get_model_classes()
 
     all_kwargs = dict(
         string="a",
         integer=5,
-        custom=SubConfig(a="b", b=8.5),
-        dictionary={"yeah": SubConfig(a="c", b=9.6)},
+        custom=SubModel(a="b", b=8.5),
+        dictionary={"yeah": SubModel(a="c", b=9.6)},
         str_list=["a", "b", "c"],
         int_tuple=(1, 2, 3),
     )
