@@ -1,9 +1,7 @@
 import importlib.util
 import json
 import os
-import sys
 from copy import deepcopy
-from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 from typing import Any, Callable, Dict, Optional, Sequence, Set, Type, Union
@@ -13,17 +11,13 @@ import toml
 import yaml
 from pydantic import BaseModel, BaseSettings, validator
 from pydantic.env_settings import EnvSettingsSource
-from pydantic.fields import ModelField
 from pydantic.schema import default_ref_template
 from toml.encoder import TomlEncoder
 
 from pyappconf.encoding.ext_json import ExtendedJSONEncoder
 from pyappconf.encoding.ext_toml import CustomTomlEncoder
 from pyappconf.encoding.ext_yaml import CustomDumper
-from pyappconf.py_config.generate import (
-    base_config_to_python_config_file,
-    pydantic_model_to_python_config_file,
-)
+from pyappconf.py_config.generate import pydantic_model_to_python_config_file
 
 
 def _output_if_necessary(content: str, out_path: Optional[Union[str, Path]] = None):
@@ -76,8 +70,8 @@ class AppConfig:
         yaml_encoder: Type = CustomDumper,
         json_encoder: Type[json.JSONEncoder] = ExtendedJSONEncoder,
         py_config_encoder: Callable[
-            ["BaseConfig", Sequence[str], Sequence[str]], str
-        ] = base_config_to_python_config_file,
+            [BaseModel, Sequence[str], Sequence[str]], str
+        ] = pydantic_model_to_python_config_file,
         py_config_imports: Optional[Sequence[str]] = None,
     ):
         self.app_name = app_name
@@ -338,7 +332,12 @@ class BaseConfig(BaseSettings):
             raise ValueError(
                 "No imports specified for Python config, must set py_config_imports in settings"
             )
-        py_str = self.settings.py_config_encoder(self, self.settings.py_config_imports, **py_config_kwargs)  # type: ignore
+        always_exclude_fields = ("settings", "_settings")
+        all_exclude_fields = [
+            *always_exclude_fields,
+            *py_config_kwargs.pop("exclude_fields", []),
+        ]
+        py_str = self.settings.py_config_encoder(self, self.settings.py_config_imports, all_exclude_fields, **py_config_kwargs)  # type: ignore
         _output_if_necessary(py_str, out_path)
         return py_str
 

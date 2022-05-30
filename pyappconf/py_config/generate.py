@@ -1,29 +1,10 @@
 from enum import Enum
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Sequence, Set
+from typing import Any, Sequence, Set
 
 import black
 from pydantic import BaseModel
 from pydantic.fields import ModelField
-
-if TYPE_CHECKING:
-    from pyappconf.model import BaseConfig
-
-
-def base_config_to_python_config_file(
-    model: "BaseConfig",
-    imports: Sequence[str],
-    exclude_fields: Sequence[str] = tuple(),
-) -> str:
-    """
-    Generate a python config file from a pyappconf model.
-
-    :param model: The pyappconf model.
-    :return: The python config file.
-    """
-    always_exclude_fields = ("settings", "_settings")
-    all_exclude_fields = [*always_exclude_fields, *exclude_fields]
-    return pydantic_model_to_python_config_file(model, imports, all_exclude_fields)
 
 
 def pydantic_model_to_python_config_file(
