@@ -1,3 +1,4 @@
+import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any, Sequence, Set
@@ -98,6 +99,15 @@ def _build_attribute_value(value: Any, stdlib_imports: Set[str]) -> str:
         return f'"{value}"'
     elif isinstance(value, BaseModel):
         return repr(value)
+    elif isinstance(value, (datetime.datetime, datetime.date, datetime.time)):
+        stdlib_imports.add("import datetime")
+        return repr(value)
+    # elif isinstance(value, datetime.datetime):
+    #     stdlib_imports.add("from datetime import datetime")
+    #     return f"datetime({value.hour}, {value.minute}, {value.second}, {value.microsecond}, tzinfo={value.tzinfo})"
+    # elif isinstance(value, datetime.date):
+    #     stdlib_imports.add("from datetime import date")
+    #     return f"date({value.year}, {value.month}, {value.day})"
     elif isinstance(value, list):
         return (
             f"[{', '.join(_build_attribute_value(v, stdlib_imports) for v in value)}]"
