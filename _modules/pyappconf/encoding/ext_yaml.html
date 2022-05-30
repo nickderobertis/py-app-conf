@@ -46,7 +46,7 @@
   
   
   
-    <title>pyappconf.encoding.ext_yaml &#8212; py-app-conf 1.2.0 documentation</title>
+    <title>pyappconf.encoding.ext_yaml &#8212; py-app-conf 1.2.0a2 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -87,7 +87,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../../index.html" title="py-app-conf 1.2.0 documentation"
+        <a href="../../../index.html" title="py-app-conf 1.2.0a2 documentation"
            class="md-header-nav__button md-logo">
           
             <i class="md-icon">&#xe869</i>
@@ -173,7 +173,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../../index.html" class="md-tabs__link">py-app-conf 1.2.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../../index.html" class="md-tabs__link">py-app-conf 1.2.0a2 documentation</a></li>
           <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -186,13 +186,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../../index.html" title="py-app-conf 1.2.0 documentation" class="md-nav__button md-logo">
+    <a href="../../../index.html" title="py-app-conf 1.2.0a2 documentation" class="md-nav__button md-logo">
       
         <i class="md-icon">&#xe869</i>
       
     </a>
     <a href="../../../index.html"
-       title="py-app-conf 1.2.0 documentation">py-app-conf</a>
+       title="py-app-conf 1.2.0a2 documentation">py-app-conf</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/nickderobertis/py-app-conf" title="Go to repository" class="md-source" data-md-source="github">
@@ -273,6 +273,7 @@
   <h1 id="modules-pyappconf-encoding-ext-yaml--page-root">Source code for pyappconf.encoding.ext_yaml</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span><span class="p">,</span> <span class="n">PosixPath</span>
+<span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">UUID</span>
 
 <span class="kn">from</span> <span class="nn">yaml.emitter</span> <span class="kn">import</span> <span class="n">Emitter</span>
 <span class="kn">from</span> <span class="nn">yaml.representer</span> <span class="kn">import</span> <span class="n">SafeRepresenter</span>
@@ -294,6 +295,12 @@
     <span class="k">return</span> <span class="n">SafeRepresenter</span><span class="o">.</span><span class="n">represent_str</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
 
+<span class="k">def</span> <span class="nf">_represent_uuid</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">UUID</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">yaml.representer</span> <span class="kn">import</span> <span class="n">SafeRepresenter</span>
+
+    <span class="k">return</span> <span class="n">SafeRepresenter</span><span class="o">.</span><span class="n">represent_str</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+
+
 <div class="viewcode-block" id="CustomRepresenter"><a class="viewcode-back" href="../../../api/pyappconf.encoding.html#pyappconf.encoding.ext_yaml.CustomRepresenter">[docs]</a><span class="k">class</span> <span class="nc">CustomRepresenter</span><span class="p">(</span><span class="n">SafeRepresenter</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
@@ -301,6 +308,7 @@
 <span class="n">CustomRepresenter</span><span class="o">.</span><span class="n">add_representer</span><span class="p">(</span><span class="n">Path</span><span class="p">,</span> <span class="n">_represent_hasstr</span><span class="p">)</span>
 <span class="n">CustomRepresenter</span><span class="o">.</span><span class="n">add_representer</span><span class="p">(</span><span class="n">PosixPath</span><span class="p">,</span> <span class="n">_represent_hasstr</span><span class="p">)</span>
 <span class="n">CustomRepresenter</span><span class="o">.</span><span class="n">add_multi_representer</span><span class="p">(</span><span class="n">Enum</span><span class="p">,</span> <span class="n">_represent_enum</span><span class="p">)</span>
+<span class="n">CustomRepresenter</span><span class="o">.</span><span class="n">add_multi_representer</span><span class="p">(</span><span class="n">UUID</span><span class="p">,</span> <span class="n">_represent_uuid</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="CustomDumper"><a class="viewcode-back" href="../../../api/pyappconf.encoding.html#pyappconf.encoding.ext_yaml.CustomDumper">[docs]</a><span class="k">class</span> <span class="nc">CustomDumper</span><span class="p">(</span><span class="n">Emitter</span><span class="p">,</span> <span class="n">Serializer</span><span class="p">,</span> <span class="n">CustomRepresenter</span><span class="p">,</span> <span class="n">Resolver</span><span class="p">):</span>

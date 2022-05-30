@@ -46,7 +46,7 @@
   
   
   
-    <title>pyappconf.py_config.generate &#8212; py-app-conf 1.2.0 documentation</title>
+    <title>pyappconf.py_config.generate &#8212; py-app-conf 1.2.0a2 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -87,7 +87,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../../index.html" title="py-app-conf 1.2.0 documentation"
+        <a href="../../../index.html" title="py-app-conf 1.2.0a2 documentation"
            class="md-header-nav__button md-logo">
           
             <i class="md-icon">&#xe869</i>
@@ -173,7 +173,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../../index.html" class="md-tabs__link">py-app-conf 1.2.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../../index.html" class="md-tabs__link">py-app-conf 1.2.0a2 documentation</a></li>
           <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -186,13 +186,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../../index.html" title="py-app-conf 1.2.0 documentation" class="md-nav__button md-logo">
+    <a href="../../../index.html" title="py-app-conf 1.2.0a2 documentation" class="md-nav__button md-logo">
       
         <i class="md-icon">&#xe869</i>
       
     </a>
     <a href="../../../index.html"
-       title="py-app-conf 1.2.0 documentation">py-app-conf</a>
+       title="py-app-conf 1.2.0a2 documentation">py-app-conf</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/nickderobertis/py-app-conf" title="Go to repository" class="md-source" data-md-source="github">
@@ -271,11 +271,14 @@
           <article class="md-content__inner md-typeset" role="main">
             
   <h1 id="modules-pyappconf-py-config-generate--page-root">Source code for pyappconf.py_config.generate</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Set</span>
+<span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">UUID</span>
 
 <span class="kn">import</span> <span class="nn">black</span>
+<span class="kn">import</span> <span class="nn">isort</span>
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
 <span class="kn">from</span> <span class="nn">pydantic.fields</span> <span class="kn">import</span> <span class="n">ModelField</span>
 
@@ -304,7 +307,10 @@
 <span class="sd">    :param unformatted: The python config file.</span>
 <span class="sd">    :return: The formatted python config file.</span>
 <span class="sd">    """</span>
-    <span class="k">return</span> <span class="n">black</span><span class="o">.</span><span class="n">format_str</span><span class="p">(</span><span class="n">unformatted</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">black</span><span class="o">.</span><span class="n">FileMode</span><span class="p">(</span><span class="n">line_length</span><span class="o">=</span><span class="mi">80</span><span class="p">))</span>
+    <span class="n">black_formatted</span> <span class="o">=</span> <span class="n">black</span><span class="o">.</span><span class="n">format_str</span><span class="p">(</span><span class="n">unformatted</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">black</span><span class="o">.</span><span class="n">FileMode</span><span class="p">(</span><span class="n">line_length</span><span class="o">=</span><span class="mi">80</span><span class="p">))</span>
+    <span class="c1"># Now format with isort</span>
+    <span class="n">isort_formatted</span> <span class="o">=</span> <span class="n">isort</span><span class="o">.</span><span class="n">code</span><span class="p">(</span><span class="n">black_formatted</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">isort_formatted</span>
 
 
 <span class="k">def</span> <span class="nf">_pydantic_model_to_python_config_file</span><span class="p">(</span>
@@ -363,10 +369,22 @@
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
         <span class="n">stdlib_imports</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"from pathlib import Path"</span><span class="p">)</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s1">'Path("</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1">")'</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">UUID</span><span class="p">):</span>
+        <span class="n">stdlib_imports</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"from uuid import UUID"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">'UUID("</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1">")'</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s1">'"</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1">"'</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">time</span><span class="p">)):</span>
+        <span class="n">stdlib_imports</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"import datetime"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="c1"># elif isinstance(value, datetime.datetime):</span>
+    <span class="c1">#     stdlib_imports.add("from datetime import datetime")</span>
+    <span class="c1">#     return f"datetime({value.hour}, {value.minute}, {value.second}, {value.microsecond}, tzinfo={value.tzinfo})"</span>
+    <span class="c1"># elif isinstance(value, datetime.date):</span>
+    <span class="c1">#     stdlib_imports.add("from datetime import date")</span>
+    <span class="c1">#     return f"date({value.year}, {value.month}, {value.day})"</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">"[</span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_build_attribute_value</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">stdlib_imports</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">]"</span>
