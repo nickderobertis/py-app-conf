@@ -10,11 +10,12 @@ from tests.config import (
     PY_CONFIG_PATH,
     RECURSIVE_CONFIG_1_PATH,
     RECURSIVE_CONFIG_ROOT_PATH,
+    SCHEMA_JSON_PATH,
     TOML_PATH,
     YAML_PATH,
     YAML_WITH_SCHEMA_PATH,
 )
-from tests.fixtures.model import get_model_object
+from tests.fixtures.model import MyConfig, get_model_object
 
 
 def generate_basic_configs():
@@ -41,7 +42,13 @@ def generate_recursive_configs():
     config_recursive.to_toml(RECURSIVE_CONFIG_ROOT_PATH)
 
 
+def generate_json_schema():
+    schema = MyConfig.schema_json(indent=2)
+    SCHEMA_JSON_PATH.write_text(schema)
+
+
 if __name__ == "__main__":
     generate_basic_configs()
     generate_configs_with_schema()
     generate_recursive_configs()
+    generate_json_schema()

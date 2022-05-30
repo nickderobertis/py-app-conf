@@ -1,0 +1,172 @@
+{
+  "title": "MyConfig",
+  "description": "Base class for settings, allowing values to be overridden by environment variables.\n\nThis is useful in production for secrets you do not wish to save in code, it plays nicely with docker(-compose),\nHeroku and any 12 factor app design.",
+  "type": "object",
+  "properties": {
+    "string": {
+      "title": "String",
+      "env_names": [
+        "myapp_string"
+      ],
+      "type": "string"
+    },
+    "integer": {
+      "title": "Integer",
+      "env_names": [
+        "myapp_integer"
+      ],
+      "type": "integer"
+    },
+    "custom": {
+      "title": "Custom",
+      "env_names": [
+        "myapp_custom"
+      ],
+      "allOf": [
+        {
+          "$ref": "#/definitions/SubModel"
+        }
+      ]
+    },
+    "dictionary": {
+      "title": "Dictionary",
+      "env_names": [
+        "myapp_dictionary"
+      ],
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/SubModel"
+      }
+    },
+    "str_list": {
+      "title": "Str List",
+      "env_names": [
+        "myapp_str_list"
+      ],
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "int_tuple": {
+      "title": "Int Tuple",
+      "env_names": [
+        "myapp_int_tuple"
+      ],
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "uuid": {
+      "title": "Uuid",
+      "env_names": [
+        "myapp_uuid"
+      ],
+      "type": "string",
+      "format": "uuid"
+    },
+    "default_string": {
+      "title": "Default String",
+      "default": "woo",
+      "env_names": [
+        "myapp_default_string"
+      ],
+      "type": "string"
+    },
+    "default_custom": {
+      "title": "Default Custom",
+      "default": {
+        "a": "yeah",
+        "b": 5.6
+      },
+      "env_names": [
+        "myapp_default_custom"
+      ],
+      "allOf": [
+        {
+          "$ref": "#/definitions/SubModel"
+        }
+      ]
+    },
+    "default_enum": {
+      "default": "one",
+      "env_names": [
+        "myapp_default_enum"
+      ],
+      "allOf": [
+        {
+          "$ref": "#/definitions/MyEnum"
+        }
+      ]
+    },
+    "default_enum_list": {
+      "env_names": [
+        "myapp_default_enum_list"
+      ],
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/MyEnum"
+      }
+    },
+    "default_uuid_list": {
+      "title": "Default Uuid List",
+      "env_names": [
+        "myapp_default_uuid_list"
+      ],
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      }
+    },
+    "file_path": {
+      "title": "File Path",
+      "default": "/a/b.txt",
+      "env_names": [
+        "myapp_file_path"
+      ],
+      "type": "string",
+      "format": "path"
+    }
+  },
+  "required": [
+    "string",
+    "integer",
+    "custom",
+    "dictionary",
+    "str_list",
+    "int_tuple",
+    "uuid"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "SubModel": {
+      "title": "SubModel",
+      "type": "object",
+      "properties": {
+        "a": {
+          "title": "A",
+          "type": "string"
+        },
+        "b": {
+          "title": "B",
+          "type": "number"
+        }
+      },
+      "required": [
+        "a",
+        "b"
+      ]
+    },
+    "MyEnum": {
+      "title": "MyEnum",
+      "description": "An enumeration.",
+      "enum": [
+        "one",
+        "two"
+      ],
+      "type": "string"
+    }
+  }
+}
