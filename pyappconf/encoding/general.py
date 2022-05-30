@@ -1,9 +1,4 @@
-from pyappconf.constants import PY10
-
-if PY10:
-    from typing import Protocol  # type: ignore
-else:
-    from typing_extensions import Protocol  # type: ignore
+from typing_extensions import Protocol
 
 
 class HasStr(Protocol):
