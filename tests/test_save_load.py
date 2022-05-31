@@ -284,6 +284,67 @@ def test_load_or_create_with_path_does_not_exist(
     assert mod == model_object
 
 
+def test_load_or_create_with_folder_and_no_multi_format(
+    model_object_with_defaults: BaseConfig,
+    model_class_with_defaults: Type[BaseConfig],
+    temp_folder: Path,
+):
+    MyConfig = model_class_with_defaults
+    model_object = model_object_with_defaults
+    orig_config_location = MyConfig._settings.config_location
+    mod = MyConfig.load_or_create(temp_folder)
+    assert mod._settings.config_location == orig_config_location
+    assert mod.settings.custom_config_folder == temp_folder
+    assert mod.settings.default_format == ConfigFormats.TOML
+    assert mod.settings.config_name == "config"
+
+    mod.settings = model_object.settings
+    assert mod == model_object
+
+
+def test_load_or_create_with_folder_and_multi_format_and_file_exists(
+    model_object: BaseConfig,
+    model_classes: Tuple[Type[BaseConfig], Type[BaseModel]],
+    temp_folder: Path,
+):
+    MyConfig, _ = model_classes
+    orig_config_location = MyConfig._settings.config_location
+    shutil.copy(JSON_PATH, temp_folder / "config.json")
+    mod = MyConfig.load_or_create(temp_folder, multi_format=True)
+    assert mod._settings.config_location == orig_config_location
+    assert mod.settings.custom_config_folder == temp_folder
+    assert mod.settings.default_format == ConfigFormats.JSON
+    assert mod.settings.config_name == "config"
+    assert mod == model_object.copy(
+        update=dict(
+            settings=model_object.settings.copy(
+                custom_config_folder=temp_folder, default_format=ConfigFormats.JSON
+            )
+        )
+    )
+
+
+def test_load_or_create_with_folder_and_multi_format_and_file_does_not_exist(
+    model_object_with_defaults: BaseConfig,
+    model_class_with_defaults: Type[BaseConfig],
+    temp_folder: Path,
+):
+    MyConfig = model_class_with_defaults
+    model_object = model_object_with_defaults
+
+    orig_config_location = MyConfig._settings.config_location
+    mod = MyConfig.load_or_create(temp_folder, multi_format=True)
+    assert mod._settings.config_location == orig_config_location
+    assert mod.settings.custom_config_folder == temp_folder
+    assert mod.settings.default_format == ConfigFormats.TOML
+    assert mod.settings.config_name == "config"
+    assert mod == model_object.copy(
+        update=dict(
+            settings=model_object.settings.copy(custom_config_folder=temp_folder)
+        )
+    )
+
+
 @pytest.mark.parametrize(
     "path, expect_string",
     [

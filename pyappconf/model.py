@@ -251,13 +251,20 @@ class BaseConfig(BaseSettings):
         return obj
 
     @classmethod
-    def load_or_create(cls, path: Optional[Union[str, Path]] = None) -> "BaseConfig":
-        if path is None:
-            path = cls._settings.config_location
-        else:
-            path = Path(path)
-        if path.exists():
-            return cls.load(path)
+    def load_or_create(
+        cls, path: Optional[Union[str, Path]] = None, multi_format: bool = False
+    ) -> "BaseConfig":
+        file_path = cls._determine_path_to_load(path, multi_format=multi_format).path
+        if file_path.exists():
+            return cls.load(file_path)
+        elif _is_path_of_folder(path):
+            # Trying to load from a folder that does not have any config files currently
+            # Need to create in that folder
+            return cls(
+                settings=cls._settings_with_overrides(
+                    custom_config_folder=Path(path),
+                )
+            )
         else:
             config_format = ConfigFormats.from_path(path)
             return cls(
@@ -415,3 +422,7 @@ class BaseConfig(BaseSettings):
 
 def _is_path_of_file(path: Optional[Union[str, Path]] = None) -> TypeGuard[Path]:
     return path is not None and Path(path).suffix != ""
+
+
+def _is_path_of_folder(path: Optional[Union[str, Path]] = None) -> TypeGuard[Path]:
+    return path is not None and Path(path).is_dir()
