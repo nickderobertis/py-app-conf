@@ -25,6 +25,7 @@ from pydantic import BaseModel, BaseSettings, validator
 from pydantic.env_settings import EnvSettingsSource
 from pydantic.schema import default_ref_template
 from toml.encoder import TomlEncoder
+from typing_extensions import TypeGuard
 
 from pyappconf.encoding.ext_json import ExtendedJSONEncoder
 from pyappconf.encoding.ext_toml import CustomTomlEncoder
@@ -203,8 +204,7 @@ class BaseConfig(BaseSettings):
     def _determine_path_to_load(
         cls, path: Optional[Union[str, Path]] = None, multi_format: bool = False
     ) -> _PathScanResult:
-        is_file_path = path and Path(path).suffix != ""
-        if is_file_path:
+        if _is_path_of_file(path):
             # If user passes a full path including extension, just load that file
             out_path = Path(path)
             return _PathScanResult(
@@ -216,7 +216,9 @@ class BaseConfig(BaseSettings):
             search_locations: List[Path] = []
             # If user passes a path without extension, try to load all possible formats in that folder.
             if path is not None:
-                search_locations.extend(cls._settings._possible_config_locations(path))
+                search_locations.extend(
+                    cls._settings._possible_config_locations(Path(path))
+                )
             # If nothing is matched in that folder, then fall back to checking all possible formats in the default location
             search_locations.extend(cls._settings._possible_config_locations())
             for possible_path in search_locations:
@@ -409,3 +411,7 @@ class BaseConfig(BaseSettings):
         if "properties" in schema and "settings" in schema["properties"]:
             del schema["properties"]["settings"]
         return schema
+
+
+def _is_path_of_file(path: Optional[Union[str, Path]] = None) -> TypeGuard[Path]:
+    return path is not None and Path(path).suffix != ""
