@@ -17,6 +17,14 @@ Subpackages
 Submodules
 ----------
 
+pyappconf.constants module
+--------------------------
+
+.. automodule:: pyappconf.constants
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pyappconf.model module
 ----------------------
 

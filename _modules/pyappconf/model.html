@@ -46,7 +46,7 @@
   
   
   
-    <title>pyappconf.model &#8212; py-app-conf 1.3.0a1 documentation</title>
+    <title>pyappconf.model &#8212; py-app-conf 1.3.0a2 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
@@ -87,7 +87,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="py-app-conf 1.3.0a1 documentation"
+        <a href="../../index.html" title="py-app-conf 1.3.0a2 documentation"
            class="md-header-nav__button md-logo">
           
             <i class="md-icon">&#xe869</i>
@@ -173,7 +173,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">py-app-conf 1.3.0a1 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">py-app-conf 1.3.0a2 documentation</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -186,13 +186,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="py-app-conf 1.3.0a1 documentation" class="md-nav__button md-logo">
+    <a href="../../index.html" title="py-app-conf 1.3.0a2 documentation" class="md-nav__button md-logo">
       
         <i class="md-icon">&#xe869</i>
       
     </a>
     <a href="../../index.html"
-       title="py-app-conf 1.3.0a1 documentation">py-app-conf</a>
+       title="py-app-conf 1.3.0a2 documentation">py-app-conf</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/nickderobertis/py-app-conf" title="Go to repository" class="md-source" data-md-source="github">
@@ -277,7 +277,19 @@
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">Final</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Sequence</span><span class="p">,</span>
+    <span class="n">Set</span><span class="p">,</span>
+    <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">Type</span><span class="p">,</span>
+    <span class="n">Union</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">appdirs</span>
 <span class="kn">import</span> <span class="nn">toml</span>
@@ -286,6 +298,7 @@
 <span class="kn">from</span> <span class="nn">pydantic.env_settings</span> <span class="kn">import</span> <span class="n">EnvSettingsSource</span>
 <span class="kn">from</span> <span class="nn">pydantic.schema</span> <span class="kn">import</span> <span class="n">default_ref_template</span>
 <span class="kn">from</span> <span class="nn">toml.encoder</span> <span class="kn">import</span> <span class="n">TomlEncoder</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">TypeGuard</span>
 
 <span class="kn">from</span> <span class="nn">pyappconf.encoding.ext_json</span> <span class="kn">import</span> <span class="n">ExtendedJSONEncoder</span>
 <span class="kn">from</span> <span class="nn">pyappconf.encoding.ext_toml</span> <span class="kn">import</span> <span class="n">CustomTomlEncoder</span>
@@ -329,6 +342,9 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">"suffix </span><span class="si">{</span><span class="n">ext</span><span class="si">}</span><span class="s2"> not a supported config format. Supplied path: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span></div></div>
+
+
+<span class="n">FILE_EXTENSIONS</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">fmt</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">fmt</span> <span class="ow">in</span> <span class="n">ConfigFormats</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="AppConfig"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.AppConfig">[docs]</a><span class="k">class</span> <span class="nc">AppConfig</span><span class="p">:</span>
@@ -393,9 +409,19 @@
     <span class="k">def</span> <span class="nf">config_location</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_base_location</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"."</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_format</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">_possible_config_locations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
+        <span class="n">folder</span> <span class="o">=</span> <span class="p">(</span><span class="n">folder</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_name</span><span class="p">)</span> <span class="k">if</span> <span class="n">folder</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_base_location</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Path</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"."</span> <span class="o">+</span> <span class="n">ext</span><span class="p">)</span> <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="n">FILE_EXTENSIONS</span><span class="p">]</span>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">config_file_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_location</span><span class="o">.</span><span class="n">name</span></div>
+
+
+<span class="k">class</span> <span class="nc">_PathScanResult</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">path</span><span class="p">:</span> <span class="n">Path</span>
+    <span class="n">config_format</span><span class="p">:</span> <span class="n">ConfigFormats</span>
+    <span class="n">is_default</span><span class="p">:</span> <span class="nb">bool</span>
 
 
 <div class="viewcode-block" id="BaseConfig"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.BaseConfig">[docs]</a><span class="k">class</span> <span class="nc">BaseConfig</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
@@ -447,25 +473,53 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">config_location</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_serializer</span><span class="p">()(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">config_location</span><span class="p">,</span> <span class="n">serializer_kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
 
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_determine_path_to_load</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">multi_format</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_PathScanResult</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">_is_path_of_file</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="c1"># If user passes a full path including extension, just load that file</span>
+            <span class="n">out_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">_PathScanResult</span><span class="p">(</span>
+                <span class="n">path</span><span class="o">=</span><span class="n">out_path</span><span class="p">,</span>
+                <span class="n">config_format</span><span class="o">=</span><span class="n">ConfigFormats</span><span class="o">.</span><span class="n">from_path</span><span class="p">(</span><span class="n">out_path</span><span class="p">),</span>
+                <span class="n">is_default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">multi_format</span><span class="p">:</span>
+            <span class="n">search_locations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1"># If user passes a path without extension, try to load all possible formats in that folder.</span>
+            <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">search_locations</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">_possible_config_locations</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+                <span class="p">)</span>
+            <span class="c1"># If nothing is matched in that folder, then fall back to checking all possible formats in the default location</span>
+            <span class="n">search_locations</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">_possible_config_locations</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">possible_path</span> <span class="ow">in</span> <span class="n">search_locations</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">possible_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                    <span class="k">return</span> <span class="n">_PathScanResult</span><span class="p">(</span>
+                        <span class="n">path</span><span class="o">=</span><span class="n">possible_path</span><span class="p">,</span>
+                        <span class="n">config_format</span><span class="o">=</span><span class="n">ConfigFormats</span><span class="o">.</span><span class="n">from_path</span><span class="p">(</span><span class="n">possible_path</span><span class="p">),</span>
+                        <span class="n">is_default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="p">)</span>
+        <span class="k">return</span> <span class="n">_PathScanResult</span><span class="p">(</span>
+            <span class="n">path</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">config_location</span><span class="p">,</span>
+            <span class="n">config_format</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">default_format</span><span class="p">,</span>
+            <span class="n">is_default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+
 <div class="viewcode-block" id="BaseConfig.load"><a class="viewcode-back" href="../../api/pyappconf.html#pyappconf.model.BaseConfig.load">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"BaseConfig"</span><span class="p">:</span>
-        <span class="n">assign_settings</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">multi_format</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"BaseConfig"</span><span class="p">:</span>
+        <span class="n">path_result</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_determine_path_to_load</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">multi_format</span><span class="o">=</span><span class="n">multi_format</span><span class="p">)</span>
+        <span class="n">assign_settings</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">path_result</span><span class="o">.</span><span class="n">is_default</span>
 
-        <span class="n">config_format</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ConfigFormats</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">assign_settings</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">config_location</span>
-            <span class="n">config_format</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-            <span class="n">config_format</span> <span class="o">=</span> <span class="n">ConfigFormats</span><span class="o">.</span><span class="n">from_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-
-        <span class="n">obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_deserializer</span><span class="p">(</span><span class="n">config_format</span><span class="p">)(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_deserializer</span><span class="p">(</span><span class="n">path_result</span><span class="o">.</span><span class="n">config_format</span><span class="p">)(</span><span class="n">path_result</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">assign_settings</span><span class="p">:</span>
             <span class="n">obj</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_settings_with_overrides</span><span class="p">(</span>
-                <span class="n">custom_config_folder</span><span class="o">=</span><span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span>
-                <span class="n">default_format</span><span class="o">=</span><span class="n">config_format</span><span class="p">,</span>
-                <span class="n">config_name</span><span class="o">=</span><span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="p">,</span>
+                <span class="n">custom_config_folder</span><span class="o">=</span><span class="n">path_result</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span>
+                <span class="n">default_format</span><span class="o">=</span><span class="n">path_result</span><span class="o">.</span><span class="n">config_format</span><span class="p">,</span>
+                <span class="n">config_name</span><span class="o">=</span><span class="n">path_result</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">obj</span></div>
 
@@ -630,6 +684,10 @@
         <span class="k">if</span> <span class="s2">"properties"</span> <span class="ow">in</span> <span class="n">schema</span> <span class="ow">and</span> <span class="s2">"settings"</span> <span class="ow">in</span> <span class="n">schema</span><span class="p">[</span><span class="s2">"properties"</span><span class="p">]:</span>
             <span class="k">del</span> <span class="n">schema</span><span class="p">[</span><span class="s2">"properties"</span><span class="p">][</span><span class="s2">"settings"</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">schema</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">_is_path_of_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TypeGuard</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span> <span class="o">!=</span> <span class="s2">""</span>
 </pre></div>
 
           </article>
