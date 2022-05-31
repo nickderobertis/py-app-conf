@@ -4,7 +4,19 @@ import os
 from copy import deepcopy
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Dict, Optional, Sequence, Set, Type, Union
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Final,
+    List,
+    Optional,
+    Sequence,
+    Set,
+    Tuple,
+    Type,
+    Union,
+)
 
 import appdirs
 import toml
@@ -56,6 +68,9 @@ class ConfigFormats(str, Enum):
         raise ValueError(
             f"suffix {ext} not a supported config format. Supplied path: {path}"
         )
+
+
+FILE_EXTENSIONS: Final[Tuple[str, ...]] = tuple(fmt.value for fmt in ConfigFormats)
 
 
 class AppConfig:
@@ -120,9 +135,19 @@ class AppConfig:
     def config_location(self) -> Path:
         return Path(str(self.config_base_location) + "." + self.default_format.value)
 
+    def _possible_config_locations(self, folder: Optional[Path] = None) -> List[Path]:
+        folder = (folder / self.config_name) if folder else self.config_base_location
+        return [Path(str(folder) + "." + ext) for ext in FILE_EXTENSIONS]
+
     @property
     def config_file_name(self) -> str:
         return self.config_location.name
+
+
+class _PathScanResult(BaseModel):
+    path: Path
+    config_format: ConfigFormats
+    is_default: bool
 
 
 class BaseConfig(BaseSettings):
@@ -175,24 +200,51 @@ class BaseConfig(BaseSettings):
         self.get_serializer()(self.settings.config_location, serializer_kwargs, **kwargs)  # type: ignore
 
     @classmethod
-    def load(cls, path: Optional[Union[str, Path]] = None) -> "BaseConfig":
-        assign_settings = True
+    def _determine_path_to_load(
+        cls, path: Optional[Union[str, Path]] = None, multi_format: bool = False
+    ) -> _PathScanResult:
+        is_file_path = path and Path(path).suffix != ""
+        if is_file_path:
+            # If user passes a full path including extension, just load that file
+            out_path = Path(path)
+            return _PathScanResult(
+                path=out_path,
+                config_format=ConfigFormats.from_path(out_path),
+                is_default=False,
+            )
+        if multi_format:
+            search_locations: List[Path] = []
+            # If user passes a path without extension, try to load all possible formats in that folder.
+            if path is not None:
+                search_locations.extend(cls._settings._possible_config_locations(path))
+            # If nothing is matched in that folder, then fall back to checking all possible formats in the default location
+            search_locations.extend(cls._settings._possible_config_locations())
+            for possible_path in search_locations:
+                if possible_path.exists():
+                    return _PathScanResult(
+                        path=possible_path,
+                        config_format=ConfigFormats.from_path(possible_path),
+                        is_default=False,
+                    )
+        return _PathScanResult(
+            path=cls._settings.config_location,
+            config_format=cls._settings.default_format,
+            is_default=True,
+        )
 
-        config_format: Optional[ConfigFormats]
-        if path is None:
-            assign_settings = False
-            path = cls._settings.config_location
-            config_format = None
-        else:
-            path = Path(path)
-            config_format = ConfigFormats.from_path(path)
+    @classmethod
+    def load(
+        cls, path: Optional[Union[str, Path]] = None, multi_format: bool = False
+    ) -> "BaseConfig":
+        path_result = cls._determine_path_to_load(path, multi_format=multi_format)
+        assign_settings = not path_result.is_default
 
-        obj = cls.get_deserializer(config_format)(path)
+        obj = cls.get_deserializer(path_result.config_format)(path_result.path)
         if assign_settings:
             obj.settings = cls._settings_with_overrides(
-                custom_config_folder=path.parent,
-                default_format=config_format,
-                config_name=path.stem,
+                custom_config_folder=path_result.path.parent,
+                default_format=path_result.config_format,
+                config_name=path_result.path.stem,
             )
         return obj
 

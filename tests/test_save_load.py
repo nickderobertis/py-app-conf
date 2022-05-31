@@ -28,6 +28,7 @@ from tests.fixtures.model import (
     model_object,
     model_object_with_defaults,
 )
+from tests.fixtures.temp_folder import temp_folder
 
 
 def _save_load_test(custom_settings: AppConfig) -> Tuple[BaseConfig, Type[BaseConfig]]:
@@ -53,7 +54,9 @@ def _save_load_test(custom_settings: AppConfig) -> Tuple[BaseConfig, Type[BaseCo
 
 def test_save_load_toml():
     custom_settings = AppConfig(
-        app_name="MyApp", custom_config_folder=GENERATED_DATA_DIR
+        app_name="MyApp",
+        custom_config_folder=GENERATED_DATA_DIR,
+        default_format=ConfigFormats.TOML,
     )
     _save_load_test(custom_settings)
 
@@ -125,6 +128,93 @@ def test_save_load_json_with_schema():
     assert expect_schema_url in json_str
     json_str_no_schema = obj.to_json(include_schema_url=False)
     assert expect_schema_url not in json_str_no_schema
+
+
+def _multi_format_save_load_test(
+    custom_settings: AppConfig,
+) -> Tuple[BaseConfig, Type[BaseConfig]]:
+    # Save in a format other than the default format
+    settings_with_other_format: Optional[AppConfig] = None
+    for config_format in ConfigFormats:
+        if config_format == custom_settings.default_format:
+            continue
+        settings_with_other_format = custom_settings.copy(default_format=config_format)
+    if settings_with_other_format is None:
+        raise ValueError("No other formats to test")
+
+    mod = get_model_object(settings=custom_settings)
+    mod.save()
+    assert str(mod.settings.config_location).endswith(
+        custom_settings.default_format.value
+    )
+
+    OrigConfig, SubModel = get_model_classes()
+
+    # Now MyConfig is configured with a different format, so it could only be loaded
+    # via multi-format
+    class MyConfig(OrigConfig):
+        _settings = settings_with_other_format
+
+    assert str(MyConfig._settings.config_location).endswith(
+        settings_with_other_format.default_format.value
+    )
+    obj = MyConfig.load(multi_format=True)
+    # Check that loaded config is the same as the one used for saving
+    assert obj == mod.copy(
+        update=dict(
+            settings=mod.settings.copy(default_format=custom_settings.default_format)
+        )
+    )
+    return obj, MyConfig
+
+
+def test_multi_format_save_load_toml(temp_folder: Path):
+    custom_settings = AppConfig(
+        app_name="MyApp",
+        custom_config_folder=temp_folder,
+        default_format=ConfigFormats.TOML,
+        py_config_imports=[
+            "from tests.fixtures.model import MyConfig, SubModel, MyEnum"
+        ],
+    )
+    _multi_format_save_load_test(custom_settings)
+
+
+def test_multi_format_save_load_yaml(temp_folder: Path):
+    custom_settings = AppConfig(
+        app_name="MyApp",
+        custom_config_folder=temp_folder,
+        default_format=ConfigFormats.YAML,
+        py_config_imports=[
+            "from tests.fixtures.model import MyConfig, SubModel, MyEnum"
+        ],
+    )
+    _multi_format_save_load_test(custom_settings)
+
+
+def test_multi_format_save_load_json(temp_folder: Path):
+    custom_settings = AppConfig(
+        app_name="MyApp",
+        custom_config_folder=temp_folder,
+        default_format=ConfigFormats.JSON,
+        py_config_imports=[
+            "from tests.fixtures.model import MyConfig, SubModel, MyEnum"
+        ],
+    )
+    _multi_format_save_load_test(custom_settings)
+
+
+def test_multi_format_save_load_py_config(temp_folder: Path):
+    custom_settings = AppConfig(
+        app_name="MyApp",
+        custom_config_folder=temp_folder,
+        default_format=ConfigFormats.PY,
+        config_name="with-dashes and spaces",
+        py_config_imports=[
+            "from tests.fixtures.model import MyConfig, SubModel, MyEnum"
+        ],
+    )
+    _multi_format_save_load_test(custom_settings)
 
 
 def assert_model_loaded_with_extension(
