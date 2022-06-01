@@ -146,7 +146,7 @@ class AppConfig:
 
 
 class _PathScanResult(BaseModel):
-    path: Path
+    path: Optional[Path]
     config_format: ConfigFormats
     is_default: bool
 
@@ -202,7 +202,10 @@ class BaseConfig(BaseSettings):
 
     @classmethod
     def _determine_path_to_load(
-        cls, path: Optional[Union[str, Path]] = None, multi_format: bool = False
+        cls,
+        path: Optional[Union[str, Path]] = None,
+        multi_format: bool = False,
+        include_default: bool = True,
     ) -> _PathScanResult:
         if _is_path_of_file(path):
             # If user passes a full path including extension, just load that file
@@ -212,24 +215,35 @@ class BaseConfig(BaseSettings):
                 config_format=ConfigFormats.from_path(out_path),
                 is_default=False,
             )
+        search_locations: List[Path] = []
         if multi_format:
-            search_locations: List[Path] = []
             # If user passes a path without extension, try to load all possible formats in that folder.
             if path is not None:
                 search_locations.extend(
                     cls._settings._possible_config_locations(Path(path))
                 )
-            # If nothing is matched in that folder, then fall back to checking all possible formats in the default location
-            search_locations.extend(cls._settings._possible_config_locations())
-            for possible_path in search_locations:
-                if possible_path.exists():
-                    return _PathScanResult(
-                        path=possible_path,
-                        config_format=ConfigFormats.from_path(possible_path),
-                        is_default=False,
-                    )
+            if include_default:
+                # If nothing is matched in that folder, then fall back to checking all possible formats in the default location
+                search_locations.extend(cls._settings._possible_config_locations())
+        elif _is_path_of_folder(path):
+            # If user passes a folder, but we are in single format mode, check if there is a file in that
+            # folder with the default name and extension
+            full_path = (
+                Path(path)
+                / f"{cls._settings.config_name}.{cls._settings.default_format}"
+            )
+            search_locations.append(full_path)
+        for possible_path in search_locations:
+            if possible_path.exists():
+                return _PathScanResult(
+                    path=possible_path,
+                    config_format=ConfigFormats.from_path(possible_path),
+                    is_default=False,
+                )
+        # Have not been able to find a config file, so return the default location or an empty result
+        return_path = cls._settings.config_location if include_default else None
         return _PathScanResult(
-            path=cls._settings.config_location,
+            path=return_path,
             config_format=cls._settings.default_format,
             is_default=True,
         )
@@ -239,6 +253,8 @@ class BaseConfig(BaseSettings):
         cls, path: Optional[Union[str, Path]] = None, multi_format: bool = False
     ) -> "BaseConfig":
         path_result = cls._determine_path_to_load(path, multi_format=multi_format)
+        if path_result.path is None:
+            raise ValueError("path should not be None")
         assign_settings = not path_result.is_default
 
         obj = cls.get_deserializer(path_result.config_format)(path_result.path)
@@ -255,6 +271,8 @@ class BaseConfig(BaseSettings):
         cls, path: Optional[Union[str, Path]] = None, multi_format: bool = False
     ) -> "BaseConfig":
         file_path = cls._determine_path_to_load(path, multi_format=multi_format).path
+        if file_path is None:
+            raise ValueError("path should not be None")
         if file_path.exists():
             return cls.load(file_path)
         elif _is_path_of_folder(path):
@@ -276,7 +294,9 @@ class BaseConfig(BaseSettings):
             )
 
     @classmethod
-    def load_recursive(cls, path: Optional[Union[str, Path]] = None) -> "BaseConfig":
+    def load_recursive(
+        cls, path: Optional[Union[str, Path]] = None, multi_format: bool = False
+    ) -> "BaseConfig":
         """
         Searches the passed path or current directory for a config with the correct name,
         and if not found goes the parent directory and repeats the search.
@@ -292,11 +312,12 @@ class BaseConfig(BaseSettings):
         def has_hit_root_directory() -> bool:
             return current_path.parent == current_path
 
-        file_name = cls._settings.config_file_name
         while True:
-            check_path = current_path / file_name
-            if check_path.exists():
-                return cls.load(check_path)
+            possible_path = cls._determine_path_to_load(
+                current_path, multi_format=multi_format, include_default=False
+            ).path
+            if possible_path is not None:
+                return cls.load(possible_path)
             if has_hit_root_directory():
                 break
             current_path = current_path.parent

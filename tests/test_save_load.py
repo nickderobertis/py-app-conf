@@ -372,7 +372,31 @@ def test_load_recursive(path: Optional[Path], expect_string: str):
         _settings = custom_settings
 
     orig_config_location = MyConfig._settings.config_location
-    mod = MyConfig.load_recursive(path)
+    mod = MyConfig.load_recursive(path, multi_format=False)
     assert mod._settings.config_location == orig_config_location
 
     assert mod.string == expect_string
+
+
+@pytest.mark.parametrize(
+    "config_format", [ConfigFormats.JSON, ConfigFormats.YAML, ConfigFormats.PY]
+)
+def test_load_recursive_multi_format(config_format: ConfigFormats, temp_folder: Path):
+    OrigConfig, SubModel = get_model_classes()
+
+    custom_settings = AppConfig(
+        app_name="MyApp",
+        custom_config_folder=temp_folder,
+        # Set to yaml so that toml could only be loaded via multi_format
+        default_format=config_format,
+        config_name="recursive-config",
+    )
+
+    class MyConfig(OrigConfig):
+        _settings = custom_settings
+
+    orig_config_location = MyConfig._settings.config_location
+    mod = MyConfig.load_recursive(RECURSIVE_INPUT_FOLDER / "2", multi_format=True)
+    assert mod._settings.config_location == orig_config_location
+
+    assert mod.string == "loaded from recursive"
