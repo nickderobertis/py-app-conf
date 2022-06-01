@@ -1,0 +1,37 @@
+[build-system]
+requires = [ "setuptools>=40.8.0", "wheel",]
+build-backend = "setuptools.build_meta:__legacy__"
+
+[tool.isort]
+profile = "black"
+src_paths = [ "requests", "test",]
+honor_noqa = true
+
+[tool.config]
+string = "a"
+integer = 5
+str_list = [ "a", "b", "c",]
+int_tuple = [ 1, 2, 3,]
+uuid = "826032aa-465a-4692-b9b4-c81819197ed0"
+date = 2020-01-01
+time = 2020-01-01T12:00:00
+default_string = "woo"
+default_enum = "one"
+default_enum_list = [ "one", "two",]
+default_uuid_list = [ "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa", "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",]
+default_time_with_tz = 2022-01-01T00:00:00Z
+default_time_list = [ 2022-01-01T00:00:00-23:59, 2022-01-02T00:00:00+23:59,]
+default_date_list = [ 2022-01-01, 2022-01-02,]
+file_path = "/a/b.txt"
+
+[tool.config.custom]
+a = "b"
+b = 8.5
+
+[tool.config.default_custom]
+a = "yeah"
+b = 5.6
+
+[tool.config.dictionary.yeah]
+a = "c"
+b = 9.6

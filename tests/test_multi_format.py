@@ -2,7 +2,13 @@ import shutil
 from pathlib import Path
 
 from pyappconf import ConfigFormats
-from tests.config import JSON_PATH, PY_CONFIG_PATH, TOML_PATH, YAML_PATH
+from tests.config import (
+    JSON_PATH,
+    PY_CONFIG_PATH,
+    PYPROJECT_TOML_CLEAN_CONFIG_PATH,
+    TOML_PATH,
+    YAML_PATH,
+)
 from tests.fixtures.model import MyConfig, model_object
 from tests.fixtures.temp_folder import temp_folder
 
@@ -43,5 +49,17 @@ def test_load_py_config_via_multi_format(temp_folder: Path, model_object: MyConf
     config = MyConfig.load(temp_folder, multi_format=True)
     expect_altered_settings = MyConfig._settings_with_overrides(
         custom_config_folder=temp_folder, default_format=ConfigFormats.PY
+    )
+    assert config == model_object.copy(update=dict(settings=expect_altered_settings))
+
+
+def test_load_pyproject_toml_via_multi_format(
+    temp_folder: Path, model_object: MyConfig
+):
+    shutil.copy(PYPROJECT_TOML_CLEAN_CONFIG_PATH, temp_folder / "pyproject.toml")
+
+    config = MyConfig.load(temp_folder, multi_format=True)
+    expect_altered_settings = MyConfig._settings_with_overrides(
+        custom_config_folder=temp_folder, default_format=ConfigFormats.PYPROJECT
     )
     assert config == model_object.copy(update=dict(settings=expect_altered_settings))

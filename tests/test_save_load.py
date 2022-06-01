@@ -13,12 +13,14 @@ from tests.config import (
     JSON_PATH,
     NON_EXISTENT_INPUT_JSON_PATH,
     NON_EXISTENT_NAME,
+    PYPROJECT_TOML_MIXED_CONFIG_PATH,
     RECURSIVE_INPUT_FOLDER,
     TOML_PATH,
     YAML_PATH,
 )
 from tests.fixtures.data import get_default_data
 from tests.fixtures.model import (
+    MyConfig,
     MyConfigPyFormat,
     SubModel,
     get_model_classes,
@@ -96,6 +98,35 @@ def test_save_load_py_config():
     obj = MyConfigPyFormat.load()
     # Check that loaded config is the same as the one used for saving
     assert mod == obj
+
+
+def test_save_load_pyproject_toml(temp_folder: Path):
+    custom_settings = AppConfig(
+        app_name="MyApp",
+        custom_config_folder=temp_folder,
+        default_format=ConfigFormats.PYPROJECT,
+    )
+    _save_load_test(custom_settings)
+
+
+def test_saving_pyproject_toml_does_not_affect_other_pyproject_content(
+    model_object: MyConfig,
+):
+    path = PYPROJECT_TOML_MIXED_CONFIG_PATH
+    orig_contents = path.read_text()
+    last_modified = path.stat().st_mtime
+    mod = MyConfig.load(path)
+    assert mod == model_object.copy(
+        update=dict(
+            settings=model_object.settings.copy(
+                default_format=ConfigFormats.PYPROJECT, custom_config_folder=path.parent
+            )
+        )
+    )
+    mod.save()
+    assert path.read_text() == orig_contents
+    # Assert config file was written to
+    assert path.stat().st_mtime != last_modified
 
 
 def test_save_load_yaml_with_schema():

@@ -31,6 +31,10 @@ from pyappconf.encoding.ext_json import ExtendedJSONEncoder
 from pyappconf.encoding.ext_toml import CustomTomlEncoder
 from pyappconf.encoding.ext_yaml import CustomDumper
 from pyappconf.py_config.generate import pydantic_model_to_python_config_file
+from pyappconf.pyproject import (
+    add_model_to_pyproject_toml,
+    read_config_data_from_pyproject_toml,
+)
 
 
 def _output_if_necessary(content: str, out_path: Optional[Union[str, Path]] = None):
@@ -54,10 +58,13 @@ class ConfigFormats(str, Enum):
     JSON = "json"
     TOML = "toml"
     PY = "py"
+    PYPROJECT = "pyproject.toml"
 
     @classmethod
     def from_path(cls, path: Path) -> "ConfigFormats":
         ext = path.suffix.strip(".").casefold()
+        if path.name.casefold() == "pyproject.toml":
+            return cls.PYPROJECT
         if ext in ("yml", "yaml"):
             return cls.YAML
         if ext == "json":
@@ -89,6 +96,9 @@ class AppConfig:
             [BaseModel, Sequence[str], Sequence[str]], str
         ] = pydantic_model_to_python_config_file,
         py_config_imports: Optional[Sequence[str]] = None,
+        pyproject_encoder: Callable[
+            [Dict[str, Any], Path, str, Type[TomlEncoder]], str
+        ] = add_model_to_pyproject_toml,
     ):
         self.app_name = app_name
         self.config_name = config_name
@@ -100,6 +110,7 @@ class AppConfig:
         self.json_encoder = json_encoder
         self.py_config_encoder = py_config_encoder
         self.py_config_imports = py_config_imports
+        self.pyproject_encoder = pyproject_encoder
 
     @classmethod
     def __modify_schema__(cls, field_schema: Dict[str, Any]) -> None:
@@ -127,18 +138,28 @@ class AppConfig:
         return self.__class__(**{**config_data, **kwargs})
 
     @property
-    def config_base_location(self) -> Path:
+    def config_folder(self) -> Path:
         if self.custom_config_folder is not None:
-            return self.custom_config_folder / self.config_name
-        return Path(appdirs.user_config_dir(self.app_name)) / self.config_name
+            return self.custom_config_folder
+        return Path(appdirs.user_config_dir(self.app_name))
+
+    @property
+    def config_base_location(self) -> Path:
+        return self.config_folder / self.config_name
 
     @property
     def config_location(self) -> Path:
+        if self.default_format == ConfigFormats.PYPROJECT:
+            return self.config_folder / "pyproject.toml"
         return Path(str(self.config_base_location) + "." + self.default_format.value)
 
     def _possible_config_locations(self, folder: Optional[Path] = None) -> List[Path]:
-        folder = (folder / self.config_name) if folder else self.config_base_location
-        return [Path(str(folder) + "." + ext) for ext in FILE_EXTENSIONS]
+        use_folder = folder or self.config_folder
+        folder_with_name = use_folder / self.config_name
+        config_name_with_possible_exts = [
+            Path(str(folder_with_name) + "." + ext) for ext in FILE_EXTENSIONS
+        ]
+        return [*config_name_with_possible_exts, use_folder / "pyproject.toml"]
 
     @property
     def config_file_name(self) -> str:
@@ -172,6 +193,8 @@ class BaseConfig(BaseSettings):
             return self.to_json
         if self.settings.default_format == ConfigFormats.PY:
             return self.to_py_config
+        if self.settings.default_format == ConfigFormats.PYPROJECT:
+            return self.to_pyproject_toml
         raise NotImplementedError(f"unsupported format {self.settings.default_format}")
 
     @classmethod
@@ -189,6 +212,8 @@ class BaseConfig(BaseSettings):
             return cls.parse_json
         if config_format == ConfigFormats.PY:
             return cls.parse_py_config
+        if config_format == ConfigFormats.PYPROJECT:
+            return cls.parse_pyproject_toml
         raise NotImplementedError(f"unsupported format {config_format}")
 
     @classmethod
@@ -262,7 +287,10 @@ class BaseConfig(BaseSettings):
             obj.settings = cls._settings_with_overrides(
                 custom_config_folder=path_result.path.parent,
                 default_format=path_result.config_format,
-                config_name=path_result.path.stem,
+                # For pyproject.toml, don't update config name. pyproject.toml is always the name of the file
+                config_name=path_result.path.stem
+                if path_result.config_format != ConfigFormats.PYPROJECT
+                else cls._settings.config_name,
             )
         return obj
 
@@ -430,6 +458,29 @@ class BaseConfig(BaseSettings):
         config_module = importlib.util.module_from_spec(spec)  # type: ignore
         spec.loader.exec_module(config_module)  # type: ignore
         return config_module.config
+
+    def to_pyproject_toml(
+        self,
+        out_path: Optional[Union[str, Path]] = None,
+        pyproject_toml_kwargs: Dict[str, Any] = None,
+        **kwargs,
+    ) -> str:
+        pyproject_toml_kwargs = pyproject_toml_kwargs or {}
+        if _is_path_of_folder(out_path):
+            pyproject_path = out_path / "pyproject.toml"
+        else:
+            pyproject_path = out_path
+        kwargs = _get_data_kwargs(**kwargs)
+        data = self.dict(**kwargs)
+        pyproject_str = self.settings.pyproject_encoder(data, pyproject_path, self.settings.config_name, self.settings.toml_encoder, **pyproject_toml_kwargs)  # type: ignore
+        _output_if_necessary(pyproject_str, out_path)
+        return pyproject_str
+
+    @classmethod
+    def parse_pyproject_toml(cls, in_path: Union[str, Path]) -> "BaseConfig":
+        data = read_config_data_from_pyproject_toml(in_path, cls._settings.config_name)
+        data.update(cls._get_env_values())
+        return cls(**data)
 
     @classmethod
     def schema(

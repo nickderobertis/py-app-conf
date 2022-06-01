@@ -10,6 +10,8 @@ from tests.config import (
     JSON_WITH_SCHEMA_PATH,
     PY_CONFIG_PATH,
     PYDANTIC_PY_CONFIG_PATH,
+    PYPROJECT_TOML_CLEAN_CONFIG_PATH,
+    PYPROJECT_TOML_MIXED_CONFIG_PATH,
     RECURSIVE_CONFIG_1_PATH,
     RECURSIVE_CONFIG_ROOT_PATH,
     SCHEMA_JSON_PATH,
@@ -27,6 +29,8 @@ def generate_basic_configs():
     conf.to_yaml(out_path=YAML_PATH)
     conf.to_toml(out_path=TOML_PATH)
     conf.to_py_config(out_path=PY_CONFIG_PATH)
+    conf.to_pyproject_toml(out_path=PYPROJECT_TOML_CLEAN_CONFIG_PATH)
+    conf.to_pyproject_toml(out_path=PYPROJECT_TOML_MIXED_CONFIG_PATH)
 
 
 def generate_configs_with_schema():
