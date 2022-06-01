@@ -33,3 +33,11 @@ pyappconf.model module
    :undoc-members:
    :show-inheritance:
 
+pyappconf.pyproject module
+--------------------------
+
+.. automodule:: pyappconf.pyproject
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

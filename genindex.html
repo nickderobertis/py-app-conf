@@ -46,7 +46,7 @@
   
   
   
-    <title>Index &#8212; py-app-conf 1.3.0a4 documentation</title>
+    <title>Index &#8212; py-app-conf 1.3.0a5 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/material.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -87,7 +87,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="index.html" title="py-app-conf 1.3.0a4 documentation"
+        <a href="index.html" title="py-app-conf 1.3.0a5 documentation"
            class="md-header-nav__button md-logo">
           
             <i class="md-icon">&#xe869</i>
@@ -173,7 +173,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">py-app-conf 1.3.0a4 documentation</a></li>
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">py-app-conf 1.3.0a5 documentation</a></li>
       </ul>
     </div>
   </nav>
@@ -185,13 +185,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="index.html" title="py-app-conf 1.3.0a4 documentation" class="md-nav__button md-logo">
+    <a href="index.html" title="py-app-conf 1.3.0a5 documentation" class="md-nav__button md-logo">
       
         <i class="md-icon">&#xe869</i>
       
     </a>
     <a href="index.html"
-       title="py-app-conf 1.3.0a4 documentation">py-app-conf</a>
+       title="py-app-conf 1.3.0a5 documentation">py-app-conf</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/nickderobertis/py-app-conf" title="Go to repository" class="md-source" data-md-source="github">
@@ -286,6 +286,7 @@
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#P"><strong>P</strong></a>
+ | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
  | <a href="#Y"><strong>Y</strong></a>
@@ -308,6 +309,10 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/pyappconf.html#pyappconf.pyproject.add_model_to_pyproject_toml">add_model_to_pyproject_toml() (in module pyappconf.pyproject)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/pyappconf.html#pyappconf.model.AppConfig">AppConfig (class in pyappconf.model)</a>
 </li>
   </ul></td>
@@ -328,12 +333,14 @@
 </li>
       <li><a href="api/pyappconf.html#pyappconf.model.AppConfig.config_file_name">config_file_name (pyappconf.model.AppConfig property)</a>
 </li>
-      <li><a href="api/pyappconf.html#pyappconf.model.AppConfig.config_location">config_location (pyappconf.model.AppConfig property)</a>
+      <li><a href="api/pyappconf.html#pyappconf.model.AppConfig.config_folder">config_folder (pyappconf.model.AppConfig property)</a>
 </li>
-      <li><a href="api/pyappconf.html#pyappconf.model.ConfigFormats">ConfigFormats (class in pyappconf.model)</a>
+      <li><a href="api/pyappconf.html#pyappconf.model.AppConfig.config_location">config_location (pyappconf.model.AppConfig property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/pyappconf.html#pyappconf.model.ConfigFormats">ConfigFormats (class in pyappconf.model)</a>
+</li>
       <li><a href="api/pyappconf.html#pyappconf.model.AppConfig.copy">copy() (pyappconf.model.AppConfig method)</a>
 </li>
       <li><a href="api/pyappconf.encoding.html#pyappconf.encoding.ext_yaml.CustomDumper">CustomDumper (class in pyappconf.encoding.ext_yaml)</a>
@@ -446,6 +453,8 @@
 </li>
         <li><a href="api/pyappconf.py_config.html#module-pyappconf.py_config.generate">pyappconf.py_config.generate</a>
 </li>
+        <li><a href="api/pyappconf.html#module-pyappconf.pyproject">pyappconf.pyproject</a>
+</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -460,6 +469,8 @@
       <li><a href="api/pyappconf.html#pyappconf.model.BaseConfig.parse_json">parse_json() (pyappconf.model.BaseConfig class method)</a>
 </li>
       <li><a href="api/pyappconf.html#pyappconf.model.BaseConfig.parse_py_config">parse_py_config() (pyappconf.model.BaseConfig class method)</a>
+</li>
+      <li><a href="api/pyappconf.html#pyappconf.model.BaseConfig.parse_pyproject_toml">parse_pyproject_toml() (pyappconf.model.BaseConfig class method)</a>
 </li>
       <li><a href="api/pyappconf.html#pyappconf.model.BaseConfig.parse_toml">parse_toml() (pyappconf.model.BaseConfig class method)</a>
 </li>
@@ -541,7 +552,24 @@
         <li><a href="api/pyappconf.py_config.html#module-pyappconf.py_config.generate">module</a>
 </li>
       </ul></li>
+      <li>
+    pyappconf.pyproject
+
+      <ul>
+        <li><a href="api/pyappconf.html#module-pyappconf.pyproject">module</a>
+</li>
+      </ul></li>
       <li><a href="api/pyappconf.py_config.html#pyappconf.py_config.generate.pydantic_model_to_python_config_file">pydantic_model_to_python_config_file() (in module pyappconf.py_config.generate)</a>
+</li>
+      <li><a href="api/pyappconf.html#pyappconf.model.ConfigFormats.PYPROJECT">PYPROJECT (pyappconf.model.ConfigFormats attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/pyappconf.html#pyappconf.pyproject.read_config_data_from_pyproject_toml">read_config_data_from_pyproject_toml() (in module pyappconf.pyproject)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -568,6 +596,8 @@
       <li><a href="api/pyappconf.html#pyappconf.model.BaseConfig.to_json">to_json() (pyappconf.model.BaseConfig method)</a>
 </li>
       <li><a href="api/pyappconf.html#pyappconf.model.BaseConfig.to_py_config">to_py_config() (pyappconf.model.BaseConfig method)</a>
+</li>
+      <li><a href="api/pyappconf.html#pyappconf.model.BaseConfig.to_pyproject_toml">to_pyproject_toml() (pyappconf.model.BaseConfig method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
