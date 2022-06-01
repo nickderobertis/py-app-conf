@@ -466,6 +466,7 @@ class BaseConfig(BaseSettings):
         **kwargs,
     ) -> str:
         pyproject_toml_kwargs = pyproject_toml_kwargs or {}
+        pyproject_path: Optional[Union[str, Path]]
         if _is_path_of_folder(out_path):
             pyproject_path = out_path / "pyproject.toml"
         else:
@@ -478,7 +479,9 @@ class BaseConfig(BaseSettings):
 
     @classmethod
     def parse_pyproject_toml(cls, in_path: Union[str, Path]) -> "BaseConfig":
-        data = read_config_data_from_pyproject_toml(in_path, cls._settings.config_name)
+        data = read_config_data_from_pyproject_toml(
+            Path(in_path), cls._settings.config_name
+        )
         data.update(cls._get_env_values())
         return cls(**data)
 
