@@ -266,12 +266,12 @@ class BaseConfig(BaseSettings):
                 )
             )
         else:
-            config_format = ConfigFormats.from_path(path)
+            config_format = ConfigFormats.from_path(file_path)
             return cls(
                 settings=cls._settings_with_overrides(
-                    custom_config_folder=path.parent,
+                    custom_config_folder=file_path.parent,
                     default_format=config_format,
-                    config_name=path.stem,
+                    config_name=file_path.stem,
                 )
             )
 
