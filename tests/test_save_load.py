@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Optional, Tuple, Type
 
 import pytest
-from pydantic import BaseModel
+from pydantic import BaseModel, create_model
 
 from pyappconf.model import AppConfig, BaseConfig, ConfigFormats
 from tests.config import (
@@ -431,3 +431,30 @@ def test_load_recursive_multi_format(config_format: ConfigFormats, temp_folder: 
     assert mod._settings.config_location == orig_config_location
 
     assert mod.string == "loaded from recursive"
+
+
+def test_save_load_dynamic(temp_folder: Path):
+    OrigConfig, SubModel = get_model_classes()
+
+    custom_settings = AppConfig(
+        app_name="MyApp",
+        custom_config_folder=temp_folder,
+        config_name="dynamic-config",
+    )
+
+    class MyConfig(OrigConfig):
+        _settings = custom_settings
+
+    DynamicModel = create_model(
+        "DynamicModel", dynamic_attr=(str, "dynamic"), integer=100, __base__=MyConfig
+    )
+
+    data = {**get_default_data(), **{"integer": 100}}
+    model = DynamicModel(**data)
+    model.save()
+
+    loaded = DynamicModel.load()
+    assert model == loaded
+    assert model.dynamic_attr == "dynamic"
+    assert model.integer == 100
+    assert model.string == "a"
