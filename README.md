@@ -1,7 +1,11 @@
+
+
 [![](https://codecov.io/gh/nickderobertis/py-app-conf/branch/master/graph/badge.svg)](https://codecov.io/gh/nickderobertis/py-app-conf)
 [![PyPI](https://img.shields.io/pypi/v/py-app-conf)](https://pypi.org/project/py-app-conf/)
 ![PyPI - License](https://img.shields.io/pypi/l/py-app-conf)
 [![Documentation](https://img.shields.io/badge/documentation-pass-green)](https://nickderobertis.github.io/py-app-conf/)
+![Tests Run on Ubuntu Python Versions](https://img.shields.io/badge/Tests%20Ubuntu%2FPython-3.8%20%7C%203.9%20%7C%203.10-blue)
+![Tests Run on Macos Python Versions](https://img.shields.io/badge/Tests%20Macos%2FPython-3.8%20%7C%203.9%20%7C%203.10-blue)
 [![Github Repo](https://img.shields.io/badge/repo-github-informational)](https://github.com/nickderobertis/py-app-conf/)
 
 
