@@ -200,7 +200,7 @@ class BaseConfig(BaseSettings):
     @classmethod
     def get_deserializer(
         cls, config_format: Optional[ConfigFormats] = None
-    ) -> Callable[[Union[str, Path]], "BaseConfig"]:
+    ) -> Callable[[Union[str, Path], Optional[Dict[str, Any]]], "BaseConfig"]:
         if config_format is None:
             config_format = cls._settings.default_format
 
@@ -275,14 +275,19 @@ class BaseConfig(BaseSettings):
 
     @classmethod
     def load(
-        cls, path: Optional[Union[str, Path]] = None, multi_format: bool = False
+        cls,
+        path: Optional[Union[str, Path]] = None,
+        multi_format: bool = False,
+        model_kwargs: Optional[Dict[str, Any]] = None,
     ) -> "BaseConfig":
         path_result = cls._determine_path_to_load(path, multi_format=multi_format)
         if path_result.path is None:
             raise ValueError("path should not be None")
         assign_settings = not path_result.is_default
 
-        obj = cls.get_deserializer(path_result.config_format)(path_result.path)
+        obj = cls.get_deserializer(path_result.config_format)(
+            path_result.path, model_kwargs
+        )
         if assign_settings:
             obj.settings = cls._settings_with_overrides(
                 custom_config_folder=path_result.path.parent,
@@ -296,20 +301,24 @@ class BaseConfig(BaseSettings):
 
     @classmethod
     def load_or_create(
-        cls, path: Optional[Union[str, Path]] = None, multi_format: bool = False
+        cls,
+        path: Optional[Union[str, Path]] = None,
+        multi_format: bool = False,
+        model_kwargs: Optional[Dict[str, Any]] = None,
     ) -> "BaseConfig":
         file_path = cls._determine_path_to_load(path, multi_format=multi_format).path
         if file_path is None:
             raise ValueError("path should not be None")
         if file_path.exists():
-            return cls.load(file_path)
+            return cls.load(file_path, model_kwargs=model_kwargs)
         elif _is_path_of_folder(path):
             # Trying to load from a folder that does not have any config files currently
             # Need to create in that folder
             return cls(
                 settings=cls._settings_with_overrides(
                     custom_config_folder=Path(path),
-                )
+                ),
+                **(model_kwargs or {}),
             )
         else:
             config_format = ConfigFormats.from_path(file_path)
@@ -318,12 +327,16 @@ class BaseConfig(BaseSettings):
                     custom_config_folder=file_path.parent,
                     default_format=config_format,
                     config_name=file_path.stem,
-                )
+                ),
+                **(model_kwargs or {}),
             )
 
     @classmethod
     def load_recursive(
-        cls, path: Optional[Union[str, Path]] = None, multi_format: bool = False
+        cls,
+        path: Optional[Union[str, Path]] = None,
+        multi_format: bool = False,
+        model_kwargs: Optional[Dict[str, Any]] = None,
     ) -> "BaseConfig":
         """
         Searches the passed path or current directory for a config with the correct name,
@@ -345,20 +358,31 @@ class BaseConfig(BaseSettings):
                 current_path, multi_format=multi_format, include_default=False
             ).path
             if possible_path is not None:
-                return cls.load(possible_path)
+                return cls.load(possible_path, model_kwargs=model_kwargs)
             if has_hit_root_directory():
                 break
             current_path = current_path.parent
 
         # Could not find config after reaching root directory. Try
         # loading from default location
-        return cls.load()
+        return cls.load(model_kwargs=model_kwargs)
 
     @classmethod
     def _get_env_values(cls) -> Dict[str, Any]:
         env_file = getattr(cls.Config, "env_file", None)
         source = EnvSettingsSource(env_file=env_file, env_file_encoding=None)
         return source(cls)  # type: ignore
+
+    @classmethod
+    def _assemble_data_with_overrides(
+        cls, model_data: Dict[str, Any], kwarg_data: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
+        if kwarg_data is None:
+            kwarg_data = {}
+        env_data = cls._get_env_values()
+        # Priority is to first load from user passed kwargs, then fall back to env_data, then fall back to model_data
+        data = {**model_data, **env_data, **kwarg_data}
+        return data
 
     def to_yaml(
         self,
@@ -378,10 +402,12 @@ class BaseConfig(BaseSettings):
         return yaml_str
 
     @classmethod
-    def parse_yaml(cls, in_path: Union[str, Path]) -> "BaseConfig":
+    def parse_yaml(
+        cls, in_path: Union[str, Path], model_kwargs: Optional[Dict[str, Any]] = None
+    ) -> "BaseConfig":
         data = yaml.safe_load(Path(in_path).read_text())
-        data.update(cls._get_env_values())
-        return cls(**data)
+        all_data = cls._assemble_data_with_overrides(data, model_kwargs)
+        return cls(**all_data)
 
     def to_toml(
         self,
@@ -399,10 +425,12 @@ class BaseConfig(BaseSettings):
         return toml_str
 
     @classmethod
-    def parse_toml(cls, in_path: Union[str, Path]) -> "BaseConfig":
+    def parse_toml(
+        cls, in_path: Union[str, Path], model_kwargs: Optional[Dict[str, Any]] = None
+    ) -> "BaseConfig":
         data = toml.load(in_path)
-        data.update(cls._get_env_values())
-        return cls(**data)
+        all_data = cls._assemble_data_with_overrides(data, model_kwargs)
+        return cls(**all_data)
 
     def to_json(
         self,
@@ -424,13 +452,15 @@ class BaseConfig(BaseSettings):
         return json_str
 
     @classmethod
-    def parse_json(cls, in_path: Union[str, Path]) -> "BaseConfig":
+    def parse_json(
+        cls, in_path: Union[str, Path], model_kwargs: Optional[Dict[str, Any]] = None
+    ) -> "BaseConfig":
         data = json.loads(Path(in_path).read_text())
-        data.update(cls._get_env_values())
-        if "$schema" in data:
+        all_data = cls._assemble_data_with_overrides(data, model_kwargs)
+        if "$schema" in all_data:
             # Schema is not kept in instance data, it is in cls._settings.schema_url
-            del data["$schema"]
-        return cls(**data)
+            del all_data["$schema"]
+        return cls(**all_data)
 
     def to_py_config(
         self,
@@ -452,12 +482,18 @@ class BaseConfig(BaseSettings):
         return py_str
 
     @classmethod
-    def parse_py_config(cls, in_path: Union[str, Path]) -> "BaseConfig":
+    def parse_py_config(
+        cls, in_path: Union[str, Path], model_kwargs: Optional[Dict[str, Any]] = None
+    ) -> "BaseConfig":
         # Import the file given by the in_path. The config is in the config attribute of the module
         spec = importlib.util.spec_from_file_location("py_config", in_path)
         config_module = importlib.util.module_from_spec(spec)  # type: ignore
         spec.loader.exec_module(config_module)  # type: ignore
-        return config_module.config
+        obj = config_module.config
+        data = obj.dict()
+        all_data = cls._assemble_data_with_overrides(data, model_kwargs)
+        # Preserve the user class in case they subclassed the config model
+        return obj.__class__(**all_data)
 
     def to_pyproject_toml(
         self,
@@ -478,12 +514,14 @@ class BaseConfig(BaseSettings):
         return pyproject_str
 
     @classmethod
-    def parse_pyproject_toml(cls, in_path: Union[str, Path]) -> "BaseConfig":
+    def parse_pyproject_toml(
+        cls, in_path: Union[str, Path], model_kwargs: Optional[Dict[str, Any]] = None
+    ) -> "BaseConfig":
         data = read_config_data_from_pyproject_toml(
             Path(in_path), cls._settings.config_name
         )
-        data.update(cls._get_env_values())
-        return cls(**data)
+        all_data = cls._assemble_data_with_overrides(data, model_kwargs)
+        return cls(**all_data)
 
     @classmethod
     def schema(
