@@ -35,10 +35,13 @@ def _format_python_config_file(unformatted: str) -> str:
     :param unformatted: The python config file.
     :return: The formatted python config file.
     """
-    black_formatted = black.format_str(unformatted, mode=black.FileMode(line_length=80))
-    # Now format with isort
-    isort_formatted = isort.code(black_formatted)
-    return isort_formatted
+    isort_formatted = isort.code(unformatted)
+    # Format with black second, so it can reformat the imports
+    black_formatted = black.format_str(
+        isort_formatted, mode=black.FileMode(line_length=80)
+    )
+
+    return black_formatted
 
 
 def _pydantic_model_to_python_config_file(
