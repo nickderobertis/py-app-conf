@@ -1,4 +1,5 @@
 import datetime
+import types
 from enum import Enum
 from pathlib import Path
 from typing import Any, Sequence, Set
@@ -91,6 +92,8 @@ def _build_attribute_value(value: Any, stdlib_imports: Set[str]) -> str:
     :param value: The value of the attribute.
     :return: The value of the attribute.
     """
+    if hasattr(value, "__pyconfig_repr__"):
+        return value.__pyconfig_repr__()
     if isinstance(value, Enum):
         return f"{value.__class__.__name__}.{value.name}"
     elif isinstance(value, Path):
@@ -106,12 +109,12 @@ def _build_attribute_value(value: Any, stdlib_imports: Set[str]) -> str:
     elif isinstance(value, (datetime.datetime, datetime.date, datetime.time)):
         stdlib_imports.add("import datetime")
         return repr(value)
-    # elif isinstance(value, datetime.datetime):
-    #     stdlib_imports.add("from datetime import datetime")
-    #     return f"datetime({value.hour}, {value.minute}, {value.second}, {value.microsecond}, tzinfo={value.tzinfo})"
-    # elif isinstance(value, datetime.date):
-    #     stdlib_imports.add("from datetime import date")
-    #     return f"date({value.year}, {value.month}, {value.day})"
+    elif isinstance(value, types.FunctionType):
+        return f"{value.__name__}"
+    elif callable(value):
+        raise ValueError(
+            "Cannot convert generic callable to python config. Real functions defined with def are supported"
+        )
     elif isinstance(value, list):
         return (
             f"[{', '.join(_build_attribute_value(v, stdlib_imports) for v in value)}]"

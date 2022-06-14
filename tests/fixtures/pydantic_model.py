@@ -1,7 +1,7 @@
 import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Callable, Dict, List, Tuple
 from uuid import UUID
 
 import pytest
@@ -58,11 +58,45 @@ class MyModel(BaseModel):
     file_path: Path = Path("/a/b.txt")
 
 
+def default_func():
+    return "default"
+
+
+class RequiredCallableClass:
+    def __call__(self):
+        return "required"
+
+    def __pyconfig_repr__(self):
+        return "required_callable"
+
+
+required_callable = RequiredCallableClass()
+
+
+class PythonFormatSpecificModel(MyModel):
+    func: Callable[[], str]
+    optional_func: Callable[[], str] = default_func
+
+
 def get_pydantic_model_object() -> MyModel:
     all_kwargs = get_default_data()
     return MyModel(**all_kwargs)
 
 
+def get_python_format_specific_model_object() -> PythonFormatSpecificModel:
+    all_kwargs = get_default_data()
+    all_kwargs["func"] = required_callable
+    return PythonFormatSpecificModel(**all_kwargs)
+
+
 @pytest.fixture
 def pydantic_model_object() -> MyModel:
     yield get_pydantic_model_object()
+
+
+@pytest.fixture
+def python_format_specific_model_object() -> PythonFormatSpecificModel:
+    yield get_python_format_specific_model_object()
+
+
+PYTHON_FORMAT_IMPORT = "from tests.fixtures.pydantic_model import PythonFormatSpecificModel, SubModel, MyEnum, default_func, required_callable"

@@ -20,7 +20,11 @@ from tests.config import (
     YAML_WITH_SCHEMA_PATH,
 )
 from tests.fixtures.model import MyConfig, get_model_object
-from tests.fixtures.pydantic_model import get_pydantic_model_object
+from tests.fixtures.pydantic_model import (
+    PYTHON_FORMAT_IMPORT,
+    get_pydantic_model_object,
+    get_python_format_specific_model_object,
+)
 
 
 def generate_basic_configs():
@@ -55,10 +59,10 @@ def generate_json_schema():
 
 
 def generate_pydantic_py_config_file():
-    model = get_pydantic_model_object()
+    model = get_python_format_specific_model_object()
     conf_str = pydantic_model_to_python_config_file(
         model,
-        ["from tests.fixtures.pydantic_model import MyModel, SubModel, MyEnum"],
+        [PYTHON_FORMAT_IMPORT],
     )
     PYDANTIC_PY_CONFIG_PATH.write_text(conf_str)
 

@@ -2,9 +2,15 @@ import datetime
 from pathlib import Path
 from uuid import UUID
 
-from tests.fixtures.pydantic_model import MyEnum, MyModel, SubModel
+from tests.fixtures.pydantic_model import (
+    MyEnum,
+    PythonFormatSpecificModel,
+    SubModel,
+    default_func,
+    required_callable,
+)
 
-config = MyModel(
+config = PythonFormatSpecificModel(
     string="a",
     integer=5,
     custom=SubModel(a="b", b=8.5),
@@ -45,4 +51,6 @@ config = MyModel(
     ],
     default_date_list=[datetime.date(2022, 1, 1), datetime.date(2022, 1, 2)],
     file_path=Path("/a/b.txt"),
+    func=required_callable,
+    optional_func=default_func,
 )
