@@ -2,7 +2,10 @@
 Generate test data for file output
 """
 from pyappconf import AppConfig
-from pyappconf.py_config.generate import pydantic_model_to_python_config_file
+from pyappconf.py_config.generate import (
+    pydantic_model_to_python_config_file,
+    pydantic_model_to_python_config_stub_file,
+)
 from tests.config import (
     DATA_NAME,
     INPUT_DATA_DIR,
@@ -10,6 +13,7 @@ from tests.config import (
     JSON_WITH_SCHEMA_PATH,
     PY_CONFIG_PATH,
     PYDANTIC_PY_CONFIG_PATH,
+    PYDANTIC_PY_CONFIG_STUB_PATH,
     PYPROJECT_TOML_CLEAN_CONFIG_PATH,
     PYPROJECT_TOML_MIXED_CONFIG_PATH,
     RECURSIVE_CONFIG_1_PATH,
@@ -67,9 +71,18 @@ def generate_pydantic_py_config_file():
     PYDANTIC_PY_CONFIG_PATH.write_text(conf_str)
 
 
+def generate_pydantic_py_config_stub_file():
+    model = get_python_format_specific_model_object()
+    conf_str = pydantic_model_to_python_config_stub_file(
+        model, [PYTHON_FORMAT_IMPORT], generate_model_class=True
+    )
+    PYDANTIC_PY_CONFIG_STUB_PATH.write_text(conf_str)
+
+
 if __name__ == "__main__":
     generate_basic_configs()
     generate_configs_with_schema()
     generate_recursive_configs()
     generate_json_schema()
     generate_pydantic_py_config_file()
+    generate_pydantic_py_config_stub_file()

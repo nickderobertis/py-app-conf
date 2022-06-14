@@ -30,7 +30,10 @@ from typing_extensions import TypeGuard
 from pyappconf.encoding.ext_json import ExtendedJSONEncoder
 from pyappconf.encoding.ext_toml import CustomTomlEncoder
 from pyappconf.encoding.ext_yaml import CustomDumper
-from pyappconf.py_config.generate import pydantic_model_to_python_config_file
+from pyappconf.py_config.generate import (
+    pydantic_model_to_python_config_file,
+    pydantic_model_to_python_config_stub_file,
+)
 from pyappconf.pyproject import (
     add_model_to_pyproject_toml,
     read_config_data_from_pyproject_toml,
@@ -95,7 +98,12 @@ class AppConfig:
         py_config_encoder: Callable[
             [BaseModel, Sequence[str], Sequence[str]], str
         ] = pydantic_model_to_python_config_file,
+        py_config_stub_encoder: Callable[
+            [BaseModel, Sequence[str], Sequence[str], bool], str
+        ] = pydantic_model_to_python_config_stub_file,
         py_config_imports: Optional[Sequence[str]] = None,
+        py_config_create_stub: bool = True,
+        py_config_generate_model_class_in_stub: bool = False,
         pyproject_encoder: Callable[
             [Dict[str, Any], Path, str, Type[TomlEncoder]], str
         ] = add_model_to_pyproject_toml,
@@ -109,7 +117,12 @@ class AppConfig:
         self.yaml_encoder = yaml_encoder
         self.json_encoder = json_encoder
         self.py_config_encoder = py_config_encoder
+        self.py_config_stub_encoder = py_config_stub_encoder
         self.py_config_imports = py_config_imports
+        self.py_config_create_stub = py_config_create_stub
+        self.py_config_generate_model_class_in_stub = (
+            py_config_generate_model_class_in_stub
+        )
         self.pyproject_encoder = pyproject_encoder
 
     @classmethod
@@ -466,7 +479,19 @@ class BaseConfig(BaseSettings):
         self,
         out_path: Optional[Union[str, Path]] = None,
         py_config_kwargs: Dict[str, Any] = None,
+        include_stub_file: Optional[bool] = None,
+        generate_model_class_in_stub_file: Optional[bool] = None,
     ) -> str:
+        include_stub_file = (
+            self.settings.py_config_create_stub
+            if include_stub_file is None
+            else include_stub_file
+        )
+        generate_model_class_in_stub_file = (
+            self.settings.py_config_generate_model_class_in_stub
+            if generate_model_class_in_stub_file is None
+            else generate_model_class_in_stub_file
+        )
         py_config_kwargs = py_config_kwargs or {}
         if self.settings.py_config_imports is None:
             raise ValueError(
@@ -479,7 +504,39 @@ class BaseConfig(BaseSettings):
         ]
         py_str = self.settings.py_config_encoder(self, self.settings.py_config_imports, all_exclude_fields, **py_config_kwargs)  # type: ignore
         _output_if_necessary(py_str, out_path)
+        if include_stub_file:
+            stub_kwargs: Dict[str, Any] = {}
+            if generate_model_class_in_stub_file:
+                stub_kwargs["generate_model_class"] = True
+            stub_out_path = (
+                Path(out_path).with_suffix(".pyi") if out_path is not None else None
+            )
+            self.to_py_config_stub(stub_out_path, stub_kwargs)
         return py_str
+
+    def to_py_config_stub(
+        self,
+        out_path: Optional[Union[str, Path]] = None,
+        py_config_stub_kwargs: Dict[str, Any] = None,
+    ) -> str:
+        py_config_stub_kwargs = py_config_stub_kwargs or {}
+        if self.settings.py_config_imports is None:
+            raise ValueError(
+                "No imports specified for Python config, must set py_config_imports in settings"
+            )
+        always_exclude_fields = ("settings", "_settings")
+        all_exclude_fields = [
+            *always_exclude_fields,
+            *py_config_stub_kwargs.pop("exclude_fields", []),
+        ]
+        py_stub_str = self.settings.py_config_stub_encoder(  # type: ignore
+            self,
+            self.settings.py_config_imports,
+            all_exclude_fields,
+            **py_config_stub_kwargs,
+        )
+        _output_if_necessary(py_stub_str, out_path)
+        return py_stub_str
 
     @classmethod
     def parse_py_config(
