@@ -13,7 +13,6 @@ from tests.fixtures.pydantic_model import (
     required_callable,
 )
 
-
 class PythonFormatSpecificModel(BaseModel):
     string: str = "a"
     integer: int = 5
@@ -60,6 +59,5 @@ class PythonFormatSpecificModel(BaseModel):
     file_path: Path = Path("/a/b.txt")
     func: typing.Callable[[], str] = required_callable
     optional_func: typing.Callable[[], str] = default_func
-
 
 config: PythonFormatSpecificModel

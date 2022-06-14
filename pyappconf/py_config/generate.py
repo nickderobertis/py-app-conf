@@ -45,11 +45,11 @@ def pydantic_model_to_python_config_stub_file(
         model, imports, generate_model_class, exclude_fields
     )
     # Format the python config file with black.
-    formatted = _format_python_config_file(unformatted)
+    formatted = _format_python_config_file(unformatted, is_stub=True)
     return formatted
 
 
-def _format_python_config_file(unformatted: str) -> str:
+def _format_python_config_file(unformatted: str, is_stub: bool = False) -> str:
     """
     Format a python config file.
 
@@ -58,11 +58,21 @@ def _format_python_config_file(unformatted: str) -> str:
     """
     isort_formatted = isort.code(unformatted)
     # Format with black second, so it can reformat the imports
-    black_formatted = black.format_str(
-        isort_formatted, mode=black.FileMode(line_length=80)
-    )
+    black_formatted = black.format_str(isort_formatted, mode=_black_file_mode(is_stub))
 
     return black_formatted
+
+
+def _black_file_mode(is_stub: bool) -> black.FileMode:
+    """
+    Get the black file mode.
+
+    :param is_stub: Whether the file is a stub.
+    :return: The black file mode.
+    """
+    if is_stub:
+        return black.FileMode(line_length=80, is_pyi=True)
+    return black.FileMode(line_length=80)
 
 
 def _pydantic_model_to_python_config_file(
