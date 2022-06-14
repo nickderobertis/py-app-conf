@@ -2,7 +2,6 @@ from pathlib import Path
 from typing import Any, Dict, Type
 
 import toml
-from pydantic import BaseModel
 from toml import TomlEncoder
 
 
