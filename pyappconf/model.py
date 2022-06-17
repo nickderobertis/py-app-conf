@@ -180,6 +180,12 @@ class AppConfig:
     def config_file_name(self) -> str:
         return self.config_location.name
 
+    @property
+    def supported_formats(self) -> List[ConfigFormats]:
+        if self.multi_format:
+            return list(ConfigFormats)
+        return [self.default_format]
+
 
 class _PathScanResult(BaseModel):
     path: Optional[Path]
