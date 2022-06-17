@@ -91,6 +91,7 @@ class AppConfig:
         config_name: str = "config",
         custom_config_folder: Optional[Path] = None,
         default_format: ConfigFormats = ConfigFormats.TOML,
+        multi_format: bool = False,
         schema_url: Optional[str] = None,
         toml_encoder: Type[TomlEncoder] = CustomTomlEncoder,
         yaml_encoder: Type = CustomDumper,
@@ -112,6 +113,7 @@ class AppConfig:
         self.config_name = config_name
         self.custom_config_folder = custom_config_folder
         self.default_format = default_format
+        self.multi_format = multi_format
         self.schema_url = schema_url
         self.toml_encoder = toml_encoder
         self.yaml_encoder = yaml_encoder
@@ -242,9 +244,10 @@ class BaseConfig(BaseSettings):
     def _determine_path_to_load(
         cls,
         path: Optional[Union[str, Path]] = None,
-        multi_format: bool = False,
+        multi_format: Optional[bool] = None,
         include_default: bool = True,
     ) -> _PathScanResult:
+        multi_format = multi_format or cls._settings.multi_format
         if _is_path_of_file(path):
             # If user passes a full path including extension, just load that file
             out_path = Path(path)
@@ -290,9 +293,10 @@ class BaseConfig(BaseSettings):
     def load(
         cls,
         path: Optional[Union[str, Path]] = None,
-        multi_format: bool = False,
+        multi_format: Optional[bool] = None,
         model_kwargs: Optional[Dict[str, Any]] = None,
     ) -> "BaseConfig":
+        multi_format = multi_format or cls._settings.multi_format
         path_result = cls._determine_path_to_load(path, multi_format=multi_format)
         if path_result.path is None:
             raise ValueError("path should not be None")
@@ -316,9 +320,10 @@ class BaseConfig(BaseSettings):
     def load_or_create(
         cls,
         path: Optional[Union[str, Path]] = None,
-        multi_format: bool = False,
+        multi_format: Optional[bool] = None,
         model_kwargs: Optional[Dict[str, Any]] = None,
     ) -> "BaseConfig":
+        multi_format = multi_format or cls._settings.multi_format
         file_path = cls._determine_path_to_load(path, multi_format=multi_format).path
         if file_path is None:
             raise ValueError("path should not be None")
@@ -348,7 +353,7 @@ class BaseConfig(BaseSettings):
     def load_recursive(
         cls,
         path: Optional[Union[str, Path]] = None,
-        multi_format: bool = False,
+        multi_format: Optional[bool] = None,
         model_kwargs: Optional[Dict[str, Any]] = None,
     ) -> "BaseConfig":
         """
@@ -360,6 +365,7 @@ class BaseConfig(BaseSettings):
         :param path: The path to start searching from, defaults to the current directory
         :return:
         """
+        multi_format = multi_format or cls._settings.multi_format
         path = Path(path or os.getcwd()).absolute()
         current_path = path
 
