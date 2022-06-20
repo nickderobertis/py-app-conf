@@ -1,9 +1,9 @@
-typing_extensions
-toml
 PyYAML
-python-dotenv
-isort
-pydantic>=1.8
 appdirs
 py-app-conf
+isort
+toml
+python-dotenv
+pydantic>=1.8
 black
+typing_extensions
