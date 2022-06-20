@@ -82,6 +82,13 @@
       "type": "string",
       "format": "date-time"
     },
+    "optional_required_string": {
+      "title": "Optional Required String",
+      "env_names": [
+        "myapp_optional_required_string"
+      ],
+      "type": "string"
+    },
     "default_string": {
       "title": "Default String",
       "default": "woo",
@@ -175,6 +182,14 @@
       ],
       "type": "string",
       "format": "path"
+    },
+    "default_optional_string": {
+      "title": "Default Optional String",
+      "default": "default_optional_string",
+      "env_names": [
+        "myapp_default_optional_string"
+      ],
+      "type": "string"
     }
   },
   "required": [

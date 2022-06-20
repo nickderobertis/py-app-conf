@@ -12,6 +12,7 @@ default_enum: one
 default_enum_list:
 - one
 - two
+default_optional_string: default_optional_string
 default_string: woo
 default_time_list:
 - 2022-01-01 00:00:00-23:59
@@ -30,6 +31,7 @@ int_tuple:
 - 2
 - 3
 integer: 5
+optional_required_string: optional_required_string
 str_list:
 - a
 - b

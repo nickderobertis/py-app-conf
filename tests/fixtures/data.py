@@ -18,6 +18,7 @@ def get_default_data(
         uuid=UUID("826032aa-465a-4692-b9b4-c81819197ed0"),
         date=datetime.date(2020, 1, 1),
         time=datetime.datetime(2020, 1, 1, 12, 0, 0),
+        optional_required_string="optional_required_string",
     )
     if exclude_keys is not None:
         all_kwargs = {

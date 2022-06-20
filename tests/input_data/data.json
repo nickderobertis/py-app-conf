@@ -24,6 +24,7 @@
   "uuid": "826032aa-465a-4692-b9b4-c81819197ed0",
   "date": "2020-01-01",
   "time": "2020-01-01T12:00:00",
+  "optional_required_string": "optional_required_string",
   "default_string": "woo",
   "default_custom": {
     "a": "yeah",
@@ -47,5 +48,6 @@
     "2022-01-01",
     "2022-01-02"
   ],
-  "file_path": "/a/b.txt"
+  "file_path": "/a/b.txt",
+  "default_optional_string": "default_optional_string"
 }

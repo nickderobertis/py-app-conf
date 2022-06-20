@@ -20,6 +20,7 @@ config = PythonFormatSpecificModel(
     uuid=UUID("826032aa-465a-4692-b9b4-c81819197ed0"),
     date=datetime.date(2020, 1, 1),
     time=datetime.datetime(2020, 1, 1, 12, 0),
+    optional_required_string="optional_required_string",
     default_string="woo",
     default_custom=SubModel(a="yeah", b=5.6),
     default_enum=MyEnum.ONE,
@@ -51,6 +52,7 @@ config = PythonFormatSpecificModel(
     ],
     default_date_list=[datetime.date(2022, 1, 1), datetime.date(2022, 1, 2)],
     file_path=Path("/a/b.txt"),
+    default_optional_string="default_optional_string",
     func=required_callable,
     optional_func=default_func,
 )

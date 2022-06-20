@@ -1,9 +1,8 @@
 import datetime
-import re
 import types
 from enum import Enum
 from pathlib import Path
-from typing import Any, Sequence, Set
+from typing import Any, Final, Sequence, Set, Tuple
 from uuid import UUID
 
 import black
@@ -175,35 +174,59 @@ def _build_model_class_attributes(
         if field_name in exclude_fields:
             continue
         value = getattr(model, field_name)
-        attributes += f"    {field_name}: {_build_attribute_type(field.type_, stdlib_imports)} = {_build_attribute_value(value, stdlib_imports)}\n"
+        attributes += f"    {field_name}: {_build_attribute_type(field, stdlib_imports)} = {_build_attribute_value(value, stdlib_imports)}\n"
     return attributes
 
 
-TYPE_STR_RE = re.compile(r"<(class|enum) '([\w.]+)'>")
+CONTAINER_TYPES: Final[Tuple[str, ...]] = (
+    "Mapping",
+    "Dict",
+    "List",
+    "Set",
+    "Tuple",
+    "Generator",
+    "Iterator",
+    "AsyncGenerator",
+    "AsyncIterator",
+    "Optional",
+    "Union",
+    "Callable",
+    "Sequence",
+    "FrozenSet",
+    "Iterable",
+    "Deque",
+    "DefaultDict",
+    "Counter",
+)
+
+IMPORT_DATA_TYPES: Final[Tuple[str, ...]] = ("Any",)
 
 
-def _build_attribute_type(value: type, stdlib_imports: Set[str]) -> str:
+def _build_attribute_type(field: ModelField, stdlib_imports: Set[str]) -> str:
     """
     Build the type of an attribute for a pydantic model class definition.
 
     :param value: A type class.
     :return: The code string representation of the type class.
     """
-    str_value = str(value)
-    # Parse the format <class 'str'> to str using a regular expression.
-    match = TYPE_STR_RE.match(str_value)
-    if match:
-        fully_qualified_path = match.group(2)
-        # fully_qualified_path could be just e.g. str or could be e.g. my.package.Something
-        # We are assuming that the user is using a direct import for any custom types, so
-        # extract only the name from the fully qualified path.
-        import_name = fully_qualified_path.split(".")[-1]
-        return import_name
-    # May be in format typing.Callable[[], str]
-    if "typing" in str_value:
-        stdlib_imports.add("import typing")
-        return str_value
-    raise ValueError("Unsupported type class: " + str(value))
+    # Use pydantic's type representation for __repr__ to convert to string
+    # Not great to be using a private method, but there would be a lot of
+    # logic to vendor.
+    type_str = field._type_display()
+
+    import_from_typing: Set[str] = set()
+    for container_type in CONTAINER_TYPES:
+        if container_type + "[" in type_str:
+            import_from_typing.add(container_type)
+
+    for data_type in IMPORT_DATA_TYPES:
+        if data_type in type_str:
+            import_from_typing.add(data_type)
+
+    if import_from_typing:
+        all_imports = ", ".join(import_from_typing)
+        stdlib_imports.add(f"from typing import {all_imports}")
+    return type_str
 
 
 def _build_attribute_value(value: Any, stdlib_imports: Set[str]) -> str:

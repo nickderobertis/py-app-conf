@@ -1,7 +1,7 @@
 import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Callable, Dict, List, Tuple
+from typing import Callable, Dict, List, Optional, Tuple
 from uuid import UUID
 
 import pytest
@@ -30,6 +30,7 @@ class MyModel(BaseModel):
     uuid: UUID
     date: datetime.date
     time: datetime.datetime
+    optional_required_string: Optional[str]
 
     default_string: str = "woo"
     default_custom: SubModel = SubModel(a="yeah", b=5.6)
@@ -56,6 +57,7 @@ class MyModel(BaseModel):
         ]
     )
     file_path: Path = Path("/a/b.txt")
+    default_optional_string: Optional[str] = "default_optional_string"
 
 
 def default_func():
