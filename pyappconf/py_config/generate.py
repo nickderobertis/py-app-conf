@@ -214,6 +214,9 @@ def _build_attribute_type(field: ModelField, stdlib_imports: Set[str]) -> str:
     # logic to vendor.
     type_str = field._type_display()
 
+    # pydantic's representation has NoneType instead of None
+    type_str = type_str.replace("NoneType", "None")
+
     import_from_typing: Set[str] = set()
     for container_type in CONTAINER_TYPES:
         if container_type + "[" in type_str:

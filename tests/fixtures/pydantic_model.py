@@ -60,7 +60,7 @@ class MyModel(BaseModel):
     default_optional_string: Optional[str] = "default_optional_string"
 
 
-def default_func():
+def default_func(nothing: None) -> str:
     return "default"
 
 
@@ -77,7 +77,7 @@ required_callable = RequiredCallableClass()
 
 class PythonFormatSpecificModel(MyModel):
     func: Callable[[], str]
-    optional_func: Callable[[], str] = default_func
+    optional_func: Callable[[None], str] = default_func
 
 
 def get_pydantic_model_object() -> MyModel:

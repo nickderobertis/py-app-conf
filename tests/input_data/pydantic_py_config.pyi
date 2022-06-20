@@ -60,6 +60,6 @@ class PythonFormatSpecificModel(BaseModel):
     file_path: Path = Path("/a/b.txt")
     default_optional_string: Optional[str] = "default_optional_string"
     func: Callable[[], str] = required_callable
-    optional_func: Callable[[], str] = default_func
+    optional_func: Callable[[None], str] = default_func
 
 config: PythonFormatSpecificModel
