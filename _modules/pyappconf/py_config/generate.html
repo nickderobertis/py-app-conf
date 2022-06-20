@@ -46,7 +46,7 @@
   
   
   
-    <title>pyappconf.py_config.generate &#8212; py-app-conf 1.3.0a8 documentation</title>
+    <title>pyappconf.py_config.generate &#8212; py-app-conf 1.3.0a9 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
@@ -88,7 +88,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../../index.html" title="py-app-conf 1.3.0a8 documentation"
+        <a href="../../../index.html" title="py-app-conf 1.3.0a9 documentation"
            class="md-header-nav__button md-logo">
           
             <i class="md-icon">&#xe869</i>
@@ -174,7 +174,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../../index.html" class="md-tabs__link">py-app-conf 1.3.0a8 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../../index.html" class="md-tabs__link">py-app-conf 1.3.0a9 documentation</a></li>
           <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -187,13 +187,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../../index.html" title="py-app-conf 1.3.0a8 documentation" class="md-nav__button md-logo">
+    <a href="../../../index.html" title="py-app-conf 1.3.0a9 documentation" class="md-nav__button md-logo">
       
         <i class="md-icon">&#xe869</i>
       
     </a>
     <a href="../../../index.html"
-       title="py-app-conf 1.3.0a8 documentation">py-app-conf</a>
+       title="py-app-conf 1.3.0a9 documentation">py-app-conf</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/nickderobertis/py-app-conf" title="Go to repository" class="md-source" data-md-source="github">
@@ -273,11 +273,10 @@
             
   <h1 id="modules-pyappconf-py-config-generate--page-root">Source code for pyappconf.py_config.generate</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">types</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Set</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Final</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span>
 <span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">UUID</span>
 
 <span class="kn">import</span> <span class="nn">black</span>
@@ -449,35 +448,59 @@
         <span class="k">if</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="n">exclude_fields</span><span class="p">:</span>
             <span class="k">continue</span>
         <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span>
-        <span class="n">attributes</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"    </span><span class="si">{</span><span class="n">field_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">_build_attribute_type</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">type_</span><span class="p">,</span> <span class="n">stdlib_imports</span><span class="p">)</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">_build_attribute_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">stdlib_imports</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+        <span class="n">attributes</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"    </span><span class="si">{</span><span class="n">field_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">_build_attribute_type</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">stdlib_imports</span><span class="p">)</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">_build_attribute_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">stdlib_imports</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
     <span class="k">return</span> <span class="n">attributes</span>
 
 
-<span class="n">TYPE_STR_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"&lt;(class|enum) '([\w.]+)'&gt;"</span><span class="p">)</span>
+<span class="n">CONTAINER_TYPES</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"Mapping"</span><span class="p">,</span>
+    <span class="s2">"Dict"</span><span class="p">,</span>
+    <span class="s2">"List"</span><span class="p">,</span>
+    <span class="s2">"Set"</span><span class="p">,</span>
+    <span class="s2">"Tuple"</span><span class="p">,</span>
+    <span class="s2">"Generator"</span><span class="p">,</span>
+    <span class="s2">"Iterator"</span><span class="p">,</span>
+    <span class="s2">"AsyncGenerator"</span><span class="p">,</span>
+    <span class="s2">"AsyncIterator"</span><span class="p">,</span>
+    <span class="s2">"Optional"</span><span class="p">,</span>
+    <span class="s2">"Union"</span><span class="p">,</span>
+    <span class="s2">"Callable"</span><span class="p">,</span>
+    <span class="s2">"Sequence"</span><span class="p">,</span>
+    <span class="s2">"FrozenSet"</span><span class="p">,</span>
+    <span class="s2">"Iterable"</span><span class="p">,</span>
+    <span class="s2">"Deque"</span><span class="p">,</span>
+    <span class="s2">"DefaultDict"</span><span class="p">,</span>
+    <span class="s2">"Counter"</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">IMPORT_DATA_TYPES</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"Any"</span><span class="p">,)</span>
 
 
-<span class="k">def</span> <span class="nf">_build_attribute_type</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">type</span><span class="p">,</span> <span class="n">stdlib_imports</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_build_attribute_type</span><span class="p">(</span><span class="n">field</span><span class="p">:</span> <span class="n">ModelField</span><span class="p">,</span> <span class="n">stdlib_imports</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">"""</span>
 <span class="sd">    Build the type of an attribute for a pydantic model class definition.</span>
 
 <span class="sd">    :param value: A type class.</span>
 <span class="sd">    :return: The code string representation of the type class.</span>
 <span class="sd">    """</span>
-    <span class="n">str_value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-    <span class="c1"># Parse the format &lt;class 'str'&gt; to str using a regular expression.</span>
-    <span class="n">match</span> <span class="o">=</span> <span class="n">TYPE_STR_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">str_value</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
-        <span class="n">fully_qualified_path</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-        <span class="c1"># fully_qualified_path could be just e.g. str or could be e.g. my.package.Something</span>
-        <span class="c1"># We are assuming that the user is using a direct import for any custom types, so</span>
-        <span class="c1"># extract only the name from the fully qualified path.</span>
-        <span class="n">import_name</span> <span class="o">=</span> <span class="n">fully_qualified_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">import_name</span>
-    <span class="c1"># May be in format typing.Callable[[], str]</span>
-    <span class="k">if</span> <span class="s2">"typing"</span> <span class="ow">in</span> <span class="n">str_value</span><span class="p">:</span>
-        <span class="n">stdlib_imports</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"import typing"</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">str_value</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Unsupported type class: "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+    <span class="c1"># Use pydantic's type representation for __repr__ to convert to string</span>
+    <span class="c1"># Not great to be using a private method, but there would be a lot of</span>
+    <span class="c1"># logic to vendor.</span>
+    <span class="n">type_str</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">_type_display</span><span class="p">()</span>
+
+    <span class="n">import_from_typing</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">container_type</span> <span class="ow">in</span> <span class="n">CONTAINER_TYPES</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">container_type</span> <span class="o">+</span> <span class="s2">"["</span> <span class="ow">in</span> <span class="n">type_str</span><span class="p">:</span>
+            <span class="n">import_from_typing</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">container_type</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">data_type</span> <span class="ow">in</span> <span class="n">IMPORT_DATA_TYPES</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">data_type</span> <span class="ow">in</span> <span class="n">type_str</span><span class="p">:</span>
+            <span class="n">import_from_typing</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">data_type</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">import_from_typing</span><span class="p">:</span>
+        <span class="n">all_imports</span> <span class="o">=</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">import_from_typing</span><span class="p">)</span>
+        <span class="n">stdlib_imports</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="sa">f</span><span class="s2">"from typing import </span><span class="si">{</span><span class="n">all_imports</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">type_str</span>
 
 
 <span class="k">def</span> <span class="nf">_build_attribute_value</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">stdlib_imports</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
